@@ -1,0 +1,6456 @@
+{
+  "data_root": "data/physionet.org/files/sleep-edfx/1.0.0",
+  "psg_files": 197,
+  "hypnogram_files": 197,
+  "paired_records": 197,
+  "unmatched_hypnograms": [],
+  "stage_counts": {
+    "1": 7292,
+    "2": 8171,
+    "3": 4820,
+    "4": 1462,
+    "?": 174,
+    "M": 196,
+    "R": 1953,
+    "W": 4461
+  },
+  "records_with_errors": [],
+  "records": [
+    {
+      "relative_path": "sleep-cassette/SC4001E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4001EC-Hypnogram.edf",
+      "size_bytes": 48338048,
+      "duration_seconds": 79500.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 24,
+        "2": 40,
+        "3": 48,
+        "4": 23,
+        "?": 1,
+        "R": 6,
+        "W": 12
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4002E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4002EC-Hypnogram.edf",
+      "size_bytes": 51621248,
+      "duration_seconds": 84900.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 32,
+        "2": 37,
+        "3": 30,
+        "4": 16,
+        "?": 1,
+        "M": 1,
+        "R": 12,
+        "W": 23
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4011E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4011EH-Hypnogram.edf",
+      "size_bytes": 51110528,
+      "duration_seconds": 84060.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 33,
+        "2": 40,
+        "3": 21,
+        "4": 8,
+        "?": 1,
+        "R": 8,
+        "W": 15
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4012E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4012EC-Hypnogram.edf",
+      "size_bytes": 51986048,
+      "duration_seconds": 85500.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 42,
+        "2": 55,
+        "3": 29,
+        "4": 9,
+        "?": 1,
+        "R": 18,
+        "W": 17
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4021E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4021EH-Hypnogram.edf",
+      "size_bytes": 51147008,
+      "duration_seconds": 84120.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 22,
+        "2": 56,
+        "3": 43,
+        "4": 15,
+        "?": 1,
+        "R": 15,
+        "W": 9
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4022E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4022EJ-Hypnogram.edf",
+      "size_bytes": 50271488,
+      "duration_seconds": 82680.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 52,
+        "2": 63,
+        "3": 34,
+        "4": 11,
+        "?": 1,
+        "M": 1,
+        "R": 11,
+        "W": 6
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4031E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4031EC-Hypnogram.edf",
+      "size_bytes": 51438848,
+      "duration_seconds": 84600.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 30,
+        "2": 42,
+        "3": 21,
+        "4": 1,
+        "?": 1,
+        "R": 10,
+        "W": 14
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4032E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4032EP-Hypnogram.edf",
+      "size_bytes": 49833728,
+      "duration_seconds": 81960.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 20,
+        "2": 33,
+        "3": 28,
+        "4": 16,
+        "?": 1,
+        "R": 12,
+        "W": 13
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4041E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4041EC-Hypnogram.edf",
+      "size_bytes": 46878848,
+      "duration_seconds": 77100.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 43,
+        "2": 47,
+        "3": 15,
+        "?": 1,
+        "M": 1,
+        "R": 24,
+        "W": 30
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4042E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4042EC-Hypnogram.edf",
+      "size_bytes": 50928128,
+      "duration_seconds": 83760.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 51,
+        "2": 48,
+        "3": 22,
+        "4": 3,
+        "?": 1,
+        "M": 4,
+        "R": 33,
+        "W": 16
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4051E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4051EC-Hypnogram.edf",
+      "size_bytes": 49651328,
+      "duration_seconds": 81660.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 19,
+        "2": 45,
+        "3": 39,
+        "4": 11,
+        "?": 1,
+        "R": 3,
+        "W": 12
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4052E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4052EC-Hypnogram.edf",
+      "size_bytes": 51183488,
+      "duration_seconds": 84180.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 43,
+        "2": 32,
+        "3": 14,
+        "4": 6,
+        "?": 1,
+        "M": 2,
+        "R": 12,
+        "W": 29
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4061E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4061EC-Hypnogram.edf",
+      "size_bytes": 50526848,
+      "duration_seconds": 83100.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 18,
+        "2": 27,
+        "3": 11,
+        "4": 4,
+        "?": 1,
+        "R": 4,
+        "W": 13
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4062E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4062EC-Hypnogram.edf",
+      "size_bytes": 51621248,
+      "duration_seconds": 84900.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 25,
+        "2": 26,
+        "3": 17,
+        "4": 9,
+        "?": 1,
+        "R": 6,
+        "W": 14
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4071E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4071EC-Hypnogram.edf",
+      "size_bytes": 51256448,
+      "duration_seconds": 84300.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 23,
+        "2": 33,
+        "3": 27,
+        "4": 16,
+        "?": 1,
+        "R": 11,
+        "W": 5
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4072E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4072EH-Hypnogram.edf",
+      "size_bytes": 50526848,
+      "duration_seconds": 83100.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 40,
+        "2": 43,
+        "3": 37,
+        "4": 18,
+        "?": 1,
+        "R": 31,
+        "W": 9
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4081E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4081EC-Hypnogram.edf",
+      "size_bytes": 51001088,
+      "duration_seconds": 83880.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 14,
+        "2": 42,
+        "3": 53,
+        "4": 19,
+        "?": 1,
+        "R": 4,
+        "W": 9
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4082E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4082EP-Hypnogram.edf",
+      "size_bytes": 48046208,
+      "duration_seconds": 79020.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 23,
+        "2": 55,
+        "3": 46,
+        "4": 11,
+        "?": 1,
+        "R": 8,
+        "W": 12
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4091E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4091EC-Hypnogram.edf",
+      "size_bytes": 49833728,
+      "duration_seconds": 81960.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 10,
+        "2": 54,
+        "3": 39,
+        "4": 9,
+        "?": 1,
+        "M": 10,
+        "R": 17,
+        "W": 8
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4092E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4092EC-Hypnogram.edf",
+      "size_bytes": 52131968,
+      "duration_seconds": 85740.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 30,
+        "2": 37,
+        "3": 13,
+        "4": 4,
+        "?": 2,
+        "M": 12,
+        "R": 12,
+        "W": 7
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4101E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4101EC-Hypnogram.edf",
+      "size_bytes": 49614848,
+      "duration_seconds": 81600.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 15,
+        "2": 22,
+        "3": 6,
+        "?": 1,
+        "M": 1,
+        "R": 4,
+        "W": 14
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4102E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4102EC-Hypnogram.edf",
+      "size_bytes": 52131968,
+      "duration_seconds": 85740.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 41,
+        "2": 50,
+        "3": 10,
+        "?": 1,
+        "M": 1,
+        "R": 3,
+        "W": 12
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4111E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4111EC-Hypnogram.edf",
+      "size_bytes": 48192128,
+      "duration_seconds": 79260.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 5,
+        "2": 50,
+        "3": 49,
+        "4": 8,
+        "?": 1,
+        "M": 1,
+        "R": 6,
+        "W": 6
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4112E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4112EC-Hypnogram.edf",
+      "size_bytes": 50709248,
+      "duration_seconds": 83400.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 11,
+        "2": 45,
+        "3": 42,
+        "4": 13,
+        "?": 1,
+        "R": 7,
+        "W": 7
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4121E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4121EC-Hypnogram.edf",
+      "size_bytes": 50818688,
+      "duration_seconds": 83580.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 33,
+        "2": 38,
+        "3": 20,
+        "4": 9,
+        "?": 4,
+        "R": 8,
+        "W": 19
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4122E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4122EV-Hypnogram.edf",
+      "size_bytes": 47535488,
+      "duration_seconds": 78180.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 38,
+        "2": 36,
+        "3": 25,
+        "4": 14,
+        "?": 1,
+        "R": 5,
+        "W": 31
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4131E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4131EC-Hypnogram.edf",
+      "size_bytes": 51329408,
+      "duration_seconds": 84420.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 25,
+        "2": 37,
+        "3": 31,
+        "4": 22,
+        "?": 1,
+        "R": 12,
+        "W": 19
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4141E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4141EU-Hypnogram.edf",
+      "size_bytes": 50271488,
+      "duration_seconds": 82680.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 16,
+        "2": 30,
+        "3": 30,
+        "4": 18,
+        "?": 1,
+        "R": 7,
+        "W": 20
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4142E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4142EU-Hypnogram.edf",
+      "size_bytes": 50599808,
+      "duration_seconds": 83220.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 18,
+        "2": 30,
+        "3": 29,
+        "4": 21,
+        "?": 1,
+        "R": 8,
+        "W": 17
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4151E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4151EC-Hypnogram.edf",
+      "size_bytes": 47790848,
+      "duration_seconds": 78600.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 12,
+        "2": 28,
+        "3": 30,
+        "4": 12,
+        "?": 1,
+        "M": 4,
+        "R": 4,
+        "W": 8
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4152E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4152EC-Hypnogram.edf",
+      "size_bytes": 52241408,
+      "duration_seconds": 85920.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 8,
+        "2": 28,
+        "3": 32,
+        "4": 17,
+        "?": 1,
+        "M": 5,
+        "R": 8,
+        "W": 8
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4161E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4161EC-Hypnogram.edf",
+      "size_bytes": 47900288,
+      "duration_seconds": 78780.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 21,
+        "2": 40,
+        "3": 45,
+        "4": 21,
+        "?": 1,
+        "M": 4,
+        "R": 8,
+        "W": 15
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4162E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4162EC-Hypnogram.edf",
+      "size_bytes": 50198528,
+      "duration_seconds": 82560.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 15,
+        "2": 47,
+        "3": 42,
+        "4": 14,
+        "?": 1,
+        "M": 2,
+        "R": 6,
+        "W": 8
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4171E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4171EU-Hypnogram.edf",
+      "size_bytes": 50016128,
+      "duration_seconds": 82260.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 15,
+        "2": 53,
+        "3": 64,
+        "4": 17,
+        "?": 1,
+        "M": 1,
+        "R": 10,
+        "W": 22
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4172E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4172EC-Hypnogram.edf",
+      "size_bytes": 49687808,
+      "duration_seconds": 81720.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 14,
+        "2": 71,
+        "3": 56,
+        "4": 14,
+        "?": 1,
+        "M": 3,
+        "R": 17,
+        "W": 13
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4181E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4181EC-Hypnogram.edf",
+      "size_bytes": 50271488,
+      "duration_seconds": 82680.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 13,
+        "2": 55,
+        "3": 61,
+        "4": 17,
+        "?": 1,
+        "R": 4,
+        "W": 10
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4182E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4182EC-Hypnogram.edf",
+      "size_bytes": 51840128,
+      "duration_seconds": 85260.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 20,
+        "2": 31,
+        "3": 26,
+        "4": 12,
+        "?": 1,
+        "R": 9,
+        "W": 9
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4191E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4191EP-Hypnogram.edf",
+      "size_bytes": 50599808,
+      "duration_seconds": 83220.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 45,
+        "2": 54,
+        "3": 25,
+        "4": 14,
+        "?": 1,
+        "R": 18,
+        "W": 21
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4192E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4192EV-Hypnogram.edf",
+      "size_bytes": 47608448,
+      "duration_seconds": 78300.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 24,
+        "2": 36,
+        "3": 16,
+        "4": 1,
+        "?": 1,
+        "M": 4,
+        "R": 12,
+        "W": 34
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4201E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4201EC-Hypnogram.edf",
+      "size_bytes": 51147008,
+      "duration_seconds": 84120.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 15,
+        "2": 15,
+        "3": 3,
+        "?": 1,
+        "M": 1,
+        "R": 6,
+        "W": 15
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4202E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4202EC-Hypnogram.edf",
+      "size_bytes": 48702848,
+      "duration_seconds": 80100.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 18,
+        "2": 11,
+        "?": 1,
+        "R": 5,
+        "W": 12
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4211E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4211EC-Hypnogram.edf",
+      "size_bytes": 51256448,
+      "duration_seconds": 84300.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 18,
+        "2": 44,
+        "3": 28,
+        "?": 1,
+        "M": 5,
+        "R": 5,
+        "W": 17
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4212E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4212EC-Hypnogram.edf",
+      "size_bytes": 49140608,
+      "duration_seconds": 80820.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 14,
+        "2": 30,
+        "3": 20,
+        "?": 1,
+        "R": 2,
+        "W": 9
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4221E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4221EJ-Hypnogram.edf",
+      "size_bytes": 49250048,
+      "duration_seconds": 81000.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 45,
+        "2": 54,
+        "3": 29,
+        "4": 2,
+        "?": 1,
+        "R": 9,
+        "W": 24
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4222E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4222EC-Hypnogram.edf",
+      "size_bytes": 50344448,
+      "duration_seconds": 82800.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 31,
+        "2": 54,
+        "3": 39,
+        "4": 19,
+        "?": 1,
+        "R": 9,
+        "W": 29
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4231E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4231EJ-Hypnogram.edf",
+      "size_bytes": 50089088,
+      "duration_seconds": 82380.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 40,
+        "2": 39,
+        "3": 10,
+        "?": 1,
+        "M": 3,
+        "R": 11,
+        "W": 8
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4232E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4232EV-Hypnogram.edf",
+      "size_bytes": 48155648,
+      "duration_seconds": 79200.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 57,
+        "2": 42,
+        "3": 1,
+        "?": 1,
+        "M": 5,
+        "R": 16,
+        "W": 26
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4241E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4241EC-Hypnogram.edf",
+      "size_bytes": 49286528,
+      "duration_seconds": 81060.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 19,
+        "2": 31,
+        "3": 17,
+        "?": 1,
+        "M": 2,
+        "R": 3,
+        "W": 14
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4242E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4242EA-Hypnogram.edf",
+      "size_bytes": 49432448,
+      "duration_seconds": 81300.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 46,
+        "2": 27,
+        "3": 2,
+        "?": 1,
+        "R": 15,
+        "W": 27
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4251E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4251EP-Hypnogram.edf",
+      "size_bytes": 50344448,
+      "duration_seconds": 82800.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 19,
+        "2": 34,
+        "3": 15,
+        "?": 1,
+        "R": 8,
+        "W": 5
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4252E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4252EU-Hypnogram.edf",
+      "size_bytes": 48629888,
+      "duration_seconds": 79980.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 48,
+        "2": 49,
+        "3": 21,
+        "4": 5,
+        "?": 1,
+        "M": 1,
+        "R": 3,
+        "W": 26
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4261F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4261FM-Hypnogram.edf",
+      "size_bytes": 51074048,
+      "duration_seconds": 84000.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 63,
+        "2": 40,
+        "3": 21,
+        "4": 5,
+        "?": 1,
+        "R": 16,
+        "W": 48
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4262F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4262FC-Hypnogram.edf",
+      "size_bytes": 49614848,
+      "duration_seconds": 81600.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 17,
+        "2": 30,
+        "3": 19,
+        "4": 3,
+        "?": 1,
+        "R": 7,
+        "W": 19
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4271F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4271FC-Hypnogram.edf",
+      "size_bytes": 44507648,
+      "duration_seconds": 73200.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 12,
+        "2": 48,
+        "3": 50,
+        "4": 16,
+        "?": 1,
+        "R": 3,
+        "W": 10
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4272F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4272FM-Hypnogram.edf",
+      "size_bytes": 52350848,
+      "duration_seconds": 86100.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 40,
+        "2": 49,
+        "3": 29,
+        "4": 8,
+        "?": 1,
+        "R": 16,
+        "W": 26
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4281G0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4281GC-Hypnogram.edf",
+      "size_bytes": 50855168,
+      "duration_seconds": 83640.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 15,
+        "2": 25,
+        "3": 36,
+        "4": 23,
+        "?": 1,
+        "R": 4,
+        "W": 16
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4282G0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4282GC-Hypnogram.edf",
+      "size_bytes": 51329408,
+      "duration_seconds": 84420.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 14,
+        "2": 23,
+        "3": 24,
+        "4": 10,
+        "?": 1,
+        "R": 3,
+        "W": 15
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4291G0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4291GA-Hypnogram.edf",
+      "size_bytes": 50271488,
+      "duration_seconds": 82680.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 101,
+        "2": 65,
+        "3": 29,
+        "4": 19,
+        "?": 1,
+        "R": 34,
+        "W": 52
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4292G0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4292GC-Hypnogram.edf",
+      "size_bytes": 51256448,
+      "duration_seconds": 84300.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 26,
+        "2": 32,
+        "3": 25,
+        "4": 16,
+        "?": 1,
+        "M": 3,
+        "R": 14,
+        "W": 28
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4301E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4301EC-Hypnogram.edf",
+      "size_bytes": 48265088,
+      "duration_seconds": 79380.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 31,
+        "2": 45,
+        "3": 20,
+        "?": 1,
+        "M": 2,
+        "R": 7,
+        "W": 20
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4302E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4302EV-Hypnogram.edf",
+      "size_bytes": 51219968,
+      "duration_seconds": 84240.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 30,
+        "2": 42,
+        "3": 19,
+        "?": 1,
+        "R": 8,
+        "W": 11
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4311E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4311EC-Hypnogram.edf",
+      "size_bytes": 48702848,
+      "duration_seconds": 80100.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 23,
+        "2": 39,
+        "3": 37,
+        "4": 14,
+        "?": 1,
+        "R": 4,
+        "W": 22
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4312E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4312EM-Hypnogram.edf",
+      "size_bytes": 49250048,
+      "duration_seconds": 81000.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 63,
+        "2": 48,
+        "3": 37,
+        "4": 14,
+        "?": 1,
+        "R": 35,
+        "W": 54
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4321E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4321EC-Hypnogram.edf",
+      "size_bytes": 49067648,
+      "duration_seconds": 80700.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 16,
+        "2": 14,
+        "?": 1,
+        "M": 1,
+        "R": 10,
+        "W": 14
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4322E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4322EC-Hypnogram.edf",
+      "size_bytes": 47717888,
+      "duration_seconds": 78480.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 54,
+        "2": 33,
+        "3": 1,
+        "?": 1,
+        "R": 16,
+        "W": 29
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4331F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4331FV-Hypnogram.edf",
+      "size_bytes": 51256448,
+      "duration_seconds": 84300.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 48,
+        "2": 27,
+        "?": 1,
+        "M": 1,
+        "R": 9,
+        "W": 36
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4332F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4332FC-Hypnogram.edf",
+      "size_bytes": 50344448,
+      "duration_seconds": 82800.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 44,
+        "2": 27,
+        "?": 1,
+        "M": 2,
+        "R": 9,
+        "W": 32
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4341F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4341FA-Hypnogram.edf",
+      "size_bytes": 50162048,
+      "duration_seconds": 82500.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 19,
+        "2": 12,
+        "?": 1,
+        "R": 8,
+        "W": 10
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4342F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4342FA-Hypnogram.edf",
+      "size_bytes": 50891648,
+      "duration_seconds": 83700.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 41,
+        "2": 21,
+        "?": 1,
+        "R": 18,
+        "W": 10
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4351F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4351FA-Hypnogram.edf",
+      "size_bytes": 49432448,
+      "duration_seconds": 81300.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 24,
+        "2": 61,
+        "3": 45,
+        "?": 1,
+        "R": 7,
+        "W": 15
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4352F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4352FV-Hypnogram.edf",
+      "size_bytes": 46185728,
+      "duration_seconds": 75960.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 16,
+        "2": 56,
+        "3": 46,
+        "4": 5,
+        "?": 1,
+        "M": 2,
+        "R": 4,
+        "W": 20
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4362F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4362FC-Hypnogram.edf",
+      "size_bytes": 41333888,
+      "duration_seconds": 67980.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 12,
+        "2": 37,
+        "3": 23,
+        "?": 1,
+        "R": 5,
+        "W": 9
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4371F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4371FA-Hypnogram.edf",
+      "size_bytes": 51986048,
+      "duration_seconds": 85500.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 39,
+        "2": 45,
+        "3": 10,
+        "?": 1,
+        "R": 1,
+        "W": 7
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4372F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4372FC-Hypnogram.edf",
+      "size_bytes": 51803648,
+      "duration_seconds": 85200.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 18,
+        "2": 14,
+        "3": 5,
+        "?": 1,
+        "R": 3,
+        "W": 18
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4381F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4381FC-Hypnogram.edf",
+      "size_bytes": 50162048,
+      "duration_seconds": 82500.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 14,
+        "2": 25,
+        "3": 13,
+        "?": 1,
+        "R": 6,
+        "W": 11
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4382F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4382FW-Hypnogram.edf",
+      "size_bytes": 50526848,
+      "duration_seconds": 83100.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 30,
+        "2": 33,
+        "3": 14,
+        "4": 1,
+        "?": 1,
+        "R": 9,
+        "W": 17
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4401E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4401EC-Hypnogram.edf",
+      "size_bytes": 47973248,
+      "duration_seconds": 78900.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 34,
+        "2": 18,
+        "3": 3,
+        "?": 1,
+        "R": 4,
+        "W": 32
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4402E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4402EW-Hypnogram.edf",
+      "size_bytes": 50891648,
+      "duration_seconds": 83700.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 40,
+        "2": 48,
+        "3": 36,
+        "4": 5,
+        "?": 1,
+        "R": 9,
+        "W": 27
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4411E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4411EJ-Hypnogram.edf",
+      "size_bytes": 49760768,
+      "duration_seconds": 81840.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 56,
+        "2": 68,
+        "3": 26,
+        "4": 1,
+        "?": 1,
+        "R": 6,
+        "W": 21
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4412E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4412EM-Hypnogram.edf",
+      "size_bytes": 52131968,
+      "duration_seconds": 85740.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 36,
+        "2": 50,
+        "3": 53,
+        "4": 26,
+        "?": 1,
+        "R": 9,
+        "W": 21
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4421E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4421EA-Hypnogram.edf",
+      "size_bytes": 50417408,
+      "duration_seconds": 82920.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 22,
+        "2": 39,
+        "3": 36,
+        "4": 18,
+        "?": 1,
+        "R": 4,
+        "W": 7
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4422E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4422EA-Hypnogram.edf",
+      "size_bytes": 48921728,
+      "duration_seconds": 80460.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 39,
+        "2": 37,
+        "3": 34,
+        "4": 20,
+        "?": 1,
+        "R": 3,
+        "W": 24
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4431E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4431EM-Hypnogram.edf",
+      "size_bytes": 51256448,
+      "duration_seconds": 84300.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 27,
+        "2": 39,
+        "3": 24,
+        "4": 7,
+        "?": 1,
+        "R": 5,
+        "W": 7
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4432E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4432EM-Hypnogram.edf",
+      "size_bytes": 50709248,
+      "duration_seconds": 83400.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 13,
+        "2": 33,
+        "3": 25,
+        "4": 7,
+        "?": 1,
+        "R": 3,
+        "W": 6
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4441E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4441EC-Hypnogram.edf",
+      "size_bytes": 47790848,
+      "duration_seconds": 78600.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 32,
+        "2": 33,
+        "3": 27,
+        "4": 12,
+        "?": 1,
+        "R": 2,
+        "W": 29
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4442E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4442EV-Hypnogram.edf",
+      "size_bytes": 50672768,
+      "duration_seconds": 83340.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 35,
+        "2": 42,
+        "3": 27,
+        "4": 8,
+        "?": 1,
+        "R": 3,
+        "W": 34
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4451F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4451FY-Hypnogram.edf",
+      "size_bytes": 50891648,
+      "duration_seconds": 83700.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 59,
+        "2": 32,
+        "3": 37,
+        "4": 27,
+        "?": 1,
+        "R": 12,
+        "W": 46
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4452F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4452FW-Hypnogram.edf",
+      "size_bytes": 48702848,
+      "duration_seconds": 80100.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 45,
+        "2": 53,
+        "3": 53,
+        "4": 22,
+        "?": 1,
+        "R": 16,
+        "W": 30
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4461F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4461FA-Hypnogram.edf",
+      "size_bytes": 49177088,
+      "duration_seconds": 80880.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 33,
+        "2": 26,
+        "3": 9,
+        "?": 1,
+        "M": 1,
+        "R": 10,
+        "W": 18
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4462F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4462FJ-Hypnogram.edf",
+      "size_bytes": 52095488,
+      "duration_seconds": 85680.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 35,
+        "2": 41,
+        "3": 17,
+        "?": 1,
+        "M": 2,
+        "R": 10,
+        "W": 10
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4471F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4471FA-Hypnogram.edf",
+      "size_bytes": 49979648,
+      "duration_seconds": 82200.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 48,
+        "2": 80,
+        "3": 62,
+        "4": 26,
+        "?": 1,
+        "M": 1,
+        "R": 10,
+        "W": 19
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4472F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4472FA-Hypnogram.edf",
+      "size_bytes": 50891648,
+      "duration_seconds": 83700.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 68,
+        "2": 60,
+        "3": 36,
+        "4": 14,
+        "?": 1,
+        "M": 1,
+        "R": 9,
+        "W": 42
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4481F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4481FV-Hypnogram.edf",
+      "size_bytes": 52533248,
+      "duration_seconds": 86400.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 65,
+        "2": 50,
+        "3": 33,
+        "4": 6,
+        "R": 11,
+        "W": 53
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4482F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4482FJ-Hypnogram.edf",
+      "size_bytes": 52533248,
+      "duration_seconds": 86400.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 60,
+        "2": 62,
+        "3": 36,
+        "4": 10,
+        "R": 19,
+        "W": 20
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4491G0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4491GJ-Hypnogram.edf",
+      "size_bytes": 51074048,
+      "duration_seconds": 84000.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 52,
+        "2": 41,
+        "3": 12,
+        "?": 1,
+        "R": 13,
+        "W": 30
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4492G0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4492GJ-Hypnogram.edf",
+      "size_bytes": 38962688,
+      "duration_seconds": 64080.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 59,
+        "2": 47,
+        "3": 17,
+        "4": 1,
+        "?": 1,
+        "M": 1,
+        "R": 8,
+        "W": 35
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4501E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4501EW-Hypnogram.edf",
+      "size_bytes": 50162048,
+      "duration_seconds": 82500.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 30,
+        "2": 24,
+        "3": 2,
+        "?": 1,
+        "R": 9,
+        "W": 18
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4502E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4502EM-Hypnogram.edf",
+      "size_bytes": 50526848,
+      "duration_seconds": 83100.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 32,
+        "2": 51,
+        "3": 28,
+        "?": 1,
+        "R": 13,
+        "W": 13
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4511E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4511EJ-Hypnogram.edf",
+      "size_bytes": 49468928,
+      "duration_seconds": 81360.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 40,
+        "2": 22,
+        "3": 3,
+        "?": 1,
+        "R": 6,
+        "W": 23
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4512E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4512EW-Hypnogram.edf",
+      "size_bytes": 50162048,
+      "duration_seconds": 82500.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 35,
+        "2": 21,
+        "3": 2,
+        "?": 1,
+        "R": 11,
+        "W": 32
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4522E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4522EM-Hypnogram.edf",
+      "size_bytes": 50599808,
+      "duration_seconds": 83220.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 19,
+        "2": 19,
+        "3": 7,
+        "?": 1,
+        "R": 5,
+        "W": 17
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4531E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4531EM-Hypnogram.edf",
+      "size_bytes": 47462528,
+      "duration_seconds": 78060.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 49,
+        "2": 80,
+        "3": 42,
+        "4": 1,
+        "?": 1,
+        "R": 10,
+        "W": 23
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4532E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4532EV-Hypnogram.edf",
+      "size_bytes": 50052608,
+      "duration_seconds": 82320.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 38,
+        "2": 37,
+        "3": 13,
+        "?": 1,
+        "R": 14,
+        "W": 16
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4541F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4541FA-Hypnogram.edf",
+      "size_bytes": 49979648,
+      "duration_seconds": 82200.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 76,
+        "2": 60,
+        "3": 5,
+        "?": 1,
+        "M": 1,
+        "R": 9,
+        "W": 30
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4542F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4542FW-Hypnogram.edf",
+      "size_bytes": 48885248,
+      "duration_seconds": 80400.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 89,
+        "2": 76,
+        "3": 22,
+        "4": 1,
+        "?": 1,
+        "R": 15,
+        "W": 43
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4551F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4551FC-Hypnogram.edf",
+      "size_bytes": 50563328,
+      "duration_seconds": 83160.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 27,
+        "2": 32,
+        "3": 20,
+        "?": 1,
+        "R": 7,
+        "W": 24
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4552F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4552FW-Hypnogram.edf",
+      "size_bytes": 51256448,
+      "duration_seconds": 84300.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 32,
+        "2": 22,
+        "3": 1,
+        "?": 1,
+        "R": 10,
+        "W": 19
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4561F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4561FJ-Hypnogram.edf",
+      "size_bytes": 49323008,
+      "duration_seconds": 81120.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 69,
+        "2": 43,
+        "3": 19,
+        "4": 1,
+        "?": 1,
+        "M": 2,
+        "R": 10,
+        "W": 42
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4562F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4562FJ-Hypnogram.edf",
+      "size_bytes": 51074048,
+      "duration_seconds": 84000.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 63,
+        "2": 41,
+        "3": 16,
+        "?": 1,
+        "R": 17,
+        "W": 35
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4571F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4571FV-Hypnogram.edf",
+      "size_bytes": 51986048,
+      "duration_seconds": 85500.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 79,
+        "2": 59,
+        "?": 2,
+        "R": 14,
+        "W": 59
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4572F0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4572FC-Hypnogram.edf",
+      "size_bytes": 52533248,
+      "duration_seconds": 86400.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 36,
+        "2": 48,
+        "3": 13,
+        "M": 7,
+        "R": 7,
+        "W": 20
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4581G0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4581GM-Hypnogram.edf",
+      "size_bytes": 49943168,
+      "duration_seconds": 82140.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 67,
+        "2": 52,
+        "3": 8,
+        "?": 1,
+        "R": 9,
+        "W": 25
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4582G0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4582GP-Hypnogram.edf",
+      "size_bytes": 48046208,
+      "duration_seconds": 79020.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 71,
+        "2": 49,
+        "3": 5,
+        "?": 1,
+        "R": 18,
+        "W": 37
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4591G0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4591GY-Hypnogram.edf",
+      "size_bytes": 51438848,
+      "duration_seconds": 84600.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 62,
+        "2": 53,
+        "3": 21,
+        "?": 1,
+        "M": 1,
+        "R": 14,
+        "W": 44
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4592G0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4592GY-Hypnogram.edf",
+      "size_bytes": 37211648,
+      "duration_seconds": 61200.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 86,
+        "2": 61,
+        "3": 32,
+        "4": 8,
+        "?": 1,
+        "R": 19,
+        "W": 67
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4601E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4601EC-Hypnogram.edf",
+      "size_bytes": 49797248,
+      "duration_seconds": 81900.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 17,
+        "2": 58,
+        "3": 73,
+        "4": 31,
+        "?": 1,
+        "R": 7,
+        "W": 17
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4602E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4602EJ-Hypnogram.edf",
+      "size_bytes": 51074048,
+      "duration_seconds": 84000.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 44,
+        "2": 70,
+        "3": 70,
+        "4": 20,
+        "?": 1,
+        "R": 12,
+        "W": 28
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4611E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4611EG-Hypnogram.edf",
+      "size_bytes": 48338048,
+      "duration_seconds": 79500.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 37,
+        "2": 79,
+        "3": 61,
+        "4": 18,
+        "?": 4,
+        "R": 35,
+        "W": 19
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4612E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4612EA-Hypnogram.edf",
+      "size_bytes": 49797248,
+      "duration_seconds": 81900.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 35,
+        "2": 55,
+        "3": 36,
+        "4": 1,
+        "?": 1,
+        "R": 6,
+        "W": 19
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4621E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4621EV-Hypnogram.edf",
+      "size_bytes": 47644928,
+      "duration_seconds": 78360.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 64,
+        "2": 60,
+        "3": 11,
+        "?": 1,
+        "R": 8,
+        "W": 46
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4622E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4622EJ-Hypnogram.edf",
+      "size_bytes": 52095488,
+      "duration_seconds": 85680.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 85,
+        "2": 46,
+        "3": 4,
+        "?": 1,
+        "R": 16,
+        "W": 44
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4631E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4631EM-Hypnogram.edf",
+      "size_bytes": 50307968,
+      "duration_seconds": 82740.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 54,
+        "2": 50,
+        "3": 17,
+        "?": 1,
+        "R": 6,
+        "W": 30
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4632E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4632EA-Hypnogram.edf",
+      "size_bytes": 51949568,
+      "duration_seconds": 85440.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 59,
+        "2": 54,
+        "3": 18,
+        "?": 1,
+        "R": 3,
+        "W": 32
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4641E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4641EP-Hypnogram.edf",
+      "size_bytes": 48885248,
+      "duration_seconds": 80400.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 38,
+        "2": 24,
+        "?": 1,
+        "R": 6,
+        "W": 19
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4642E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4642EP-Hypnogram.edf",
+      "size_bytes": 50891648,
+      "duration_seconds": 83700.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 41,
+        "2": 28,
+        "?": 1,
+        "R": 3,
+        "W": 17
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4651E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4651EP-Hypnogram.edf",
+      "size_bytes": 52168448,
+      "duration_seconds": 85800.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 40,
+        "2": 102,
+        "3": 54,
+        "4": 10,
+        "?": 1,
+        "R": 12,
+        "W": 32
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4652E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4652EG-Hypnogram.edf",
+      "size_bytes": 51803648,
+      "duration_seconds": 85200.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 103,
+        "2": 125,
+        "3": 77,
+        "4": 21,
+        "?": 2,
+        "M": 1,
+        "R": 24,
+        "W": 48
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4661E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4661EJ-Hypnogram.edf",
+      "size_bytes": 49979648,
+      "duration_seconds": 82200.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 77,
+        "2": 50,
+        "3": 22,
+        "?": 2,
+        "R": 6,
+        "W": 51
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4662E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4662EJ-Hypnogram.edf",
+      "size_bytes": 51438848,
+      "duration_seconds": 84600.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 60,
+        "2": 45,
+        "3": 29,
+        "4": 4,
+        "?": 1,
+        "R": 14,
+        "W": 38
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4671G0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4671GJ-Hypnogram.edf",
+      "size_bytes": 50709248,
+      "duration_seconds": 83400.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 89,
+        "2": 62,
+        "3": 11,
+        "?": 1,
+        "R": 9,
+        "W": 57
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4672G0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4672GV-Hypnogram.edf",
+      "size_bytes": 47061248,
+      "duration_seconds": 77400.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 34,
+        "2": 29,
+        "3": 13,
+        "4": 1,
+        "?": 1,
+        "R": 5,
+        "W": 32
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4701E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4701EC-Hypnogram.edf",
+      "size_bytes": 48885248,
+      "duration_seconds": 80400.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 23,
+        "2": 37,
+        "3": 24,
+        "?": 1,
+        "M": 1,
+        "R": 4,
+        "W": 20
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4702E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4702EA-Hypnogram.edf",
+      "size_bytes": 47863808,
+      "duration_seconds": 78720.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 43,
+        "2": 40,
+        "3": 19,
+        "?": 1,
+        "R": 5,
+        "W": 25
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4711E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4711EC-Hypnogram.edf",
+      "size_bytes": 49797248,
+      "duration_seconds": 81900.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 41,
+        "2": 34,
+        "3": 4,
+        "?": 1,
+        "R": 11,
+        "W": 37
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4712E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4712EA-Hypnogram.edf",
+      "size_bytes": 51438848,
+      "duration_seconds": 84600.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 69,
+        "2": 31,
+        "?": 1,
+        "R": 17,
+        "W": 39
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4721E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4721EC-Hypnogram.edf",
+      "size_bytes": 42720128,
+      "duration_seconds": 70260.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 30,
+        "2": 12,
+        "?": 1,
+        "R": 4,
+        "W": 30
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4722E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4722EM-Hypnogram.edf",
+      "size_bytes": 50089088,
+      "duration_seconds": 82380.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 67,
+        "2": 40,
+        "?": 1,
+        "R": 7,
+        "W": 39
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4731E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4731EM-Hypnogram.edf",
+      "size_bytes": 50709248,
+      "duration_seconds": 83400.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 60,
+        "2": 30,
+        "?": 1,
+        "R": 7,
+        "W": 35
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4732E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4732EJ-Hypnogram.edf",
+      "size_bytes": 45966848,
+      "duration_seconds": 75600.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 101,
+        "2": 33,
+        "?": 1,
+        "M": 1,
+        "R": 8,
+        "W": 74
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4741E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4741EA-Hypnogram.edf",
+      "size_bytes": 49067648,
+      "duration_seconds": 80700.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 37,
+        "2": 25,
+        "?": 1,
+        "M": 1,
+        "R": 9,
+        "W": 18
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4742E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4742EC-Hypnogram.edf",
+      "size_bytes": 48338048,
+      "duration_seconds": 79500.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 34,
+        "2": 18,
+        "?": 1,
+        "R": 8,
+        "W": 25
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4751E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4751EC-Hypnogram.edf",
+      "size_bytes": 48885248,
+      "duration_seconds": 80400.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 20,
+        "2": 14,
+        "?": 1,
+        "R": 2,
+        "W": 21
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4752E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4752EM-Hypnogram.edf",
+      "size_bytes": 45054848,
+      "duration_seconds": 74100.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 47,
+        "2": 44,
+        "3": 15,
+        "?": 1,
+        "R": 7,
+        "W": 24
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4761E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4761EP-Hypnogram.edf",
+      "size_bytes": 47973248,
+      "duration_seconds": 78900.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 47,
+        "2": 39,
+        "3": 12,
+        "?": 3,
+        "R": 8,
+        "W": 28
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4762E0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4762EG-Hypnogram.edf",
+      "size_bytes": 51256448,
+      "duration_seconds": 84300.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 83,
+        "2": 54,
+        "?": 13,
+        "M": 14,
+        "R": 57,
+        "W": 33
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4771G0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4771GC-Hypnogram.edf",
+      "size_bytes": 50271488,
+      "duration_seconds": 82680.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 54,
+        "2": 20,
+        "3": 5,
+        "?": 1,
+        "R": 12,
+        "W": 44
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4772G0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4772GC-Hypnogram.edf",
+      "size_bytes": 40896128,
+      "duration_seconds": 67260.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 30,
+        "2": 35,
+        "3": 27,
+        "4": 6,
+        "?": 1,
+        "R": 6,
+        "W": 30
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4801G0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4801GC-Hypnogram.edf",
+      "size_bytes": 50599808,
+      "duration_seconds": 83220.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 56,
+        "2": 28,
+        "3": 10,
+        "?": 1,
+        "R": 15,
+        "W": 55
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4802G0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4802GV-Hypnogram.edf",
+      "size_bytes": 51256448,
+      "duration_seconds": 84300.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 56,
+        "2": 38,
+        "3": 4,
+        "?": 1,
+        "R": 13,
+        "W": 46
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4811G0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4811GG-Hypnogram.edf",
+      "size_bytes": 43814528,
+      "duration_seconds": 72060.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 55,
+        "2": 58,
+        "3": 43,
+        "4": 14,
+        "?": 1,
+        "R": 20,
+        "W": 34
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4812G0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4812GV-Hypnogram.edf",
+      "size_bytes": 44069888,
+      "duration_seconds": 72480.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 37,
+        "2": 35,
+        "3": 27,
+        "4": 10,
+        "?": 1,
+        "M": 2,
+        "R": 12,
+        "W": 29
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4821G0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4821GC-Hypnogram.edf",
+      "size_bytes": 49651328,
+      "duration_seconds": 81660.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 20,
+        "2": 34,
+        "3": 40,
+        "4": 27,
+        "?": 1,
+        "M": 1,
+        "R": 6,
+        "W": 25
+      }
+    },
+    {
+      "relative_path": "sleep-cassette/SC4822G0-PSG.edf",
+      "paired_hypnogram": "sleep-cassette/SC4822GC-Hypnogram.edf",
+      "size_bytes": 51256448,
+      "duration_seconds": 84300.0,
+      "signal_count": 7,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "Resp oro-nasal",
+        "EMG submental",
+        "Temp rectal",
+        "Event marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "stage_counts": {
+        "1": 36,
+        "2": 36,
+        "3": 36,
+        "4": 18,
+        "?": 1,
+        "R": 6,
+        "W": 33
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7011J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7011JP-Hypnogram.edf",
+      "size_bytes": 29439536,
+      "duration_seconds": 35900.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 52,
+        "2": 82,
+        "3": 51,
+        "4": 10,
+        "R": 10,
+        "W": 26
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7012J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7012JP-Hypnogram.edf",
+      "size_bytes": 25683936,
+      "duration_seconds": 31320.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 30,
+        "2": 64,
+        "3": 47,
+        "4": 4,
+        "R": 15,
+        "W": 13
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7021J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7021JM-Hypnogram.edf",
+      "size_bytes": 25093536,
+      "duration_seconds": 30600.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 26,
+        "2": 39,
+        "3": 24,
+        "4": 10,
+        "R": 12,
+        "W": 24
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7022J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7022JM-Hypnogram.edf",
+      "size_bytes": 25224736,
+      "duration_seconds": 30760.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 30,
+        "2": 52,
+        "3": 29,
+        "4": 5,
+        "R": 10,
+        "W": 22
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7041J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7041JO-Hypnogram.edf",
+      "size_bytes": 25552736,
+      "duration_seconds": 31160.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 27,
+        "2": 30,
+        "3": 34,
+        "4": 24,
+        "M": 1,
+        "R": 7,
+        "W": 19
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7042J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7042JO-Hypnogram.edf",
+      "size_bytes": 28463736,
+      "duration_seconds": 34710.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 27,
+        "2": 38,
+        "3": 33,
+        "4": 18,
+        "M": 1,
+        "R": 4,
+        "W": 17
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7051J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7051JA-Hypnogram.edf",
+      "size_bytes": 26405536,
+      "duration_seconds": 32200.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 50,
+        "2": 48,
+        "3": 29,
+        "4": 17,
+        "R": 23,
+        "W": 17
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7052J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7052JA-Hypnogram.edf",
+      "size_bytes": 26922136,
+      "duration_seconds": 32830.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 38,
+        "2": 25,
+        "3": 11,
+        "4": 7,
+        "R": 8,
+        "W": 27
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7061J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7061JR-Hypnogram.edf",
+      "size_bytes": 26708936,
+      "duration_seconds": 32570.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 28,
+        "2": 32,
+        "3": 8,
+        "R": 8,
+        "W": 7
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7062J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7062JR-Hypnogram.edf",
+      "size_bytes": 26881136,
+      "duration_seconds": 32780.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 20,
+        "2": 33,
+        "3": 19,
+        "R": 14,
+        "W": 6
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7071J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7071JA-Hypnogram.edf",
+      "size_bytes": 22518736,
+      "duration_seconds": 27460.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 39,
+        "2": 40,
+        "3": 19,
+        "4": 6,
+        "R": 12,
+        "W": 23
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7072J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7072JA-Hypnogram.edf",
+      "size_bytes": 22518736,
+      "duration_seconds": 27460.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 31,
+        "2": 44,
+        "3": 33,
+        "4": 15,
+        "R": 24,
+        "W": 14
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7081J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7081JW-Hypnogram.edf",
+      "size_bytes": 23781536,
+      "duration_seconds": 29000.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 36,
+        "2": 58,
+        "3": 40,
+        "R": 3,
+        "W": 23
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7082J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7082JW-Hypnogram.edf",
+      "size_bytes": 23396136,
+      "duration_seconds": 28530.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 33,
+        "2": 44,
+        "3": 29,
+        "R": 4,
+        "W": 19
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7091J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7091JE-Hypnogram.edf",
+      "size_bytes": 24486736,
+      "duration_seconds": 29860.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 36,
+        "2": 45,
+        "3": 25,
+        "R": 5,
+        "W": 23
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7092J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7092JE-Hypnogram.edf",
+      "size_bytes": 23674936,
+      "duration_seconds": 28870.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 59,
+        "2": 52,
+        "3": 26,
+        "R": 6,
+        "W": 47
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7101J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7101JE-Hypnogram.edf",
+      "size_bytes": 27028736,
+      "duration_seconds": 32960.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 20,
+        "2": 57,
+        "3": 53,
+        "4": 8,
+        "M": 6,
+        "R": 8,
+        "W": 9
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7102J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7102JE-Hypnogram.edf",
+      "size_bytes": 24453936,
+      "duration_seconds": 29820.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 8,
+        "2": 27,
+        "3": 35,
+        "4": 16,
+        "M": 5,
+        "R": 5,
+        "W": 5
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7111J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7111JE-Hypnogram.edf",
+      "size_bytes": 25749536,
+      "duration_seconds": 31400.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 17,
+        "2": 24,
+        "3": 15,
+        "4": 5,
+        "M": 6,
+        "R": 5,
+        "W": 11
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7112J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7112JE-Hypnogram.edf",
+      "size_bytes": 25150936,
+      "duration_seconds": 30670.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 22,
+        "2": 33,
+        "3": 26,
+        "4": 11,
+        "M": 8,
+        "R": 6,
+        "W": 7
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7121J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7121JE-Hypnogram.edf",
+      "size_bytes": 25585536,
+      "duration_seconds": 31200.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 18,
+        "2": 57,
+        "3": 59,
+        "4": 18,
+        "M": 9,
+        "R": 5,
+        "W": 6
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7122J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7122JE-Hypnogram.edf",
+      "size_bytes": 24888536,
+      "duration_seconds": 30350.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 19,
+        "2": 21,
+        "3": 16,
+        "4": 11,
+        "M": 17,
+        "R": 5,
+        "W": 10
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7131J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7131JR-Hypnogram.edf",
+      "size_bytes": 22682736,
+      "duration_seconds": 27660.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 15,
+        "2": 27,
+        "3": 26,
+        "4": 10,
+        "R": 9,
+        "W": 2
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7132J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7132JR-Hypnogram.edf",
+      "size_bytes": 22125136,
+      "duration_seconds": 26980.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 23,
+        "2": 39,
+        "3": 28,
+        "4": 12,
+        "R": 8,
+        "W": 6
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7141J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7141JE-Hypnogram.edf",
+      "size_bytes": 22641736,
+      "duration_seconds": 27610.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 20,
+        "2": 34,
+        "3": 35,
+        "4": 16,
+        "M": 4,
+        "R": 3,
+        "W": 15
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7142J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7142JE-Hypnogram.edf",
+      "size_bytes": 22559736,
+      "duration_seconds": 27510.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 14,
+        "2": 26,
+        "3": 16,
+        "4": 7,
+        "M": 9,
+        "R": 6,
+        "W": 13
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7151J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7151JA-Hypnogram.edf",
+      "size_bytes": 31579736,
+      "duration_seconds": 38510.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 34,
+        "2": 53,
+        "3": 44,
+        "4": 12,
+        "R": 9,
+        "W": 26
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7152J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7152JA-Hypnogram.edf",
+      "size_bytes": 26446536,
+      "duration_seconds": 32250.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 27,
+        "2": 40,
+        "3": 44,
+        "4": 22,
+        "R": 18,
+        "W": 16
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7161J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7161JM-Hypnogram.edf",
+      "size_bytes": 27307536,
+      "duration_seconds": 33300.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 39,
+        "2": 46,
+        "3": 24,
+        "4": 10,
+        "R": 9,
+        "W": 20
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7162J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7162JM-Hypnogram.edf",
+      "size_bytes": 24634336,
+      "duration_seconds": 30040.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 47,
+        "2": 50,
+        "3": 33,
+        "4": 14,
+        "R": 2,
+        "W": 34
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7171J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7171JA-Hypnogram.edf",
+      "size_bytes": 23724136,
+      "duration_seconds": 28930.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 53,
+        "2": 47,
+        "3": 39,
+        "4": 15,
+        "R": 11,
+        "W": 29
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7172J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7172JA-Hypnogram.edf",
+      "size_bytes": 24765536,
+      "duration_seconds": 30200.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 65,
+        "2": 52,
+        "3": 28,
+        "4": 17,
+        "R": 12,
+        "W": 25
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7181J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7181JR-Hypnogram.edf",
+      "size_bytes": 25323136,
+      "duration_seconds": 30880.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 25,
+        "2": 30,
+        "3": 20,
+        "R": 5,
+        "W": 21
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7182J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7182JR-Hypnogram.edf",
+      "size_bytes": 27832336,
+      "duration_seconds": 33940.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 17,
+        "2": 35,
+        "3": 33,
+        "4": 5,
+        "R": 4,
+        "W": 15
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7191J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7191JR-Hypnogram.edf",
+      "size_bytes": 27709336,
+      "duration_seconds": 33790.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 30,
+        "2": 34,
+        "3": 30,
+        "4": 28,
+        "R": 7,
+        "W": 19
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7192J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7192JR-Hypnogram.edf",
+      "size_bytes": 26979536,
+      "duration_seconds": 32900.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 10,
+        "2": 26,
+        "3": 25,
+        "4": 11,
+        "R": 6,
+        "W": 7
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7201J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7201JO-Hypnogram.edf",
+      "size_bytes": 23879936,
+      "duration_seconds": 29120.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 26,
+        "2": 41,
+        "3": 31,
+        "4": 17,
+        "M": 2,
+        "R": 9,
+        "W": 11
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7202J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7202JO-Hypnogram.edf",
+      "size_bytes": 24601536,
+      "duration_seconds": 30000.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 20,
+        "2": 47,
+        "3": 31,
+        "M": 1,
+        "R": 11,
+        "W": 11
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7211J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7211JJ-Hypnogram.edf",
+      "size_bytes": 26544936,
+      "duration_seconds": 32370.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 31,
+        "2": 49,
+        "3": 44,
+        "4": 16,
+        "R": 7,
+        "W": 19
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7212J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7212JJ-Hypnogram.edf",
+      "size_bytes": 25929936,
+      "duration_seconds": 31620.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 37,
+        "2": 30,
+        "3": 24,
+        "4": 16,
+        "R": 8,
+        "W": 27
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7221J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7221JA-Hypnogram.edf",
+      "size_bytes": 27028736,
+      "duration_seconds": 32960.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 56,
+        "2": 36,
+        "3": 2,
+        "R": 15,
+        "W": 29
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7222J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7222JA-Hypnogram.edf",
+      "size_bytes": 23568336,
+      "duration_seconds": 28740.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 56,
+        "2": 31,
+        "R": 20,
+        "W": 24
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7241J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7241JO-Hypnogram.edf",
+      "size_bytes": 26741736,
+      "duration_seconds": 32610.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 20,
+        "2": 34,
+        "3": 20,
+        "4": 6,
+        "M": 3,
+        "R": 10,
+        "W": 9
+      }
+    },
+    {
+      "relative_path": "sleep-telemetry/ST7242J0-PSG.edf",
+      "paired_hypnogram": "sleep-telemetry/ST7242JO-Hypnogram.edf",
+      "size_bytes": 24175136,
+      "duration_seconds": 29480.0,
+      "signal_count": 5,
+      "channels": [
+        "EEG Fpz-Cz",
+        "EEG Pz-Oz",
+        "EOG horizontal",
+        "EMG submental",
+        "Marker"
+      ],
+      "sample_rates_hz": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        10.0
+      ],
+      "stage_counts": {
+        "1": 17,
+        "2": 41,
+        "3": 44,
+        "4": 28,
+        "M": 1,
+        "R": 5,
+        "W": 10
+      }
+    }
+  ]
+}
