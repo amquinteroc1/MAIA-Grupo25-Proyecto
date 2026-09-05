@@ -1,1 +1,13 @@
 /data
+.venv/
+__pycache__/
+*.pyc
+
+mlflow.db
+mlruns/
+
+models/*.joblib
+
+outputs/data/
+outputs/predictions/
+outputs/metrics/
