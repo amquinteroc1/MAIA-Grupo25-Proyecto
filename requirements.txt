@@ -1,0 +1,11 @@
+mne
+numpy
+pandas
+scipy
+scikit-learn
+mlflow
+joblib
+streamlit
+pyarrow
+matplotlib
+dvc
