@@ -1,4 +1,9 @@
 [core]
-    remote = local-remote
+    remote = cnn-remote
 ['remote "local-remote"']
     url = /tmp/dvcstore
+['remote "aws-remote"']
+    url = s3://sleep-dvcstore
+['remote "cnn-remote"']
+    url = s3://sleep-cnn-grupo25
+    region = us-east-2
