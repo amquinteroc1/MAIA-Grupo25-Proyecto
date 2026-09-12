@@ -1,0 +1,5 @@
+outs:
+- md5: 15650c3f29aaa42c6ccdebf99860d238
+  size: 2917264
+  hash: md5
+  path: groups_train.npy
