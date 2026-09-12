@@ -182,4 +182,124 @@ def main():
     pares = encontrar_pares()
     assert len(pares) > 0, "No se encontraron pares EDF"
 
-    # Mapeo sujeto → ID
+    # Mapeo sujeto → ID numérico
+    sujetos_unicos = sorted(set(p[2] for p in pares))
+    sujeto_a_id    = {s: i for i, s in enumerate(sujetos_unicos)}
+
+    todas_epocas  = []
+    todos_labels  = []
+    todos_grupos  = []
+
+    for idx, (psg, hyp, sujeto) in enumerate(pares):
+        log.info(f"[{idx+1}/{len(pares)}] Procesando {Path(psg).stem}")
+        epocas, labels = leer_sujeto(psg, hyp)
+
+        if epocas is None:
+            log.warning(f"  → Omitido (sin épocas válidas)")
+            continue
+
+        epocas = normalizar(epocas)
+
+        grupo_id = sujeto_a_id[sujeto]
+        grupos   = np.full(len(labels), grupo_id, dtype=np.int64)
+
+        todas_epocas.append(epocas)
+        todos_labels.append(labels)
+        todos_grupos.append(grupos)
+
+    # Concatenar todo
+    X      = np.concatenate(todas_epocas, axis=0)
+    y      = np.concatenate(todos_labels, axis=0)
+    grupos = np.concatenate(todos_grupos, axis=0)
+
+    log.info(f"Dataset completo: {X.shape}, etiquetas: {y.shape}")
+    log.info(f"Distribución de clases: { {i: int((y==i).sum()) for i in range(5)} }")
+
+    # ── Split por sujeto 80/20 ────────────────────────────────────────────────
+    gss = GroupShuffleSplit(n_splits=1, test_size=SPLIT_RATIO,
+                            random_state=SPLIT_SEED)
+    idx_train, idx_test = next(gss.split(X, y, groups=grupos))
+
+    X_train, X_test = X[idx_train], X[idx_test]
+    y_train, y_test = y[idx_train], y[idx_test]
+    g_train, g_test = grupos[idx_train], grupos[idx_test]
+
+    log.info(f"Train: {X_train.shape} | Test: {X_test.shape}")
+
+    assert len(set(g_train.tolist()) & set(g_test.tolist())) == 0, \
+        "ERROR: hay sujetos en train Y test — data leakage!"
+    log.info("✓ Split verificado — sin sujetos compartidos entre train y test")
+
+    # ── MVP 1: épocas individuales (N, 3, 3000) ───────────────────────────────
+    log.info("Guardando MVP 1 — épocas individuales...")
+    np.save(OUT_DIR / "X_train.npy",      X_train)
+    np.save(OUT_DIR / "X_test.npy",       X_test)
+    np.save(OUT_DIR / "y_train.npy",      y_train)
+    np.save(OUT_DIR / "y_test.npy",       y_test)
+    np.save(OUT_DIR / "groups_train.npy", g_train)
+    np.save(OUT_DIR / "groups_test.npy",  g_test)
+    log.info(f"  ✓ X_train: {X_train.shape}")
+    log.info(f"  ✓ X_test:  {X_test.shape}")
+
+    # ── MVP 2: secuencias (N, 5, 3, 3000) ────────────────────────────────────
+    log.info("Construyendo MVP 2 — secuencias de 5 épocas...")
+    X_seq_train, y_seq_train = construir_secuencias(X_train, y_train)
+    X_seq_test,  y_seq_test  = construir_secuencias(X_test,  y_test)
+
+    np.save(OUT_DIR / "X_seq_train.npy", X_seq_train)
+    np.save(OUT_DIR / "X_seq_test.npy",  X_seq_test)
+    log.info(f"  ✓ X_seq_train: {X_seq_train.shape}")
+    log.info(f"  ✓ X_seq_test:  {X_seq_test.shape}")
+
+    # ── Metadata ──────────────────────────────────────────────────────────────
+    split_info = {
+        "canales":            CANALES,
+        "sample_rate_hz":     FS,
+        "epoch_duration_s":   EPOCH_SEC,
+        "n_muestras_epoca":   N_MUESTRAS,
+        "seq_len":            SEQ_LEN,
+        "split_seed":         SPLIT_SEED,
+        "split_ratio":        SPLIT_RATIO,
+        "n_sujetos_total":    len(sujetos_unicos),
+        "n_sujetos_train":    len(set(g_train.tolist())),
+        "n_sujetos_test":     len(set(g_test.tolist())),
+        "n_epocas_train":     int(len(y_train)),
+        "n_epocas_test":      int(len(y_test)),
+        "distribucion_train": {str(i): int((y_train==i).sum()) for i in range(5)},
+        "distribucion_test":  {str(i): int((y_test==i).sum())  for i in range(5)},
+        "clases":             {"0":"Wake","1":"N1","2":"N2","3":"N3","4":"REM"}
+    }
+    with open(OUT_DIR / "split_info.json", "w") as f:
+        json.dump(split_info, f, indent=2)
+    log.info("✓ split_info.json guardado")
+
+    # ── MLflow ────────────────────────────────────────────────────────────────
+    log.info("Registrando en MLflow...")
+    mlflow.set_experiment("sleep-stage-cnn-pipeline")
+    with mlflow.start_run(run_name="dataset-cnn-v1"):
+        mlflow.log_params({
+            "canales":        str(CANALES),
+            "sample_rate_hz": FS,
+            "epoch_duration_s": EPOCH_SEC,
+            "seq_len":        SEQ_LEN,
+            "split_seed":     SPLIT_SEED,
+            "split_ratio":    SPLIT_RATIO,
+            "n_sujetos":      len(sujetos_unicos),
+            "normalizacion":  "z-score por sujeto y canal",
+        })
+        mlflow.log_metrics({
+            "n_epocas_train":  float(len(y_train)),
+            "n_epocas_test":   float(len(y_test)),
+            "n1_train_count":  float((y_train == 1).sum()),
+            "class_imbalance": float((y_train == 0).sum() /
+                                     max((y_train == 1).sum(), 1)),
+        })
+        mlflow.log_artifact(str(OUT_DIR / "split_info.json"))
+    log.info("✓ Experimento registrado en MLflow")
+
+    log.info("=== Pipeline CNN completado ===")
+    log.info(f"Artefactos en: {OUT_DIR}")
+
+
+if __name__ == "__main__":
+    main()
