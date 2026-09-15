@@ -8,4 +8,6 @@ joblib
 streamlit
 pyarrow
 matplotlib
-dvc
+dvc[s3]
+lightgbm
+skops
