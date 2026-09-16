@@ -53,16 +53,21 @@ class SleepDataset(Dataset):
 
 # ── Class weights ─────────────────────────────────────────────────────────────
 def calcular_class_weights(y_train: np.ndarray,
-                           n_classes: int = 5) -> torch.Tensor:
-    """Calcula pesos inversamente proporcionales a la frecuencia de cada clase."""
+                           n_classes: int = 5,
+                           boost_n1: float = 1.0,
+                           boost_n3: float = 1.0) -> torch.Tensor:
+    """Calcula pesos con boost opcional para clases minoritarias."""
     n_total = len(y_train)
     weights = []
     for i in range(n_classes):
         n_i = (y_train == i).sum()
         w_i = n_total / (n_classes * n_i)
         weights.append(w_i)
+    # Aplicar boost
+    weights[1] *= boost_n1  # N1
+    weights[3] *= boost_n3  # N3
+    print(f'Class weights: {[round(w,3) for w in weights]}')
     return torch.tensor(weights, dtype=torch.float32)
-
 
 # ── Entrenamiento un epoch ────────────────────────────────────────────────────
 def train_epoch(model, loader, optimizer, criterion, device):
@@ -120,7 +125,11 @@ def main(args):
 
     # Class weights
     y_train      = np.load(DATA_DIR / "y_train.npy")
-    class_weights = calcular_class_weights(y_train).to(device)
+    class_weights = calcular_class_weights(
+    	y_train, 
+    	boost_n1=args.boost_n1,
+    	boost_n3=args.boost_n3
+    ).to(device)
     print(f"Class weights: {class_weights.cpu().numpy().round(3)}")
 
     # Modelo
@@ -209,5 +218,7 @@ if __name__ == "__main__":
     parser.add_argument("--batch_size", type=int,   default=64)
     parser.add_argument("--lr",         type=float, default=1e-3)
     parser.add_argument("--dropout",    type=float, default=0.5)
+    parser.add_argument("--boost_n1", type=float, default=1.0)
+    parser.add_argument("--boost_n3", type=float, default=1.0)
     args = parser.parse_args()
     main(args)
