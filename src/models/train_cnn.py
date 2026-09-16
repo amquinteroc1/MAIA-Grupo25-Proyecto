@@ -197,7 +197,7 @@ def main(args):
             "best_val_f1_macro": f1_macro,
             "best_val_f1_n1":    float(f1_cls[1]),
         })
-        mlflow.pytorch.log_model(model, "cnn1d_model", input_example=torch.randn(1, 3, 3000))
+        mlflow.pytorch.log_model(model, "cnn1d_model", serialization_format="pickle")
         mlflow.log_artifact(str(best_path))
         print(f"\nMejor F1 macro: {f1_macro:.4f}")
         print(f"Modelo guardado en: {best_path}")
