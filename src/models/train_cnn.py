@@ -129,7 +129,7 @@ def main(args):
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr,
                                   weight_decay=1e-4)
     scheduler = ReduceLROnPlateau(optimizer, mode="max", patience=3,
-                                   factor=0.5, verbose=True)
+                                   factor=0.5)
 
     # MLflow
     mlflow.set_experiment("sleep-stage-cnn1d")
