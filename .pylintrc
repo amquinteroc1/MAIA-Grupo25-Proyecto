@@ -1,0 +1,19 @@
+[MAIN]
+ignore=.venv,.venv-gpu,.git
+
+[MESSAGES CONTROL]
+disable=
+    C0103,  # invalid-name (permite notación estándar de ML: X_train, X_test, X, N)
+    C0114,  # missing-module-docstring
+    C0115,  # missing-class-docstring
+    C0116,  # missing-function-docstring
+    W1203,  # logging-fstring-interpolation (permite f-strings en logging)
+    W0718,  # broad-exception-caught (permite except Exception en workers resilientes)
+    W1514,  # unspecified-encoding
+    C0413,  # wrong-import-position (permite imports posteriores a os.environ)
+    E0401,  # import-error (evita falsos positivos en módulos locales)
+    W0612,  # unused-variable (permite desempaquetado de tuplas de sistema)
+    C0301   # line-too-long
+
+[FORMAT]
+max-line-length=120

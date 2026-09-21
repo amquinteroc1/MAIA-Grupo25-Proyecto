@@ -9,3 +9,4 @@ streamlit
 pyarrow
 matplotlib
 dvc
+dvc-s3
