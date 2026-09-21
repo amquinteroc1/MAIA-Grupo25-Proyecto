@@ -11,3 +11,15 @@ matplotlib
 dvc[s3]
 lightgbm
 skops
+mne
+numpy
+pandas
+scipy
+scikit-learn
+mlflow
+joblib
+streamlit
+pyarrow
+matplotlib
+dvc
+dvc-s3
