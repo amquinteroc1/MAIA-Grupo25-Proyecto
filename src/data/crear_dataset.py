@@ -1,4 +1,5 @@
 from pathlib import Path
+
 import mne
 import pandas as pd
 
@@ -17,7 +18,11 @@ OUTPUT_PARQUET = OUTPUT_DIR / "dataset_sleep_ml.parquet"
 
 EPOCH_DURATION = 30
 
-CANALES_ML = ["EEG Fpz-Cz", "EEG Pz-Oz", "EOG horizontal"]
+CANALES_ML = [
+    "EEG Fpz-Cz",
+    "EEG Pz-Oz",
+    "EOG horizontal"
+]
 
 EVENT_ID = {
     "Sleep stage W": 1,
@@ -28,13 +33,23 @@ EVENT_ID = {
     "Sleep stage R": 5
 }
 
-STAGE_NAMES = {1: "Wake", 2: "N1", 3: "N2", 4: "N3", 5: "REM"}
+STAGE_NAMES = {
+    1: "Wake",
+    2: "N1",
+    3: "N2",
+    4: "N3",
+    5: "REM"
+}
 
 
-# obtener id
+# obtener ids
 
 def id_registro(nombre_archivo):
     return nombre_archivo[:6]
+
+
+def id_sujeto(nombre_archivo):
+    return nombre_archivo[:5]
 
 
 # emparejar archivos
@@ -42,14 +57,25 @@ def id_registro(nombre_archivo):
 def emparejar_archivos(carpeta):
     psg_files = sorted(carpeta.glob("*-PSG.edf"))
     hyp_files = sorted(carpeta.glob("*-Hypnogram.edf"))
-    hyp_dict = {id_registro(f.name): f for f in hyp_files}
+
+    hyp_dict = {
+        id_registro(archivo.name): archivo
+        for archivo in hyp_files
+    }
+
     pares = []
 
     for psg in psg_files:
         registro = id_registro(psg.name)
+        sujeto = id_sujeto(psg.name)
 
         if registro in hyp_dict:
-            pares.append({"id": registro, "psg": psg, "hypnogram": hyp_dict[registro]})
+            pares.append({
+                "id": registro,
+                "subject": sujeto,
+                "psg": psg,
+                "hypnogram": hyp_dict[registro]
+            })
         else:
             print(f"Sin Hypnogram: {psg.name}")
 
@@ -58,17 +84,39 @@ def emparejar_archivos(carpeta):
 
 # procesar registro
 
-def procesar_registro(psg_path, hyp_path, estudio, subject):
-    print(f"Procesando {subject}: {psg_path.name}")
+def procesar_registro(
+    psg_path,
+    hyp_path,
+    estudio,
+    subject
+):
+    print(
+        f"Procesando sujeto {subject}: "
+        f"{psg_path.name}"
+    )
 
-    raw = mne.io.read_raw_edf(psg_path, preload=True, verbose=False)
-    annotations = mne.read_annotations(hyp_path)
+    raw = mne.io.read_raw_edf(
+        psg_path,
+        preload=True,
+        verbose=False
+    )
+
+    annotations = mne.read_annotations(
+        hyp_path
+    )
+
     raw.set_annotations(annotations)
 
-    canales = [c for c in CANALES_ML if c in raw.ch_names]
+    canales = [
+        canal
+        for canal in CANALES_ML
+        if canal in raw.ch_names
+    ]
 
     if not canales:
-        raise ValueError(f"Sin canales validos en {psg_path.name}")
+        raise ValueError(
+            f"Sin canales validos en {psg_path.name}"
+        )
 
     events, _ = mne.events_from_annotations(
         raw,
@@ -98,7 +146,9 @@ def procesar_registro(psg_path, hyp_path, estudio, subject):
     filas = []
 
     for i in range(len(epochs)):
-        stage = STAGE_NAMES.get(epochs.events[i, 2])
+        stage = STAGE_NAMES.get(
+            epochs.events[i, 2]
+        )
 
         if stage is None:
             continue
@@ -113,12 +163,27 @@ def procesar_registro(psg_path, hyp_path, estudio, subject):
 
         datos_epoch = epochs[i].get_data()
 
-        for j, canal in enumerate(epochs.ch_names):
-            features = extraer_features(datos_epoch[0, j, :], fs)
-            nombre_canal = canal.replace(" ", "_").replace("-", "_")
+        for j, canal in enumerate(
+            epochs.ch_names
+        ):
+            features = extraer_features(
+                datos_epoch[0, j, :],
+                fs
+            )
+
+            nombre_canal = (
+                canal
+                .replace(" ", "_")
+                .replace("-", "_")
+            )
 
             for nombre_feature, valor in features.items():
-                fila[f"{nombre_canal}_{nombre_feature}"] = valor
+                columna = (
+                    f"{nombre_canal}_"
+                    f"{nombre_feature}"
+                )
+
+                fila[columna] = valor
 
         filas.append(fila)
 
@@ -127,56 +192,165 @@ def procesar_registro(psg_path, hyp_path, estudio, subject):
 
 # procesar estudio
 
-def procesar_estudio(carpeta, nombre_estudio):
+def procesar_estudio(
+    carpeta,
+    nombre_estudio
+):
     pares = emparejar_archivos(carpeta)
-    print(f"\n{nombre_estudio}: {len(pares)} registros")
+
+    print(
+        f"\n{nombre_estudio}: "
+        f"{len(pares)} registros"
+    )
 
     datasets = []
 
-    for i, par in enumerate(pares, start=1):
-        print(f"[{i}/{len(pares)}]")
+    for i, par in enumerate(
+        pares,
+        start=1
+    ):
+        print(
+            f"[{i}/{len(pares)}] "
+            f"registro {par['id']} - "
+            f"sujeto {par['subject']}"
+        )
 
         try:
-            df = procesar_registro(par["psg"], par["hypnogram"], nombre_estudio, par["id"])
-            datasets.append(df)
-            print(f"Epochs: {len(df)}")
-        except Exception as e:
-            print(f"ERROR {par['id']}: {e}")
+            df = procesar_registro(
+                par["psg"],
+                par["hypnogram"],
+                nombre_estudio,
+                par["subject"]
+            )
 
-    return pd.concat(datasets, ignore_index=True) if datasets else pd.DataFrame()
+            datasets.append(df)
+
+            print(f"Epochs: {len(df)}")
+
+        except Exception as error:
+            print(
+                f"ERROR {par['id']}: "
+                f"{error}"
+            )
+
+    if not datasets:
+        return pd.DataFrame()
+
+    return pd.concat(
+        datasets,
+        ignore_index=True
+    )
 
 
 # crear dataset
 
 def main():
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    OUTPUT_DIR.mkdir(
+        parents=True,
+        exist_ok=True
+    )
 
-    dataset_sc = procesar_estudio(DIR_SC, "sleep-cassette") if DIR_SC.exists() else pd.DataFrame()
-    dataset_st = procesar_estudio(DIR_ST, "sleep-telemetry") if DIR_ST.exists() else pd.DataFrame()
+    if DIR_SC.exists():
+        dataset_sc = procesar_estudio(
+            DIR_SC,
+            "sleep-cassette"
+        )
+    else:
+        print(
+            f"No existe: {DIR_SC.resolve()}"
+        )
+        dataset_sc = pd.DataFrame()
 
-    datasets = [df for df in [dataset_sc, dataset_st] if not df.empty]
+    if DIR_ST.exists():
+        dataset_st = procesar_estudio(
+            DIR_ST,
+            "sleep-telemetry"
+        )
+    else:
+        print(
+            f"No existe: {DIR_ST.resolve()}"
+        )
+        dataset_st = pd.DataFrame()
+
+    datasets = [
+        dataset
+        for dataset in [
+            dataset_sc,
+            dataset_st
+        ]
+        if not dataset.empty
+    ]
 
     if not datasets:
-        print("No se genero ningun dataset")
-        print(f"Ruta esperada SC: {DIR_SC.resolve()}")
-        print(f"Ruta esperada ST: {DIR_ST.resolve()}")
+        print(
+            "No se genero ningun dataset"
+        )
+
+        print(
+            f"Ruta esperada SC: "
+            f"{DIR_SC.resolve()}"
+        )
+
+        print(
+            f"Ruta esperada ST: "
+            f"{DIR_ST.resolve()}"
+        )
+
         return
 
-    dataset = pd.concat(datasets, ignore_index=True)
+    dataset = pd.concat(
+        datasets,
+        ignore_index=True
+    )
 
-    print(f"\nDimensiones: {dataset.shape}")
-    print(f"Sujetos: {dataset['subject'].nunique()}")
+    print(
+        f"\nDimensiones: "
+        f"{dataset.shape}"
+    )
+
+    print(
+        f"Registros: "
+        f"{dataset['archivo'].nunique()}"
+    )
+
+    print(
+        f"Sujetos reales: "
+        f"{dataset['subject'].nunique()}"
+    )
+
     print("\nEtapas:")
-    print(dataset["stage"].value_counts())
 
-    dataset.to_csv(OUTPUT_CSV, index=False)
+    print(
+        dataset["stage"].value_counts()
+    )
+
+    dataset.to_csv(
+        OUTPUT_CSV,
+        index=False
+    )
 
     try:
-        dataset.to_parquet(OUTPUT_PARQUET, index=False)
-    except Exception as e:
-        print(f"No se pudo guardar Parquet: {e}")
+        dataset.to_parquet(
+            OUTPUT_PARQUET,
+            index=False
+        )
 
-    print(f"\nDataset guardado en: {OUTPUT_CSV}")
+    except Exception as error:
+        print(
+            "No se pudo guardar "
+            f"Parquet: {error}"
+        )
+
+    print(
+        f"\nDataset CSV guardado en: "
+        f"{OUTPUT_CSV.resolve()}"
+    )
+
+    if OUTPUT_PARQUET.exists():
+        print(
+            "Dataset Parquet guardado en: "
+            f"{OUTPUT_PARQUET.resolve()}"
+        )
 
 
 # ejecutar

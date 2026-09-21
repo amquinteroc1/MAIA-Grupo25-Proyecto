@@ -1,5 +1,6 @@
 /data
 .venv/
+.venv-gpu/
 __pycache__/
 *.pyc
 
@@ -11,3 +12,6 @@ models/*.joblib
 outputs/data/
 outputs/predictions/
 outputs/metrics/
+data_processed/*.mmap
+data_processed/tmp/
+logs/

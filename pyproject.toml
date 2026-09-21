@@ -1,0 +1,9 @@
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+ignore = ["E501", "E402", "E221", "N803", "N806", "E203"]
+
+[tool.ruff.format]
+quote-style = 'single'
+indent-style = "space"
