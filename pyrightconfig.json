@@ -1,0 +1,23 @@
+{
+  "include": [
+    ".",
+    "src",
+    "dashboard"
+  ],
+  "extraPaths": [
+    ".",
+    "src",
+    "src/models",
+    "src/data",
+    "dashboard"
+  ],
+  "reportMissingImports": "none",
+  "reportMissingModuleSource": "none",
+  "reportMissingTypeStubs": "none",
+  "reportArgumentType": "none",
+  "reportCallIssue": "none",
+  "reportGeneralTypeIssues": "none",
+  "reportOptionalMemberAccess": "none",
+  "reportUnknownMemberType": "none",
+  "reportUnknownVariableType": "none"
+}

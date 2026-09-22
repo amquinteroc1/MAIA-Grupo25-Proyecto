@@ -7,3 +7,17 @@ ignore = ["E501", "E402", "E221", "N803", "N806", "E203"]
 [tool.ruff.format]
 quote-style = 'single'
 indent-style = "space"
+
+[tool.pyright]
+include = [".", "src"]
+extraPaths = [".", "src", "src/models", "src/data"]
+reportMissingImports = "none"
+reportMissingModuleSource = "none"
+reportGeneralTypeIssues = "none"
+reportOptionalMemberAccess = "none"
+reportUnknownMemberType = "none"
+reportUnknownVariableType = "none"
+reportMissingTypeStubs = "none"
+reportArgumentType = "none"
+reportCallIssue = "none"
+

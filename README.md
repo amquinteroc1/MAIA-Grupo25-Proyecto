@@ -158,87 +158,148 @@ Cada fila del dataset representa una ventana de 30 segundos.
 
 ---
 
-## 6. Entrenar modelo SVM
+## 6. Modelos y Experimentos
 
-El modelo implementado utiliza:
+El proyecto implementa y evalúa tres enfoques de Machine Learning y Deep Learning para la clasificación de etapas de sueño en ventanas de 30 segundos, todos versionados con DVC y registrados en experimentos dedicados de MLflow:
 
-- `StandardScaler`
-- Kernel RBF
-- `class_weight="balanced"`
-- Separación train/test por sujeto
+### Resumen Comparativo de Modelos:
 
-La separación por sujeto evita que ventanas pertenecientes a una misma persona aparezcan simultáneamente en entrenamiento y prueba.
+| Modelo | Arquitectura | Entrada | Comando de Ejecución | Artefacto Serializado | Experimento MLflow |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **SVM** | Support Vector Machine (RBF) | 30 features (Espectrales / Temporales) | `python -m experiments.experiment_svm` | `models/svm_sleep.joblib` | `sleep-stage-svm` |
+| **LightGBM** | Gradient Boosting Decision Trees | 30 features (Espectrales / Temporales) | `python -m experiments.experiment_lightgbm` | `models/lightgbm_sleep.joblib` | `sleep-stage-lightgbm` |
+| **CNN 1D** | Red Neuronal Convolucional Profunda | Señal cruda 3 canales × 3000 muestras (100 Hz) | `python src/models/train_cnn.py` | `experiments/cnn1d/best_cnn1d.pt` | `sleep-stage-mlp-gpu` |
 
-Ejecutar:
+---
+
+### 6.1. Support Vector Machine (SVM Baseline)
+
+Clasificador de margen máximo con ponderación balanceada para mitigar el desbalance de clases (Wake vs N1/N3/REM):
+
+- **Preprocesamiento**: `StandardScaler`.
+- **Hiperparámetros**: Kernel `rbf`, `C=1.0`, `gamma="scale"`, `class_weight="balanced"`.
+- **Estrategia de Validación**: `GroupShuffleSplit` por sujeto (alineado con los 36 sujetos de prueba evaluados por la CNN para comparación directa).
+
+**Comando de ejecución:**
 
 ```powershell
 python -m experiments.experiment_svm
 ```
 
-El modelo entrenado se guarda en:
+**Salidas y artefactos:**
 
-```text
-models/svm_sleep.joblib
-```
-
-Las predicciones se guardan en:
-
-```text
-outputs/predictions/predicciones_svm.csv
-```
-
-La matriz de confusión se guarda en:
-
-```text
-outputs/metrics/confusion_matrix_svm.csv
-```
+- **Modelo entrenado**: `models/svm_sleep.joblib`
+- **Predicciones del conjunto de prueba**: `outputs/predictions/predicciones_svm.csv`
+- **Matriz de confusión**: `outputs/metrics/confusion_matrix_svm.csv`
 
 ---
 
-## 7. MLflow
+### 6.2. LightGBM (Gradient Boosting Ensemble)
 
-Los experimentos se registran con MLflow.
+Modelo basado en árboles de decisión con optimización de hiperparámetros y validación cruzada estratificada por sujeto:
 
-Durante el desarrollo local se utiliza:
+- **Preprocesamiento**: 30 features espectrales (potencia por bandas $\delta, \theta, \alpha, \beta$) y estadísticas temporales (media, std, min, max, rango, RMS).
+- **Optimización**: `RandomizedSearchCV` con `StratifiedGroupKFold` (agrupado por sujeto para evitar fuga de datos entre splits).
+- **Hiperparámetros explorados**: `n_estimators`, `max_depth`, `learning_rate`, `num_leaves`, `subsample`, `class_weight="balanced"`.
+
+**Comandos de ejecución:**
+
+```powershell
+# Ejecución estándar:
+python -m experiments.experiment_lightgbm
+
+# Con argumentos personalizados de iteraciones y splits de validación cruzada:
+python -m experiments.experiment_lightgbm --n-iter 12 --cv-splits 3
+```
+
+**Salidas y artefactos:**
+
+- **Modelo entrenado**: `models/lightgbm_sleep.joblib`
+- **Predicciones del conjunto de prueba**: `outputs/predictions/predicciones_lightgbm.csv`
+- **Matriz de confusión**: `outputs/metrics/confusion_matrix_lightgbm.csv`
+- **Importancia de características**: `outputs/metrics/feature_importance_lightgbm.csv`
+
+---
+
+### 6.3. Red Neuronal Convolucional 1D (CNN 1D Deep Learning)
+
+Red neuronal profunda end-to-end que opera directamente sobre la señal fisiológica cruda multicanal a 100 Hz (3000 muestras por ventana de 30s) sin requerir extracción manual de características:
+
+- **Arquitectura**: Convoluciones temporales 1D con BatchNorm, activación ReLU, MaxPool, regularización Dropout (0.5) y capas lineales densas.
+- **Entrada**: Tensor de dimensiones `(batch_size, 3, 3000)` correspondientes a los canales `EEG Fpz-Cz`, `EEG Pz-Oz` y `EOG horizontal`.
+- **Optimizador y Pérdida**: AdamW con `ReduceLROnPlateau` y `CrossEntropyLoss` con boost ponderado en clases minoritarias ($N1$ y $N3$).
+
+**Comandos de ejecución:**
+
+- **En entorno local o servidor con PyTorch / GPU:**
+
+  ```powershell
+  # Ejecución por defecto:
+  python src/models/train_cnn.py
+
+  # Con hiperparámetros de entrenamiento:
+  python src/models/train_cnn.py --epochs 50 --batch_size 128 --lr 1e-3
+  ```
+
+- **En Google Colab con aceleración GPU (NVIDIA T4 / V100):**
+  Ejecutar el notebook interactivo con carga dinámica por memmap:
+  ```text
+  notebooks/train_cnn1d.ipynb
+  ```
+
+**Salidas y artefactos:**
+
+- **Modelo serializado PyTorch**: `experiments/cnn1d/best_cnn1d.pt` (y `experiments/cnn1d/best_model.pth`)
+- **Predicciones sobre los 36 sujetos de test**: `outputs/predictions/predicciones_mlp_gpu.csv`
+- **Matriz de confusión**: `outputs/metrics/confusion_matrix_cnn1d.csv`
+
+---
+
+## 7. Seguimiento de Experimentos con MLflow
+
+Todos los experimentos (SVM, LightGBM y CNN 1D) se registran de forma centralizada en la base de datos de tracking local:
 
 ```text
 mlflow.db
 ```
 
-Para abrir la interfaz local de MLflow:
+### Iniciar la interfaz web de MLflow:
 
 ```powershell
+# 1. Activar entorno virtual
+.\.venv\Scripts\activate
+
+# 2. Iniciar servidor local de tracking
 mlflow ui --backend-store-uri sqlite:///mlflow.db --port 5000
 ```
 
-Abrir en el navegador:
+Abrir en el navegador: [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
-```text
-http://127.0.0.1:5000
-```
+### Experimentos registrados:
 
-MLflow registra:
+1. `sleep-stage-svm`: Experimentos del clasificador SVM (parámetros `C`, `gamma`, métricas de clasificación y matriz de confusión).
+2. `sleep-stage-lightgbm`: Búsqueda de hiperparámetros y corridas de LightGBM (importancia de características y métricas de generalización).
+3. `sleep-stage-mlp-gpu` / `sleep-stage-cnn-pipeline`: Entrenamiento y evaluación de la CNN 1D sobre los 36 sujetos del conjunto de prueba.
 
-- Modelo
-- Hiperparámetros
-- Número de sujetos de entrenamiento
-- Número de sujetos de prueba
-- Accuracy
+### Métricas registradas por corrida:
+
+- Accuracy global
 - Balanced Accuracy
-- Macro F1
-- Predicciones
-- Matriz de confusión
-- Modelo entrenado
-
-Para la entrega final, MLflow será desplegado en una instancia AWS EC2.
+- Macro F1-Score y F1 por etapa canónica (Wake, N1, N2, N3, REM)
+- Matriz de confusión interactiva
+- Artefactos serializados del modelo entrenado
 
 ---
 
 ## 8. Ejecutar dashboard
 
-Ejecutar:
+Para ejecutar el dashboard clínico interactivo:
 
 ```powershell
+# 1. Asegurar activación del entorno virtual
+.\.venv\Scripts\activate
+
+# 2. Iniciar Streamlit
 streamlit run dashboard/app.py
 ```
 
@@ -248,16 +309,16 @@ Abrir en el navegador:
 http://localhost:8501
 ```
 
+
 El dashboard permite:
 
-- Cargar un archivo PSG EDF
-- Visualizar EEG Fpz-Cz
-- Visualizar EEG Pz-Oz
-- Visualizar EOG horizontal
-- Seleccionar una ventana de 30 segundos
-- Ejecutar el modelo
-- Mostrar la etapa predicha
-- Mostrar las probabilidades por clase
+- Cargar un archivo PSG EDF (`*-PSG.edf`).
+- Visualizar simultáneamente los canales fisiológicos continuos (**EEG Fpz-Cz**, **EEG Pz-Oz**, **EOG horizontal**).
+- Navegar a lo largo del registro nocturno en ventanas temporales de 30 segundos.
+- **Seleccionar todos los modelos disponibles (Consenso)**: Ejecuta simultáneamente **LightGBM**, **SVM** (y **CNN 1D**) para calcular el consenso clínico y el porcentaje de acuerdo inter-modelo.
+- **Selección individual o personalizada**: Permite elegir un clasificador específico (**LightGBM**, **SVM**, **CNN 1D**) o comparar cualquier combinación deseada.
+- Tarjetas de diagnóstico con la etapa canónica predicha (Wake, N1, N2, N3, REM) y descripción clínica.
+- Gráficos comparativos de distribución de probabilidad para cada modelo en la ventana analizada.
 
 ---
 

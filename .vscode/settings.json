@@ -1,14 +1,18 @@
 {
-  "python.defaultInterpreterPath": "${workspaceFolder}/.venv-gpu/Scripts/python.exe",
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe",
   "python.analysis.extraPaths": [
     "${workspaceFolder}",
     "${workspaceFolder}/src",
-    "${workspaceFolder}/src/models"
+    "${workspaceFolder}/src/models",
+    "${workspaceFolder}/src/data"
   ],
   "python.analysis.typeCheckingMode": "basic",
   "python.analysis.diagnosticSeverityOverrides": {
     "reportMissingImports": "none",
     "reportMissingModuleSource": "none",
+    "reportMissingTypeStubs": "none",
+    "reportArgumentType": "none",
+    "reportCallIssue": "none",
     "reportGeneralTypeIssues": "none",
     "reportOptionalMemberAccess": "none",
     "reportUnknownMemberType": "none",
@@ -16,18 +20,19 @@
   },
   "flake8.args": [
     "--max-line-length=120",
-    "--extend-ignore=E501,E402,E221,E251,E266,W503,E203"
+    "--extend-ignore=E501,E402,E221,E251,E266,W503,E203,W293"
   ],
   "python.linting.flake8Args": [
     "--max-line-length=120",
-    "--extend-ignore=E501,E402,E221,E251,E266,W503,E203"
+    "--extend-ignore=E501,E402,E221,E251,E266,W503,E203,W293"
   ],
   "pylint.args": [
     "--max-line-length=120",
-    "--disable=C0103,C0114,C0115,C0116,W1203,W0718,W1514,C0413,E0401,W0612,C0301,R0913,R0914,R0915"
+    "--disable=C0103,C0114,C0115,C0116,W1203,W0718,W1514,C0413,E0401,W0612,C0301,R0913,R0914,R0915,C0415,E1102,W0621"
   ],
   "python.linting.pylintArgs": [
     "--max-line-length=120",
-    "--disable=C0103,C0114,C0115,C0116,W1203,W0718,W1514,C0413,E0401,W0612,C0301,R0913,R0914,R0915"
-  ]
+    "--disable=C0103,C0114,C0115,C0116,W1203,W0718,W1514,C0413,E0401,W0612,C0301,R0913,R0914,R0915,C0415,E1102,W0621"
+  ],
+  "files.insertFinalNewline": true
 }

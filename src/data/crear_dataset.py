@@ -1,11 +1,10 @@
 from pathlib import Path
 
 import mne
+from mne.epochs import Epochs
 import numpy as np
 import pandas as pd
-from scipy.signal import welch
-
-from src.data.features import extraer_features
+from scipy.signal import welch  # type: ignore[import-untyped]
 
 
 # configuracion
@@ -164,14 +163,14 @@ def procesar_registro(
 
     fs = raw.info["sfreq"]
 
-    epochs = mne.Epochs(
+    epochs = Epochs(  # type: ignore[operator]  # pylint: disable=not-callable
         raw,
         events,
         event_id=event_dict,
         tmin=0,
         tmax=EPOCH_DURATION - 1 / fs,
         baseline=None,
-        picks=canales,
+        picks=canales,  # type: ignore[arg-type]
         preload=True,
         reject_by_annotation=True,
         verbose=False
@@ -207,7 +206,7 @@ def procesar_registro(
         feats = extraer_features_matriz(datos[:, j, :], fs)
         nombre_canal = canal.replace(" ", "_").replace("-", "_")
         for k, v in feats.items():
-            df_res[f"{nombre_canal}_{k}"] = v
+            df_res[f"{nombre_canal}_{k}"] = pd.Series(v)  # type: ignore[call-overload]
 
     return df_res
 

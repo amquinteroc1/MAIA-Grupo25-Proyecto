@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.signal import welch
+from scipy.signal import welch  # type: ignore[import-untyped]
 
 
 # potencia por banda

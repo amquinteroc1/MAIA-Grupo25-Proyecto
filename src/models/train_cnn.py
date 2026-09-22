@@ -15,15 +15,15 @@ import mlflow
 import mlflow.pytorch
 import numpy as np
 from sklearn.metrics import classification_report, f1_score
-import torch
-import torch.nn as nn
-from torch.optim.lr_scheduler import ReduceLROnPlateau
-from torch.utils.data import DataLoader, Dataset
+import torch  # type: ignore
+import torch.nn as nn  # type: ignore
+from torch.optim.lr_scheduler import ReduceLROnPlateau  # type: ignore
+from torch.utils.data import DataLoader, Dataset  # type: ignore
 
 try:
     from src.models.cnn1d import build_model
 except (ImportError, ModuleNotFoundError):
-    from cnn1d import build_model
+    from cnn1d import build_model  # type: ignore
 
 
 # ── Rutas ─────────────────────────────────────────────────────────────────────
@@ -40,7 +40,7 @@ def obtener_dispositivo() -> torch.device:
     if torch.cuda.is_available():
         return torch.device("cuda")
     try:
-        import torch_directml
+        import torch_directml  # type: ignore # pylint: disable=import-outside-toplevel
 
         return torch_directml.device()
     except (ImportError, Exception):
