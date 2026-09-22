@@ -239,11 +239,15 @@ with st.sidebar:
     # 3. Selección de Modelos (Individual, Todos o Personalizado)
     st.markdown("### 🤖 Modelo Clasificador")
 
+    c_lgb = "✅" if catalog.get("lightgbm", {}).get("available") else "❌"
+    c_svm = "✅" if catalog.get("svm", {}).get("available") else "❌"
+    c_cnn = "✅" if catalog.get("cnn1d", {}).get("available") else "⚠️ (Requiere PyTorch)"
+
     opciones_modo = [
         "🌟 Todos los modelos disponibles (Consenso)",
-        "🌲 LightGBM (Gradient Boosting)",
-        "⚙️ SVM (Baseline)",
-        "🧠 CNN 1D (Deep Learning)",
+        f"🌲 LightGBM (Gradient Boosting) {c_lgb}",
+        f"⚙️ SVM (Baseline) {c_svm}",
+        f"🧠 CNN 1D (Deep Learning) {c_cnn}",
         "🔀 Selección personalizada",
     ]
 
@@ -260,22 +264,24 @@ with st.sidebar:
     # Resolución de modelos según la selección
     modelos_a_evaluar = []
 
-    if modo_seleccion == "🌟 Todos los modelos disponibles (Consenso)":
+    if "Todos los modelos disponibles" in modo_seleccion:
         modelos_a_evaluar = [m for m in ["lightgbm", "svm", "cnn1d"] if catalog.get(m, {}).get("available", False)]
         st.info(f"✨ Evaluando **{len(modelos_a_evaluar)} modelos activos**: {', '.join(m.upper() for m in modelos_a_evaluar)}")
 
-    elif modo_seleccion == "🌲 LightGBM (Gradient Boosting)":
+    elif "LightGBM" in modo_seleccion:
         modelos_a_evaluar = ["lightgbm"]
 
-    elif modo_seleccion == "⚙️ SVM (Baseline)":
+    elif "SVM" in modo_seleccion:
         modelos_a_evaluar = ["svm"]
 
-    elif modo_seleccion == "🧠 CNN 1D (Deep Learning)":
+    elif "CNN 1D" in modo_seleccion:
         modelos_a_evaluar = ["cnn1d"]
         if not catalog["cnn1d"]["available"]:
-            st.warning("⚠️ CNN 1D fue entrenado en Colab GPU. En este entorno local (Python 3.14) PyTorch no está disponible.")
+            st.warning("⚠️ **CNN 1D no está disponible en este servidor.**")
+            st.code("pip install torch", language="bash")
+            st.caption("Ejecute el comando anterior en la terminal del servidor para habilitar CNN 1D.")
 
-    elif modo_seleccion == "🔀 Selección personalizada":
+    elif "personalizada" in modo_seleccion:
         opciones_custom = {
             "LightGBM": "lightgbm",
             "SVM": "svm",
@@ -284,7 +290,7 @@ with st.sidebar:
         custom_elegidos = st.multiselect(
             "Seleccionar clasificadores a incluir",
             list(opciones_custom.keys()),
-            default=["LightGBM", "SVM"],
+            default=[k for k, v in [("LightGBM", "lightgbm"), ("SVM", "svm"), ("CNN 1D", "cnn1d")] if catalog.get(v, {}).get("available")],
             help="Seleccione 1, 2 o más modelos para comparar sus predicciones en la misma ventana.",
         )
         modelos_a_evaluar = [opciones_custom[c] for c in custom_elegidos]
@@ -441,7 +447,11 @@ else:
                                 predicciones[m_key] = res
 
                         if not predicciones:
-                            st.error("No se pudo obtener predicciones con los modelos seleccionados.")
+                            if "cnn1d" in modelos_a_evaluar and not catalog["cnn1d"]["available"]:
+                                st.error("No se pudo ejecutar CNN 1D porque PyTorch no está instalado en este entorno.")
+                                st.info("💡 Ejecute `pip install torch` en la terminal del servidor para habilitarlo.")
+                            else:
+                                st.error("No se pudo obtener predicciones con los modelos seleccionados.")
                         else:
                             # ── Caso A: Múltiples Modelos (Consenso) ────────────
                             if len(predicciones) > 1:

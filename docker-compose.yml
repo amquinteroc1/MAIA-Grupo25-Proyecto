@@ -1,0 +1,64 @@
+services:
+
+  # ── 1. Servidor de Tracking MLflow ──────────────────────────────
+  mlflow:
+    build:
+      context: .
+      dockerfile: Dockerfile.mlflow
+    container_name: sleep-mlflow
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./mlflow.db:/app/mlflow.db
+      - ./mlruns:/app/mlruns
+    environment:
+      - MLFLOW_TRACKING_URI=sqlite:////app/mlflow.db
+    networks:
+      - sleep-network
+
+  # ── 2. API REST FastAPI (Swagger OpenAPI) ───────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: sleep-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./models:/app/models:ro
+      - ./experiments/cnn1d:/app/experiments/cnn1d:ro
+    environment:
+      - PYTHONUNBUFFERED=1
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+    depends_on:
+      - mlflow
+    networks:
+      - sleep-network
+
+  # ── 3. Dashboard Clínico Interactivo (Streamlit) ────────────────
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.dashboard
+    container_name: sleep-dashboard
+    restart: unless-stopped
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./models:/app/models:ro
+      - ./experiments/cnn1d:/app/experiments/cnn1d:ro
+    environment:
+      - PYTHONUNBUFFERED=1
+      - API_URL=http://api:8000
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+    depends_on:
+      - api
+      - mlflow
+    networks:
+      - sleep-network
+
+networks:
+  sleep-network:
+    driver: bridge

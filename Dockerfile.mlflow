@@ -1,0 +1,28 @@
+# ── Dockerfile para el Servidor de Tracking (MLflow) ──
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PORT=5000
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Instalar MLflow y soporte de almacenamiento de artefactos (boto3 para AWS S3)
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir mlflow boto3
+
+# Crear directorios para persistencia de artefactos
+RUN mkdir -p /app/mlruns
+
+EXPOSE 5000
+
+# Chequeo de salud del servicio MLflow
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD curl -f http://localhost:5000/health || exit 1
+
+# Iniciar servidor centralizado de MLflow con backend SQLite y soporte de artefactos
+CMD ["mlflow", "server", "--backend-store-uri", "sqlite:////app/mlflow.db", "--default-artifact-root", "/app/mlruns", "--host", "0.0.0.0", "--port", "5000"]

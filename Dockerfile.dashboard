@@ -1,0 +1,36 @@
+# ── Dockerfile para el Dashboard Clínico e Interactivo (Streamlit) ──
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PORT=8501
+
+WORKDIR /app
+
+# Instalar dependencias del sistema requeridas por LightGBM (OpenMP) y chequeo de salud (curl)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copiar requirements e instalar dependencias (usando wheel CPU de PyTorch para optimizar peso)
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Copiar código fuente, dashboard y artefactos del modelo
+COPY src/ ./src/
+COPY dashboard/ ./dashboard/
+COPY models/ ./models/
+COPY experiments/cnn1d/ ./experiments/cnn1d/
+
+# Exponer puerto de Streamlit
+EXPOSE 8501
+
+# Chequeo de salud del servicio Streamlit
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+    CMD curl -f http://localhost:8501/_stcore/health || exit 1
+
+# Iniciar Streamlit en modo headless
+CMD ["streamlit", "run", "dashboard/app.py", "--server.port", "8501", "--server.address", "0.0.0.0", "--server.headless", "true"]

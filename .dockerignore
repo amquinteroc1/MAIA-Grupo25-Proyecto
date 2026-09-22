@@ -1,0 +1,33 @@
+# ── Control de versiones ──
+.git
+.github
+.gitignore
+
+# ── Entorno virtual y cachés de Python ──
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+.coverage
+htmlcov
+
+# ── Configuración de IDE y Sistema Operativo ──
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+
+# ── Datos pesados y artefactos temporales ──
+data/
+data_processed/
+*.edf
+*.parquet
+*.csv
+.dvc/cache
+.dvc/tmp
+
+# ── Archivos temporales ──
+*.tmp
+*.log

@@ -1,0 +1,36 @@
+# ── Dockerfile para la API de Inferencia (FastAPI + Swagger OpenAPI) ──
+FROM python:3.11-slim
+
+# Evitar buffers en logs y prompts interactivos
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PORT=8000
+
+WORKDIR /app
+
+# Instalar dependencias del sistema requeridas por LightGBM (OpenMP) y chequeo de salud (curl)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copiar requirements e instalar dependencias (usando wheel CPU de PyTorch para optimizar peso)
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Copiar código fuente y artefactos del modelo
+COPY src/ ./src/
+COPY models/ ./models/
+COPY experiments/cnn1d/ ./experiments/cnn1d/
+
+# Exponer puerto de FastAPI
+EXPOSE 8000
+
+# Chequeo de salud del servicio
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# Iniciar servidor Uvicorn
+CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000"]

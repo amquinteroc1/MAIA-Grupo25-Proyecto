@@ -382,7 +382,72 @@ curl -X POST "http://127.0.0.1:8000/api/v1/analyze/window" `
 
 ---
 
-## 10. Flujo completo
+## 10. Despliegue con Docker y Docker Compose
+
+El proyecto incluye contenedores Docker optimizados para los tres componentes clave de la solución, permitiendo un despliegue unificado, reproducible e independiente del sistema operativo anfitrión:
+
+1. **`mlflow`**: Servidor centralizado de tracking y registro de experimentos (puerto `5000`).
+2. **`api`**: Servidor REST FastAPI con documentación interactiva Swagger OpenAPI y soporte de inferencia con los 3 modelos (puerto `8000`).
+3. **`dashboard`**: Aplicación interactiva de Streamlit para exploración de señales y diagnóstico clínico multimodelo (puerto `8501`).
+
+### Estructura de archivos Docker:
+
+- `Dockerfile.api`: Imagen ligera (`python:3.11-slim`) con Uvicorn, FastAPI, PyTorch CPU y dependencias de inferencia.
+- `Dockerfile.dashboard`: Imagen ligera (`python:3.11-slim`) con Streamlit, visualización fisiológica y soporte multimodelo.
+- `Dockerfile.mlflow`: Servidor de tracking con persistencia en SQLite (`mlflow.db`) y directorio de artefactos (`mlruns/`).
+- `docker-compose.yml`: Orquestador con red interna (`sleep-network`), volúmenes persistentes de modelos y orden de arranque con `depends_on`.
+- `.dockerignore`: Exclusión de datasets pesados, entornos virtuales y cachés para construcción ultrarrápida.
+
+### Comandos de ejecución:
+
+#### A. Levantar todos los servicios con Docker Compose (Recomendado):
+
+```powershell
+# 1. Construir y levantar los 3 contenedores en segundo plano:
+docker compose up -d --build
+
+# 2. Verificar el estado y chequeos de salud:
+docker compose ps
+
+# 3. Inspeccionar logs en tiempo real:
+docker compose logs -f
+
+# 4. Ver logs de un servicio específico (ej: api o dashboard):
+docker compose logs -f api
+```
+
+#### B. URLs de acceso una vez levantados los servicios:
+
+- **Dashboard Streamlit**: [http://localhost:8501](http://localhost:8501)
+- **API Swagger OpenAPI**: [http://localhost:8000/docs](http://localhost:8000/docs)
+- **Servidor MLflow Tracking**: [http://localhost:5000](http://localhost:5000)
+
+#### C. Detener los servicios:
+
+```powershell
+# Detener contenedores manteniendo datos y modelos persistentes:
+docker compose down
+```
+
+#### D. Construir y ejecutar contenedores individualmente:
+
+```powershell
+# 1. API:
+docker build -f Dockerfile.api -t sleep-api .
+docker run -d -p 8000:8000 --name sleep-api sleep-api
+
+# 2. Dashboard:
+docker build -f Dockerfile.dashboard -t sleep-dashboard .
+docker run -d -p 8501:8501 --name sleep-dashboard sleep-dashboard
+
+# 3. MLflow:
+docker build -f Dockerfile.mlflow -t sleep-mlflow .
+docker run -d -p 5000:5000 --name sleep-mlflow sleep-mlflow
+```
+
+---
+
+## 11. Flujo completo
 
 ```text
 Sleep-EDF
@@ -401,12 +466,13 @@ Evaluación y MLflow
     ↓
 Interfaces de Usuario y Despliegue
     ├── Dashboard Streamlit (Visualización interactiva)
-    └── API REST FastAPI (Swagger OpenAPI para integración)
+    ├── API REST FastAPI (Swagger OpenAPI para integración)
+    └── Orquestación Docker Compose (Despliegue de microservicios)
 ```
 
 ---
 
-## 11. Evaluación
+## 12. Evaluación
 
 Las principales métricas utilizadas son:
 
@@ -422,7 +488,8 @@ Debido al desbalance entre las etapas del sueño, se priorizan **Balanced Accura
 
 ---
 
-## 12. Reproducibilidad
+## 13. Reproducibilidad
+
 
 El flujo completo puede ejecutarse con:
 
