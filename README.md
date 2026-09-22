@@ -23,9 +23,12 @@ MAIA-Grupo25-Proyecto/
 │   └── app.py
 │
 ├── experiments/
-│   └── experiment_svm.py
+│   ├── experiment_svm.py
+│   └── experiment_lightgbm.py
 │
 ├── models/
+│   ├── svm_sleep.joblib
+│   └── lightgbm_sleep.joblib
 │
 ├── outputs/
 │   ├── data/
@@ -33,6 +36,11 @@ MAIA-Grupo25-Proyecto/
 │   └── predictions/
 │
 ├── src/
+│   ├── api/
+│   │   ├── main.py
+│   │   ├── schemas.py
+│   │   └── service.py
+│   │
 │   ├── data/
 │   │   ├── explore_sleep_edf.py
 │   │   ├── crear_dataset.py
@@ -45,7 +53,11 @@ MAIA-Grupo25-Proyecto/
 │   │   └── predict.py
 │   │
 │   └── models/
-│       └── svm_model.py
+│       ├── svm_model.py
+│       └── lightgbm_model.py
+│
+├── tests/
+│   └── test_api.py
 │
 ├── data.dvc
 ├── requirements.txt
@@ -249,7 +261,67 @@ El dashboard permite:
 
 ---
 
-## 9. Flujo completo
+## 9. Ejecutar API REST (FastAPI + Swagger OpenAPI)
+
+La API REST permite realizar el análisis de polisomnografía de forma programática con **selección múltiple de modelos** (`svm`, `lightgbm`, `cnn1d` o `all`) y soporte para ventanas individuales o hipnogramas completos por lotes.
+
+### Iniciar el servidor:
+
+```powershell
+python -m uvicorn src.api.main:app --host 127.0.0.1 --port 8000 --reload
+```
+
+### Documentación interactiva:
+
+Abrir en el navegador para probar los endpoints interactivamente con Swagger UI:
+
+- **Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs)
+- **ReDoc**: [http://localhost:8000/redoc](http://localhost:8000/redoc)
+- **OpenAPI JSON**: [http://localhost:8000/openapi.json](http://localhost:8000/openapi.json)
+
+### Endpoints principales:
+
+| Método | Endpoint | Descripción |
+| :--- | :--- | :--- |
+| `GET` | `/health` | Estado de salud y modelos activos en memoria |
+| `GET` | `/api/v1/models` | Catálogo de modelos registrados y disponibilidad |
+| `POST` | `/api/v1/edf/info` | Sube un EDF y obtiene duración, canales y cantidad de ventanas sin costo de inferencia |
+| `POST` | `/api/v1/analyze/window` | **Análisis de ventana con selección múltiple**: Diagnóstico por modelo, probabilidades y consenso |
+| `POST` | `/api/v1/analyze/batch` | Análisis por lotes para construcción de hipnograma secuencial |
+
+### Ejemplo de consumo desde Python (`requests`):
+
+```python
+import requests
+
+url = "http://127.0.0.1:8000/api/v1/analyze/window"
+files = {"file": open("data/sleep-cassette/SC4001E0-PSG.edf", "rb")}
+data = {
+    "window_index": 0,
+    "models": ["svm", "lightgbm"]  # Selección múltiple
+}
+
+response = requests.post(url, files=files, data=data)
+res = response.json()
+
+print(f"Consenso: {res['consensus']['consensus_stage']} ({res['consensus']['agreement_percentage']}% de acuerdo)")
+for m_id, pred in res["predictions"].items():
+    print(f"  [{pred['model_name']}]: {pred['stage']} ({pred['confidence']:.1%} confianza)")
+```
+
+### Ejemplo con cURL:
+
+```powershell
+curl -X POST "http://127.0.0.1:8000/api/v1/analyze/window" `
+     -F "file=@data/sleep-cassette/SC4001E0-PSG.edf" `
+     -F "window_index=0" `
+     -F "models=svm" `
+     -F "models=lightgbm"
+```
+
+---
+
+## 10. Flujo completo
 
 ```text
 Sleep-EDF
@@ -260,26 +332,20 @@ PSG + Hypnogram
     ↓
 Ventanas de 30 segundos
     ↓
-Extracción de features
+Extracción de features / Señales crudas
     ↓
-Dataset ML
+Modelos Clasificadores (SVM, LightGBM, CNN 1D)
     ↓
-Split por sujeto
+Evaluación y MLflow
     ↓
-SVM
-    ↓
-Evaluación
-    ↓
-MLflow
-    ↓
-Modelo entrenado
-    ↓
-Dashboard Streamlit
+Interfaces de Usuario y Despliegue
+    ├── Dashboard Streamlit (Visualización interactiva)
+    └── API REST FastAPI (Swagger OpenAPI para integración)
 ```
 
 ---
 
-## 10. Evaluación
+## 11. Evaluación
 
 Las principales métricas utilizadas son:
 
@@ -295,15 +361,26 @@ Debido al desbalance entre las etapas del sueño, se priorizan **Balanced Accura
 
 ---
 
-## 11. Reproducibilidad
+## 12. Reproducibilidad
 
 El flujo completo puede ejecutarse con:
 
 ```powershell
+# 1. Descargar datos versionados
 dvc pull
+
+# 2. Construir dataset
 python -m src.data.crear_dataset
+
+# 3. Entrenar modelos
 python -m experiments.experiment_svm
+python -m experiments.experiment_lightgbm
+
+# 4. Iniciar Dashboard interactivo
 streamlit run dashboard/app.py
+
+# 5. Iniciar API REST con Swagger OpenAPI
+python -m uvicorn src.api.main:app --port 8000 --reload
 ```
 
 ---
