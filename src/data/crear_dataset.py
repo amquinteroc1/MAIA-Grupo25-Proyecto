@@ -1,7 +1,9 @@
 from pathlib import Path
 
 import mne
+import numpy as np
 import pandas as pd
+from scipy.signal import welch
 
 from src.data.features import extraer_features
 
@@ -29,7 +31,7 @@ EVENT_ID = {
     "Sleep stage 1": 2,
     "Sleep stage 2": 3,
     "Sleep stage 3": 4,
-    "Sleep stage 4": 4,
+    "Sleep stage 4": 6,
     "Sleep stage R": 5
 }
 
@@ -38,8 +40,40 @@ STAGE_NAMES = {
     2: "N1",
     3: "N2",
     4: "N3",
+    6: "N3",
     5: "REM"
 }
+
+BANDAS = {
+    "delta": (0.5, 4),
+    "theta": (4, 8),
+    "alpha": (8, 13),
+    "beta": (13, 30)
+}
+
+
+# extraer features vectorizadas sobre matriz de epocas
+
+def extraer_features_matriz(signals, fs):
+    signals = np.asarray(signals, dtype=np.float64)
+
+    features = {
+        "mean": np.mean(signals, axis=1),
+        "std": np.std(signals, axis=1),
+        "min": np.min(signals, axis=1),
+        "max": np.max(signals, axis=1),
+        "range": np.ptp(signals, axis=1),
+        "rms": np.sqrt(np.mean(signals ** 2, axis=1))
+    }
+
+    nperseg = min(signals.shape[1], int(fs * 4))
+    freqs, psd = welch(signals, fs=fs, nperseg=nperseg, axis=1)
+
+    for nombre, (fmin, fmax) in BANDAS.items():
+        mask = (freqs >= fmin) & (freqs < fmax)
+        features[nombre] = np.trapezoid(psd[:, mask], freqs[mask], axis=1)
+
+    return features
 
 
 # obtener ids
@@ -118,7 +152,7 @@ def procesar_registro(
             f"Sin canales validos en {psg_path.name}"
         )
 
-    events, _ = mne.events_from_annotations(
+    events, event_dict = mne.events_from_annotations(
         raw,
         event_id=EVENT_ID,
         chunk_duration=EPOCH_DURATION,
@@ -133,7 +167,7 @@ def procesar_registro(
     epochs = mne.Epochs(
         raw,
         events,
-        event_id=EVENT_ID,
+        event_id=event_dict,
         tmin=0,
         tmax=EPOCH_DURATION - 1 / fs,
         baseline=None,
@@ -143,51 +177,39 @@ def procesar_registro(
         verbose=False
     )
 
-    filas = []
+    stages = [
+        STAGE_NAMES.get(evento)
+        for evento in epochs.events[:, 2]
+    ]
 
-    for i in range(len(epochs)):
-        stage = STAGE_NAMES.get(
-            epochs.events[i, 2]
-        )
+    valid_indices = [
+        i for i, st in enumerate(stages)
+        if st is not None
+    ]
 
-        if stage is None:
-            continue
+    if not valid_indices:
+        raw.close()
+        return pd.DataFrame()
 
-        fila = {
-            "subject": subject,
-            "study": estudio,
-            "archivo": psg_path.name,
-            "epoch": i,
-            "stage": stage
-        }
+    datos = epochs.get_data()[valid_indices]
+    raw.close()
+    stages_valid = [stages[i] for i in valid_indices]
 
-        datos_epoch = epochs[i].get_data()
+    df_res = pd.DataFrame({
+        "subject": subject,
+        "study": estudio,
+        "archivo": psg_path.name,
+        "epoch": valid_indices,
+        "stage": stages_valid
+    })
 
-        for j, canal in enumerate(
-            epochs.ch_names
-        ):
-            features = extraer_features(
-                datos_epoch[0, j, :],
-                fs
-            )
+    for j, canal in enumerate(epochs.ch_names):
+        feats = extraer_features_matriz(datos[:, j, :], fs)
+        nombre_canal = canal.replace(" ", "_").replace("-", "_")
+        for k, v in feats.items():
+            df_res[f"{nombre_canal}_{k}"] = v
 
-            nombre_canal = (
-                canal
-                .replace(" ", "_")
-                .replace("-", "_")
-            )
-
-            for nombre_feature, valor in features.items():
-                columna = (
-                    f"{nombre_canal}_"
-                    f"{nombre_feature}"
-                )
-
-                fila[columna] = valor
-
-        filas.append(fila)
-
-    return pd.DataFrame(filas)
+    return df_res
 
 
 # procesar estudio

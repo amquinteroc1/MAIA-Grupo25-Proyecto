@@ -33,7 +33,7 @@ EVENT_ID = {
     "Sleep stage 1": 2,
     "Sleep stage 2": 3,
     "Sleep stage 3": 4,
-    "Sleep stage 4": 4,
+    "Sleep stage 4": 6,
     "Sleep stage R": 5
 }
 
@@ -42,6 +42,7 @@ STAGE_NAMES = {
     2: "N1",
     3: "N2",
     4: "N3",
+    6: "N3",
     5: "REM"
 }
 
