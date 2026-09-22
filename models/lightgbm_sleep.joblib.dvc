@@ -1,5 +1,5 @@
 outs:
-- md5: 24abc9ae1766449ffeaa47a1213dc0b8
-  size: 5543436
+- md5: 1c5c17404087b79ee3bf302a5dc86442
+  size: 1839382
   hash: md5
   path: lightgbm_sleep.joblib

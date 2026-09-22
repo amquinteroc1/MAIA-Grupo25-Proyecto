@@ -1,0 +1,5 @@
+outs:
+- md5: 3873d147c659a058c6e66880a732bf39
+  size: 3847745
+  hash: md5
+  path: svm_sleep.joblib

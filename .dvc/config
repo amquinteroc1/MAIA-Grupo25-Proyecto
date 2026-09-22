@@ -1,5 +1,6 @@
 [core]
     remote = cnn-remote
+    autostage = true
 ['remote "local-remote"']
     url = /tmp/dvcstore
 ['remote "aws-remote"']
