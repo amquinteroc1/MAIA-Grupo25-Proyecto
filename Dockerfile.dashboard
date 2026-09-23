@@ -19,7 +19,8 @@ RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu && \
     pip install --no-cache-dir -r requirements.txt
 
-# Copiar código fuente, dashboard y artefactos del modelo
+# Copiar código fuente, dashboard, configuración y artefactos del modelo
+COPY .streamlit/ ./.streamlit/
 COPY src/ ./src/
 COPY dashboard/ ./dashboard/
 COPY models/ ./models/
@@ -32,5 +33,6 @@ EXPOSE 8501
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
     CMD curl -f http://localhost:8501/_stcore/health || exit 1
 
-# Iniciar Streamlit en modo headless
-CMD ["streamlit", "run", "dashboard/app.py", "--server.port", "8501", "--server.address", "0.0.0.0", "--server.headless", "true"]
+# Iniciar Streamlit en modo headless sin restricciones CORS/XSRF para proxies o IPs mockeadas
+CMD ["streamlit", "run", "dashboard/app.py", "--server.port", "8501", "--server.address", "0.0.0.0", "--server.headless", "true", "--server.enableCORS", "false", "--server.enableXsrfProtection", "false", "--server.maxUploadSize", "500"]
+

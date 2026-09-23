@@ -70,14 +70,18 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
-# Configuración de CORS para permitir peticiones desde cualquier frontend (React, Vue, Streamlit, etc.)
+# Configuración totalmente permisiva de CORS para saltar restricciones en localhost,
+# IPs mockeadas (ej. http://34.233.121.225:8808), proxies y cualquier frontend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
+    allow_origin_regex=r".*",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
+
 
 
 # ── Manejadores de Excepciones ────────────────────────────────────────────────
@@ -319,4 +323,12 @@ async def analyze_batch(
 # ── Punto de entrada para ejecución directa ───────────────────────────────────
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("src.api.main:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run(
+        "src.api.main:app",
+        host="0.0.0.0",
+        port=8808,
+        reload=True,
+        proxy_headers=True,
+        forwarded_allow_ips="*",
+    )
+
