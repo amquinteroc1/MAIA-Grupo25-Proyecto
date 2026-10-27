@@ -393,70 +393,89 @@ def construir_secuencias_registro(epocas, labels, seq_len=SEQ_LEN):
 def generar_tensores_seq(pares_por_particion, inventario):
     """
     Genera tensores de secuencias (5,3,3000) para cada partición.
-    Lee los tensores E0 ya normalizados y construye secuencias por registro.
+    Usa memmap para escribir directamente a disco — no acumula en RAM.
+    Dos pasadas: (1) contar secuencias totales, (2) escribir a memmap.
     """
     for particion, pares in pares_por_particion.items():
         log.info("Generando secuencias para partición: %s", particion)
 
         suffix = particion
-        X_e0 = np.load(OUT_E0 / f"X_{suffix}.npy")
+        # Cargar E0 con mmap_mode='r' para no copiar a RAM
+        X_e0 = np.load(OUT_E0 / f"X_{suffix}.npy", mmap_mode="r")
         y_e0 = np.load(OUT_E0 / f"y_{suffix}.npy")
         g_e0 = np.load(OUT_E0 / f"groups_{suffix}.npy")
 
-        # Agrupar por sujeto (grupo)
         unique_groups = np.unique(g_e0)
+        pad = SEQ_LEN // 2
 
-        all_seq_X = []
-        all_seq_y = []
-        all_seq_g = []
-        all_eligible = []
+        # ── Pasada 1: contar secuencias por grupo ────────────────────────
+        group_info = []  # (gid, idx_in_e0, n_seq, n_excluded)
+        total_seq = 0
         total_excluded_border = 0
 
-        cursor = 0
         for gid in unique_groups:
-            mask = g_e0 == gid
-            idx_in_e0 = np.where(mask)[0]
-            epocas_reg = X_e0[mask]
-            labels_reg = y_e0[mask]
-
-            X_s, y_s, elig = construir_secuencias_registro(epocas_reg, labels_reg)
-
-            if X_s is None:
-                total_excluded_border += len(epocas_reg)
+            idx_in_e0 = np.where(g_e0 == gid)[0]
+            n_epocas = len(idx_in_e0)
+            if n_epocas < SEQ_LEN:
+                total_excluded_border += n_epocas
+                group_info.append((gid, idx_in_e0, 0, n_epocas))
                 continue
-
-            n_excluded = len(epocas_reg) - len(X_s)
+            n_seq = n_epocas - 2 * pad
+            n_excluded = 2 * pad
+            total_seq += n_seq
             total_excluded_border += n_excluded
+            group_info.append((gid, idx_in_e0, n_seq, n_excluded))
 
-            all_seq_X.append(X_s)
-            all_seq_y.append(y_s)
-            all_seq_g.append(np.full(len(y_s), gid, dtype=np.int64))
-            # Los eligible indices son relativos al array E0 global
-            all_eligible.append(idx_in_e0[elig])
-
-        if not all_seq_X:
+        if total_seq == 0:
             log.warning("Partición %s sin secuencias válidas", particion)
+            del X_e0, y_e0, g_e0
             continue
 
-        X_seq = np.concatenate(all_seq_X, axis=0)
-        y_seq = np.concatenate(all_seq_y, axis=0)
-        g_seq = np.concatenate(all_seq_g, axis=0)
-        eligible = np.concatenate(all_eligible, axis=0)
+        log.info("  %s: %d secuencias previstas | excluidas borde: %d",
+                 particion, total_seq, total_excluded_border)
 
-        np.save(OUT_SEQ / f"X_seq_{suffix}.npy", X_seq)
+        # ── Pasada 2: escribir a memmap grupo por grupo ──────────────────
+        seq_path = OUT_SEQ / f"X_seq_{suffix}.npy"
+        X_seq_mm = np.lib.format.open_memmap(
+            str(seq_path), mode="w+", dtype=np.float32,
+            shape=(total_seq, SEQ_LEN, len(CANALES), N_MUESTRAS),
+        )
+        y_seq = np.empty(total_seq, dtype=np.int64)
+        g_seq = np.empty(total_seq, dtype=np.int64)
+        eligible = np.empty(total_seq, dtype=np.int64)
+
+        cursor = 0
+        for gid, idx_in_e0, n_seq, _ in group_info:
+            if n_seq == 0:
+                continue
+
+            # Leer solo las épocas de este grupo desde el mmap de E0
+            epocas_reg = np.array(X_e0[idx_in_e0])  # copia a RAM solo este grupo
+            labels_reg = y_e0[idx_in_e0]
+
+            for i in range(n_seq):
+                X_seq_mm[cursor] = epocas_reg[i:i + SEQ_LEN]
+                y_seq[cursor] = labels_reg[i + pad]
+                g_seq[cursor] = gid
+                eligible[cursor] = idx_in_e0[i + pad]
+                cursor += 1
+
+            del epocas_reg
+
+            if cursor % 10000 < n_seq:
+                log.info("    Progreso: %d/%d secuencias escritas", cursor, total_seq)
+
+        X_seq_mm.flush()
+        del X_seq_mm
+
         np.save(OUT_SEQ / f"y_seq_{suffix}.npy", y_seq)
         np.save(OUT_SEQ / f"groups_seq_{suffix}.npy", g_seq)
         np.save(OUT_SEQ / f"eligible_indices_{suffix}.npy", eligible)
 
-        log.info("  %s: %d secuencias (de %d épocas E0) | excluidas borde: %d",
-                 particion, len(y_seq), len(y_e0), total_excluded_border)
-        log.info("  Shape X_seq: %s", X_seq.shape)
+        log.info("  %s: %d secuencias escritas (de %d épocas E0) | shape: (%d, %d, %d, %d)",
+                 particion, cursor, len(y_e0), cursor, SEQ_LEN, len(CANALES), N_MUESTRAS)
 
-        # Actualizar inventario con exclusiones de borde agregadas
-        # (se registra en split_info, no por sujeto individual — es por partición)
-
-        del X_e0, y_e0, g_e0, X_seq, y_seq, g_seq, eligible
-        del all_seq_X, all_seq_y, all_seq_g, all_eligible
+        del X_e0, y_e0, g_e0, y_seq, g_seq, eligible
         gc.collect()
 
 
