@@ -1,4 +1,5 @@
 from argparse import ArgumentParser
+import os
 from pathlib import Path
 from time import perf_counter
 
@@ -490,7 +491,7 @@ def guardar_errores(errores):
 
 # crear dataset
 
-def main(limite=None):
+def main(limite=None, push_hf=False, hf_repo=None):
     inicio_total = perf_counter()
 
     OUTPUT_DIR.mkdir(
@@ -571,6 +572,24 @@ def main(limite=None):
         f"{duracion_total / 60:.1f} minutos"
     )
 
+    # Sincronización oficial con Hugging Face Hub y DVC
+    if push_hf or os.getenv("AUTO_PUSH_HF") == "1":
+        try:
+            from src.utils.hf_hub import upload_dataset_artifacts, DEFAULT_DATA_REPO
+            target_repo = hf_repo or DEFAULT_DATA_REPO
+            print(f"\n[Hugging Face] Sincronizando dataset tabular con repo '{target_repo}'...")
+            target_file = OUTPUT_PARQUET if OUTPUT_PARQUET.exists() else OUTPUT_CSV
+            upload_dataset_artifacts(
+                source_path=target_file,
+                repo_id=target_repo,
+                path_in_repo="outputs/data/dataset_sleep_lightgbm.parquet",
+                commit_message="Update LightGBM tabular feature dataset",
+                update_dvc=True,
+            )
+            print("✓ Dataset tabular sincronizado con Hugging Face exitosamente.")
+        except Exception as exc:
+            print(f"! Advertencia: No se pudo subir el dataset tabular a Hugging Face: {exc}")
+
 
 # argumentos
 
@@ -587,6 +606,19 @@ def obtener_argumentos():
         )
     )
 
+    parser.add_argument(
+        "--push-hf",
+        action="store_true",
+        help="Sube el dataset generado a Hugging Face Hub y actualiza DVC"
+    )
+
+    parser.add_argument(
+        "--hf-repo",
+        type=str,
+        default=None,
+        help="Repositorio Hugging Face destino (default: maia-grupo25/sleep-edfx-data)"
+    )
+
     return parser.parse_args()
 
 
@@ -596,5 +628,7 @@ if __name__ == "__main__":
     args = obtener_argumentos()
 
     main(
-        limite=args.limit
+        limite=args.limit,
+        push_hf=args.push_hf,
+        hf_repo=args.hf_repo,
     )

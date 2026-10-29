@@ -9,7 +9,9 @@ Uso:
 """
 
 import argparse
+import os
 from pathlib import Path
+import sys
 
 import mlflow
 import mlflow.pytorch
@@ -282,10 +284,31 @@ def run_training(cli_args):
         print(f"\nMejor F1 macro: {f1_macro:.4f}")
         print(f"Modelo guardado en: {best_path}")
 
+        # Sincronización oficial con Hugging Face Hub y DVC
+        if getattr(cli_args, "push_hf", False) or os.getenv("AUTO_PUSH_HF") == "1":
+            try:
+                from src.utils.hf_hub import upload_model_artifact, DEFAULT_MODEL_REPO
+                target_repo = cli_args.hf_repo or DEFAULT_MODEL_REPO
+                print(f"\n[Hugging Face] Sincronizando mejor modelo con repo '{target_repo}'...")
+                commit_msg = (
+                    f"Train CNN1D - Val F1 Macro: {f1_macro:.4f} "
+                    f"(ep={cli_args.epochs}, bs={cli_args.batch_size}, lr={cli_args.lr})"
+                )
+                upload_model_artifact(
+                    local_path=best_path,
+                    repo_id=target_repo,
+                    path_in_repo="experiments/cnn1d/best_cnn1d.pt",
+                    commit_message=commit_msg,
+                    update_dvc=True,
+                )
+                print("✓ Modelo y puntero DVC sincronizados en Hugging Face exitosamente.")
+            except Exception as exc:
+                print(f"! Advertencia: No se pudo subir el modelo a Hugging Face: {exc}")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Entrenamiento optimizado de CNN 1D con MLflow"
+        description="Entrenamiento optimizado de CNN 1D con MLflow y Hugging Face Hub"
     )
     parser.add_argument("--epochs", type=int, default=30)
     parser.add_argument("--batch_size", type=int, default=64)
@@ -299,5 +322,17 @@ if __name__ == "__main__":
         default=0,
         help="Hilos de lectura DataLoader (0 seguro en Windows/DirectML)",
     )
+    parser.add_argument(
+        "--push-hf",
+        action="store_true",
+        help="Sube el mejor modelo entrenado a Hugging Face Hub y actualiza DVC",
+    )
+    parser.add_argument(
+        "--hf-repo",
+        type=str,
+        default=None,
+        help="Repositorio Hugging Face destino (default: maia-grupo25/sleep-edfx-models)",
+    )
     parsed_args = parser.parse_args()
     run_training(parsed_args)
+

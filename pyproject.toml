@@ -21,3 +21,8 @@ reportMissingTypeStubs = "none"
 reportArgumentType = "none"
 reportCallIssue = "none"
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+norecursedirs = [".venv", "data", "data_processed", "mlruns", ".dvc"]
+addopts = "-v"
+
