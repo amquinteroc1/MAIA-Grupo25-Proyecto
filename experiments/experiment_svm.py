@@ -1,3 +1,5 @@
+import argparse
+import os
 from pathlib import Path
 import sys
 import joblib
@@ -229,3 +231,27 @@ with mlflow.start_run():
     print(f"\nModelo guardado en: {MODEL_OUT}")
     print(f"Predicciones guardadas en: {PRED_OUT}")
     print(f"Matriz de confusion guardada en: {CM_OUT}")
+
+    # Sincronización oficial con Hugging Face Hub y DVC
+    parser = argparse.ArgumentParser(description="Experimento SVM con soporte Hugging Face y DVC")
+    parser.add_argument("--push-hf", action="store_true", help="Sube el modelo entrenado a Hugging Face Hub")
+    parser.add_argument("--hf-repo", type=str, default=None, help="Repositorio destino en Hugging Face")
+    args, _ = parser.parse_known_args()
+
+    if args.push_hf or os.getenv("AUTO_PUSH_HF") == "1":
+        try:
+            from src.utils.hf_hub import upload_model_artifact, DEFAULT_MODEL_REPO
+            target_repo = args.hf_repo or DEFAULT_MODEL_REPO
+            print(f"\n[Hugging Face] Sincronizando SVM con repo '{target_repo}'...")
+            f1_val = metricas.get("f1_macro", 0.0)
+            commit_msg = f"SVM Baseline - F1 Macro: {f1_val:.4f}"
+            upload_model_artifact(
+                local_path=MODEL_OUT,
+                repo_id=target_repo,
+                path_in_repo="models/svm_sleep.joblib",
+                commit_message=commit_msg,
+                update_dvc=True,
+            )
+            print("✓ Modelo SVM y puntero DVC sincronizados en Hugging Face exitosamente.")
+        except Exception as exc:
+            print(f"! Advertencia: No se pudo subir SVM a Hugging Face: {exc}")

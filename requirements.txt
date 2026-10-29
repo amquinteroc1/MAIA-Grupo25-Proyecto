@@ -16,3 +16,5 @@ uvicorn
 python-multipart
 httpx
 scipy-stubs
+huggingface_hub>=0.20.0
+python-dotenv>=1.0.0

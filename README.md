@@ -88,21 +88,66 @@ pip install -r requirements.txt
 
 ---
 
-## 3. Descargar los datos con DVC
+## 2.1 Configuración de entorno y Hugging Face Hub
 
-Los datos originales no se almacenan directamente en Git.
+El proyecto utiliza **Hugging Face Hub** como repositorio oficial de almacenamiento para datos y modelos bajo la organización `maia-grupo25`:
+- **Dataset Repo:** `maia-grupo25/sleep-edfx-data` (almacena datos crudos y preprocesados)
+- **Model Repo:** `maia-grupo25/sleep-edfx-models` (almacena modelos serializados y métricas)
+
+### A. Crear la variable `HUGGING_FACE_API_KEY`
+
+1. **Vía archivo `.env` (Recomendado):**
+   Copia la plantilla y coloca tu token personal de Hugging Face (con rol `Write`):
+   ```powershell
+   Copy-Item .env.example .env
+   ```
+   Edita `.env`:
+   ```env
+   HUGGING_FACE_API_KEY=hf_tu_token_aqui
+   HF_DATA_REPO=maia-grupo25/sleep-edfx-data
+   HF_MODEL_REPO=maia-grupo25/sleep-edfx-models
+   ```
+
+2. **Vía PowerShell (Sesión actual):**
+   ```powershell
+   $env:HUGGING_FACE_API_KEY = "hf_tu_token_aqui"
+   ```
+
+3. **Vía PowerShell (Permanente de usuario):**
+   ```powershell
+   [System.Environment]::SetEnvironmentVariable('HUGGING_FACE_API_KEY', 'hf_tu_token_aqui', 'User')
+   ```
+
+4. **Vía Bash / Linux / macOS:**
+   ```bash
+   export HUGGING_FACE_API_KEY="hf_tu_token_aqui"
+   ```
+
+### B. Verificar la conexión con Hugging Face
 
 ```powershell
+python -m src.utils.hf_hub verify
+```
+
+---
+
+## 3. Descargar los datos y modelos con Hugging Face / DVC
+
+Los artefactos pesados están versionados en Hugging Face Hub y DVC:
+
+```powershell
+# Descargar modelos directamente desde Hugging Face Hub
+python -m src.utils.hf_hub pull-models
+
+# Descargar datos desde Hugging Face Hub
+python -m src.utils.hf_hub pull-data
+
+# O utilizando DVC tradicional:
 dvc pull
 ```
 
-Después del `pull`, debe existir la carpeta:
+Después de la sincronización, existirá la carpeta `data/` con los registros y los modelos en `models/` y `experiments/cnn1d/`.
 
-```text
-data/
-```
-
-con los registros de Sleep-EDF.
 
 ---
 
@@ -494,20 +539,27 @@ Debido al desbalance entre las etapas del sueño, se priorizan **Balanced Accura
 El flujo completo puede ejecutarse con:
 
 ```powershell
-# 1. Descargar datos versionados
-dvc pull
+# 1. Descargar datos y modelos versionados
+python -m src.utils.hf_hub pull-models
+python -m src.utils.hf_hub pull-data
+# o alternativamente: dvc pull
 
-# 2. Construir dataset
-python -m src.data.crear_dataset
+# 2. Construir dataset (con opción de subir a Hugging Face)
+python -m src.data.crear_dataset_cnn --push-hf
+python -m src.data.crear_dataset_lightgbm --push-hf
 
-# 3. Entrenar modelos
-python -m experiments.experiment_svm
-python -m experiments.experiment_lightgbm
+# 3. Entrenar modelos y versionar en Hugging Face + DVC
+python -m experiments.experiment_svm --push-hf
+python -m experiments.experiment_lightgbm --push-hf
+python -m src.models.train_cnn --push-hf
 
-# 4. Iniciar Dashboard interactivo
+# 4. Sincronizar todos los modelos generados manualmente (opcional)
+python -m src.utils.hf_hub push-models
+
+# 5. Iniciar Dashboard interactivo
 streamlit run dashboard/app.py
 
-# 5. Iniciar API REST con Swagger OpenAPI
+# 6. Iniciar API REST con Swagger OpenAPI
 python -m uvicorn src.api.main:app --port 8000 --reload
 ```
 

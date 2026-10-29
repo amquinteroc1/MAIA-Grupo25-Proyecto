@@ -107,13 +107,25 @@ def obtener_modelo(model_key: str):
         )
 
     info = catalog[key]
+    ruta = Path(info["path"])
+
+    # Si el modelo no existe localmente, intentar descargarlo bajo demanda desde Hugging Face Hub
+    if not ruta.exists():
+        try:
+            from src.utils.hf_hub import download_model_artifact
+            print(f"[Hugging Face] Modelo '{key}' no encontrado localmente. Descargando desde repo oficial...")
+            download_model_artifact(key)
+            catalog = get_model_catalog()
+            info = catalog[key]
+        except Exception as exc:
+            print(f"[Hugging Face] No fue posible descargar el modelo '{key}' automáticamente: {exc}")
+
     if not info["available"]:
         msg = f"El modelo '{key}' no está disponible actualmente."
         if info.get("notes"):
             msg += f" ({info['notes']})"
         raise RuntimeError(msg)
 
-    ruta = Path(info["path"])
 
     if key in ("svm", "lightgbm"):
         model = cargar_modelo(ruta)

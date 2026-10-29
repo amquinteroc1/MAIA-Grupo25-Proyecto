@@ -315,6 +315,17 @@ def main():
         action="store_true",
         help="Materializar secuencias de 5 épocas en disco (+82 GB)",
     )
+    parser.add_argument(
+        "--push-hf",
+        action="store_true",
+        help="Sube los artefactos procesados a Hugging Face Hub (maia-grupo25/sleep-edfx-data)",
+    )
+    parser.add_argument(
+        "--hf-repo",
+        type=str,
+        default=None,
+        help="ID del repositorio destino de dataset en Hugging Face",
+    )
     args = parser.parse_args()
 
     out_dir = Path(args.out_dir).resolve()
@@ -624,6 +635,23 @@ def main():
     log.info("Pipeline completado exitosamente. Artefactos listos en %s", out_dir)
     log.info("X_train shape: %s | X_test shape: %s", X_train.shape, X_test.shape)
     log.info("=" * 70)
+
+    # Sincronización oficial con Hugging Face Hub y DVC
+    if getattr(args, "push_hf", False) or os.getenv("AUTO_PUSH_HF") == "1":
+        try:
+            from src.utils.hf_hub import upload_dataset_artifacts, DEFAULT_DATA_REPO
+            target_repo = args.hf_repo or DEFAULT_DATA_REPO
+            log.info("[Hugging Face] Sincronizando dataset procesado con '%s'...", target_repo)
+            upload_dataset_artifacts(
+                source_path=out_dir,
+                repo_id=target_repo,
+                path_in_repo="data_processed",
+                commit_message="Update processed CNN dataset (X_train, y_train, groups, split_info)",
+                update_dvc=True,
+            )
+            log.info("✓ Dataset procesado y punteros DVC sincronizados exitosamente con Hugging Face.")
+        except Exception as exc:
+            log.warning("! Advertencia: No se pudo subir el dataset procesado a Hugging Face: %s", exc)
 
 
 if __name__ == "__main__":

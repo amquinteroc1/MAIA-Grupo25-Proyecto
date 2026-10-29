@@ -1,6 +1,7 @@
 from argparse import ArgumentParser
-from pathlib import Path
 import json
+import os
+from pathlib import Path
 import sys
 
 import joblib
@@ -600,7 +601,9 @@ def registrar_mlflow(
 
 def main(
     n_iter,
-    cv_splits
+    cv_splits,
+    push_hf=False,
+    hf_repo=None,
 ):
     crear_carpetas()
 
@@ -745,6 +748,27 @@ def main(
             cv_splits
         )
 
+        if push_hf or os.getenv("AUTO_PUSH_HF") == "1":
+            try:
+                from src.utils.hf_hub import upload_model_artifact, DEFAULT_MODEL_REPO
+                target_repo = hf_repo or DEFAULT_MODEL_REPO
+                print(f"\n[Hugging Face] Sincronizando LightGBM con repo '{target_repo}'...")
+                f1_val = metricas.get("f1_macro", 0.0)
+                commit_msg = (
+                    f"LightGBM - F1 Macro: {f1_val:.4f} "
+                    f"(cv_splits={cv_splits}, n_iter={n_iter})"
+                )
+                upload_model_artifact(
+                    local_path=MODEL_OUT,
+                    repo_id=target_repo,
+                    path_in_repo="models/lightgbm_sleep.joblib",
+                    commit_message=commit_msg,
+                    update_dvc=True,
+                )
+                print("✓ Modelo LightGBM y puntero DVC sincronizados en Hugging Face exitosamente.")
+            except Exception as exc:
+                print(f"! Advertencia: No se pudo subir LightGBM a Hugging Face: {exc}")
+
         print(
             "\nMejores parametros:"
         )
@@ -827,6 +851,19 @@ def obtener_argumentos():
         default=3
     )
 
+    parser.add_argument(
+        "--push-hf",
+        action="store_true",
+        help="Sube el modelo entrenado a Hugging Face Hub y actualiza DVC"
+    )
+
+    parser.add_argument(
+        "--hf-repo",
+        type=str,
+        default=None,
+        help="Repositorio destino en Hugging Face (default: maia-grupo25/sleep-edfx-models)"
+    )
+
     return parser.parse_args()
 
 
@@ -837,5 +874,7 @@ if __name__ == "__main__":
 
     main(
         n_iter=args.n_iter,
-        cv_splits=args.cv_splits
+        cv_splits=args.cv_splits,
+        push_hf=args.push_hf,
+        hf_repo=args.hf_repo,
     )

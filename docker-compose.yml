@@ -33,6 +33,10 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
       - MLFLOW_TRACKING_URI=http://mlflow:5000
+      - HUGGING_FACE_API_KEY=${HUGGING_FACE_API_KEY:-}
+      - HF_TOKEN=${HUGGING_FACE_API_KEY:-${HF_TOKEN:-}}
+      - HF_DATA_REPO=${HF_DATA_REPO:-maia-grupo25/sleep-edfx-data}
+      - HF_MODEL_REPO=${HF_MODEL_REPO:-maia-grupo25/sleep-edfx-models}
     depends_on:
       - mlflow
     networks:
@@ -54,6 +58,10 @@ services:
       - PYTHONUNBUFFERED=1
       - API_URL=http://api:8000
       - MLFLOW_TRACKING_URI=http://mlflow:5000
+      - HUGGING_FACE_API_KEY=${HUGGING_FACE_API_KEY:-}
+      - HF_TOKEN=${HUGGING_FACE_API_KEY:-${HF_TOKEN:-}}
+      - HF_DATA_REPO=${HF_DATA_REPO:-maia-grupo25/sleep-edfx-data}
+      - HF_MODEL_REPO=${HF_MODEL_REPO:-maia-grupo25/sleep-edfx-models}
       - STREAMLIT_SERVER_ENABLE_CORS=false
       - STREAMLIT_SERVER_ENABLE_XSRF_PROTECTION=false
       - STREAMLIT_SERVER_MAX_UPLOAD_SIZE=500

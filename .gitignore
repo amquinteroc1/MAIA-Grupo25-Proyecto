@@ -15,3 +15,9 @@ outputs/metrics/
 data_processed/*.mmap
 data_processed/tmp/
 logs/
+
+# Variables de entorno y secretos
+.env
+.env.*
+!.env.example
+
