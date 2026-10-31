@@ -115,8 +115,8 @@ TRAINING = {
 
     # Early stopping — monitorea val_f1_macro
     # PROVISIONAL: ajustar tras corrida exploratoria de E0
-    "max_epochs":           100,
-    "early_stopping_patience": 15,
+    "max_epochs":           30,
+    "early_stopping_patience": 10,
 
     # Criterio de selección del mejor modelo
     "monitor_metric": "val_f1_macro",   # mayor = mejor
