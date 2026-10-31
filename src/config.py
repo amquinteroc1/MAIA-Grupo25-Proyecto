@@ -18,8 +18,9 @@ ROOT = Path(__file__).resolve().parents[1]
 
 PATHS = {
     # Datos procesados por Diego (descargados desde HuggingFace)
-    "data_e0":   ROOT / "data" / "processed" / "e0",
-    "data_seq":  ROOT / "data" / "processed" / "seq",
+    # Nota: los archivos están planos en processed/ (no en subdirectorios e0/ y seq/)
+    "data_e0":   ROOT / "data" / "processed",
+    "data_seq":  ROOT / "data" / "processed",
     "data_meta": ROOT / "data" / "processed" / "meta",
 
     # Artefactos de experimentos (modelos, predicciones, logs)
@@ -137,6 +138,8 @@ MLFLOW = {
     # Cada corrida se nombra: {experimento}-seed{semilla}
     # Ejemplo: E0-seed42, E1-seed123, E2-seed2026
     "run_name_template": "{experiment}-seed{seed}",
+    # Backend SQLite — requerido en MLflow >= 2.x (filesystem backend deprecado)
+    "tracking_uri": f"sqlite:///{ROOT}/mlruns.db",
 }
 
 HF_REPO = "maia-grupo25/sleep-edfx-data"
