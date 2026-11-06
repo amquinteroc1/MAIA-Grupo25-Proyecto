@@ -1,5 +1,0 @@
-outs:
-- md5: b6fcdd932006ba31738d5cad51cebe45
-  size: 744208
-  hash: md5
-  path: groups_test.npy
