@@ -21,3 +21,10 @@ logs/
 .env.*
 !.env.example
 
+
+# Resultados de entrenamiento y evaluacion
+experiments/E0/
+experiments/E1/
+experiments/E2/
+mlruns.db
+src/evaluation/imagenes/

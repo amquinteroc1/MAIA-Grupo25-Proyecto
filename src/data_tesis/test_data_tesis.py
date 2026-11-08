@@ -1,353 +1,259 @@
-"""
-test_data_tesis.py
-Validación completa de los artefactos generados por crear_dataset_tesis.py.
-21 checks que cubren el protocolo experimental unificado.
+"""Validacion integral de datos de tesis E0 / E1 / E2.
 
-Ejecutar: python -m src.data_tesis.test_data_tesis
+Reemplaza src/data_tesis/test_data_tesis.py del microproyecto.
+Ejecucion desde la raiz del proyecto:
+    python -m src.data_tesis.test_data_tesis
+
+No modifica el dataset ni carga los arrays de senales completos en RAM.
+Requiere los artefactos generados con `--fase e0` y `--fase seq`.
 """
 
-import sys
-if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8")
+from __future__ import annotations
 
 import csv
 import json
-import numpy as np
+import sys
 from pathlib import Path
 
+import numpy as np
+
+from src.data_tesis.crear_dataset_tesis import (
+    CLASE_NOMBRES,
+    N_MUESTRAS,
+    PROTOCOL_VERSION,
+    SEQ_LEN,
+    SPLIT_SEED,
+    _centros_validos,
+    split_sc_sujetos,
+)
+
 ROOT = Path(__file__).resolve().parents[2]
-E0_DIR = ROOT / "data" / "processed" / "e0"
-SEQ_DIR = ROOT / "data" / "processed" / "seq"
-META_DIR = ROOT / "data" / "processed" / "meta"
-
-PARTICIONES = ["train", "val", "test", "st"]
-ERRORES = 0
-CHECK_NUM = 0
-
-
-def check(nombre, condicion, detalle=""):
-    global ERRORES, CHECK_NUM
-    CHECK_NUM += 1
-    if condicion:
-        print(f"  [{CHECK_NUM:2d}] ✓ {nombre}")
-    else:
-        print(f"  [{CHECK_NUM:2d}] ✗ {nombre}  ← FALLO {detalle}")
-        ERRORES += 1
+E0 = ROOT / "data" / "processed" / "e0"
+SEQ = ROOT / "data" / "processed" / "seq"
+META = ROOT / "data" / "processed" / "meta"
+PARTS = ("train", "val", "test", "st")
+EXPECTED_RECORDS = {"train": 96, "val": 25, "test": 32, "st": 44}
+EXPECTED_SUBJECTS = {"train": 49, "val": 13, "test": 16, "st": 22}
+CLASS_NAMES = [CLASE_NOMBRES[i] for i in range(5)]
 
 
-def main():
-    global ERRORES, CHECK_NUM
+class Checker:
+    def __init__(self):
+        self.passed = 0
 
-    print("=" * 70)
-    print("  VALIDACIÓN COMPLETA — Artefactos del proyecto de grado")
-    print("  21 checks contra protocolo experimental unificado")
-    print("=" * 70)
+    def check(self, description: str, condition: bool, detail: str = ""):
+        if not bool(condition):
+            raise AssertionError(f"FALLO [{description}]" + (f": {detail}" if detail else ""))
+        self.passed += 1
+        print(f"  [{self.passed:02d}] OK: {description}", flush=True)
 
-    # ══════════════════════════════════════════════════════════════════════
-    # FASE 1 — TENSORES E0 (checks 1–12)
-    # ══════════════════════════════════════════════════════════════════════
-    print("\n── FASE 1: Tensores E0 ──────────────────────────────────────")
 
-    # Cargar todos los tensores E0
-    e0 = {}
-    for p in PARTICIONES:
-        e0[p] = {
-            "X": np.load(E0_DIR / f"X_{p}.npy", mmap_mode="r"),
-            "y": np.load(E0_DIR / f"y_{p}.npy"),
-            "g": np.load(E0_DIR / f"groups_{p}.npy"),
-        }
+def load_json(path: Path):
+    return json.loads(path.read_text(encoding="utf-8"))
 
-    # [1] Shapes
-    print()
-    all_shapes_ok = True
-    for p in PARTICIONES:
-        X, y, g = e0[p]["X"], e0[p]["y"], e0[p]["g"]
-        if X.shape[1] != 3 or X.shape[2] != 3000:
-            all_shapes_ok = False
-        if len(y) != X.shape[0] or len(g) != X.shape[0]:
-            all_shapes_ok = False
-    shapes_detail = {p: e0[p]["X"].shape for p in PARTICIONES}
-    check("Shapes E0: (N, 3, 3000) en 4 conjuntos", all_shapes_ok, str(shapes_detail))
 
-    # [2] Dtypes
-    dtypes_ok = all(
-        e0[p]["X"].dtype == np.float32 and
-        e0[p]["y"].dtype == np.int64 and
-        e0[p]["g"].dtype == np.int64
-        for p in PARTICIONES
-    )
-    check("Dtypes: X=float32, y=int64, groups=int64", dtypes_ok)
+def load_npy(path: Path, mmap: bool = False):
+    if not path.is_file():
+        raise FileNotFoundError(f"Falta {path}. Genera E0 y secuencias primero.")
+    return np.load(path, mmap_mode="r" if mmap else None, allow_pickle=False)
 
-    # [3] Etiquetas en [0,4]
-    labels_ok = all(
-        set(np.unique(e0[p]["y"])).issubset({0, 1, 2, 3, 4})
-        for p in PARTICIONES
-    )
-    check("Etiquetas en [0,1,2,3,4] en 4 conjuntos", labels_ok)
 
-    # [4] Data leakage SC interno
-    suj_train = set(np.unique(e0["train"]["g"]))
-    suj_val = set(np.unique(e0["val"]["g"]))
-    suj_test = set(np.unique(e0["test"]["g"]))
-    no_leak_tv = len(suj_train & suj_val) == 0
-    no_leak_tt = len(suj_train & suj_test) == 0
-    no_leak_vt = len(suj_val & suj_test) == 0
-    check("Sin leakage SC: train∩val=∅, train∩test=∅, val∩test=∅",
-          no_leak_tv and no_leak_tt and no_leak_vt,
-          f"t∩v={len(suj_train & suj_val)}, t∩te={len(suj_train & suj_test)}, v∩te={len(suj_val & suj_test)}")
+def sample_indices(n: int, max_n: int = 48):
+    if n == 0:
+        return np.empty(0, dtype=np.int64)
+    return np.unique(np.linspace(0, n - 1, min(max_n, n), dtype=np.int64))
 
-    # [5] Data leakage SC vs ST
-    suj_st = set(np.unique(e0["st"]["g"]))
-    suj_sc = suj_train | suj_val | suj_test
-    no_leak_sc_st = len(suj_sc & suj_st) == 0
-    check("Sin leakage SC vs ST: SC∩ST=∅", no_leak_sc_st,
-          f"compartidos: {len(suj_sc & suj_st)}")
 
-    # [6] Normalización SC-train ≈ media 0, std 1
-    rng = np.random.RandomState(42)
-    idx_sample = rng.choice(e0["train"]["X"].shape[0], min(1000, e0["train"]["X"].shape[0]), replace=False)
-    sample_train = np.array(e0["train"]["X"][idx_sample])
-    norm_ok = True
-    norm_details = []
-    for ch in range(3):
-        mu = float(sample_train[:, ch, :].mean())
-        std = float(sample_train[:, ch, :].std())
-        norm_details.append(f"ch{ch}: μ={mu:.4f} σ={std:.4f}")
-        if abs(mu) > 0.1 or abs(std - 1.0) > 0.15:
-            norm_ok = False
-    check("Normalización SC-train: media≈0, std≈1 por canal", norm_ok,
-          " | ".join(norm_details))
+def validate():
+    c = Checker()
+    print("Validacion E0 / E1 / E2: protocolo sujeto-exclusivo y cronologico", flush=True)
+    print(f"Raiz: {ROOT}\n", flush=True)
 
-    # [7] NaN e Inf
-    nan_inf_ok = True
-    for p in PARTICIONES:
-        idx_s = rng.choice(e0[p]["X"].shape[0], min(500, e0[p]["X"].shape[0]), replace=False)
-        sample = np.array(e0[p]["X"][idx_s])
-        if np.isnan(sample).any() or np.isinf(sample).any():
-            nan_inf_ok = False
-    check("Sin NaN ni Inf (muestra 500 épocas × 4 conjuntos)", nan_inf_ok)
+    required_meta = [META / "inventory_records.csv", META / "split_info.json",
+                     META / "group_mappings.json", META / "norm_params.npz"]
+    required_e0 = [E0 / f"{prefix}_{p}.npy" for p in PARTS
+                   for prefix in ("X", "y", "groups", "record_ids", "epoch_starts")]
+    required_seq = [SEQ / f"{prefix}_{p}.npy" for p in PARTS
+                    for prefix in ("X_seq", "y_seq", "groups_seq", "eligible_indices")]
+    missing = [str(p) for p in required_meta + required_e0 + required_seq if not p.is_file()]
+    c.check("Todos los artefactos esperados existen", not missing,
+            "Archivos ausentes:\n" + "\n".join(missing))
 
-    # [8] Consistencia X vs y vs groups
-    consist_ok = all(
-        e0[p]["X"].shape[0] == len(e0[p]["y"]) == len(e0[p]["g"])
-        for p in PARTICIONES
-    )
-    check("Consistencia: len(X)==len(y)==len(groups) en 4 conjuntos", consist_ok)
+    info = load_json(META / "split_info.json")
+    mappings = load_json(META / "group_mappings.json")
+    with (META / "inventory_records.csv").open(newline="", encoding="utf-8") as f:
+        inventory = list(csv.DictReader(f))
+    subject_map = mappings["subject_to_group"]
+    record_map = mappings["record_to_group"]
+    c.check("Protocolo v2 en metadatos", info.get("protocol_version") == PROTOCOL_VERSION
+            and mappings.get("protocol_version") == PROTOCOL_VERSION)
+    c.check("Semilla de particion fija", info.get("split_seed") == SPLIT_SEED)
+    c.check("Inventario completo: 197 registros", len(inventory) == 197)
+    c.check("Identificadores de registros unicos", len({r["record_id"] for r in inventory}) == 197)
+    c.check("Cien personas reales", len({r["subject_id"] for r in inventory}) == 100)
+    c.check("Grupos numericos reproducibles", subject_map ==
+            {sid: i + 1 for i, sid in enumerate(sorted(subject_map))}
+            and record_map == {rid: i + 1 for i, rid in enumerate(sorted(record_map))})
+    c.check("Cada registro corresponde a su persona", all(
+            r["record_id"][:5] == r["subject_id"] for r in inventory))
 
-    # [9] Proporciones del split
-    n_suj_train = len(suj_train)
-    n_suj_val = len(suj_val)
-    n_suj_test = len(suj_test)
-    n_sc_total = n_suj_train + n_suj_val + n_suj_test
-    prop_ok = (
-        abs(n_suj_train / n_sc_total - 0.64) < 0.05 and
-        abs(n_suj_val / n_sc_total - 0.16) < 0.05 and
-        abs(n_suj_test / n_sc_total - 0.20) < 0.05
-    )
-    check(f"Proporciones: train={n_suj_train}/{n_sc_total}={n_suj_train/n_sc_total:.2f}, "
-          f"val={n_suj_val}/{n_sc_total}={n_suj_val/n_sc_total:.2f}, "
-          f"test={n_suj_test}/{n_sc_total}={n_suj_test/n_sc_total:.2f}",
-          prop_ok)
+    subjects = {p: {r["subject_id"] for r in inventory if r["partition"] == p}
+                for p in PARTS}
+    records = {p: [r for r in inventory if r["partition"] == p] for p in PARTS}
+    c.check("Personas por conjunto: 49/13/16/22", all(
+            len(subjects[p]) == EXPECTED_SUBJECTS[p] for p in PARTS))
+    c.check("Registros por conjunto: 96/25/32/44", all(
+            len(records[p]) == EXPECTED_RECORDS[p] for p in PARTS))
+    c.check("Sujetos SC y ST correctamente diferenciados", all(
+            (sid.startswith("ST") if p == "st" else sid.startswith("SC"))
+            for p in PARTS for sid in subjects[p]))
+    c.check("Ausencia total de leakage entre personas", all(
+            not (subjects[p] & subjects[q]) for i, p in enumerate(PARTS)
+            for q in PARTS[i + 1:]))
+    c.check("Asignacion reproducible desde los sujetos SC", all(
+            split_sc_sujetos(subjects["train"] | subjects["val"] | subjects["test"])[sid] == p
+            for p in ("train", "val", "test") for sid in subjects[p]))
+    c.check("Inventario y split_info coinciden", all(
+            set(info["sujetos"][p]) == subjects[p]
+            and set(info["registros"][p]) == {r["record_id"] for r in records[p]}
+            and info["n_sujetos"][p] == len(subjects[p])
+            and info["n_registros"][p] == len(records[p])
+            for p in PARTS))
+    c.check("Mapeos de grupos coinciden con el inventario", all(
+            int(r["subject_group_id"]) == subject_map[r["subject_id"]]
+            and int(r["record_group_id"]) == record_map[r["record_id"]]
+            for r in inventory))
 
-    # [10] Inventario vs tensores
-    inv_path = META_DIR / "inventory_records.csv"
-    inv_exists = inv_path.exists()
-    inv_match = False
-    if inv_exists:
-        with open(inv_path, "r") as f:
-            reader = csv.DictReader(f)
-            inv_rows = list(reader)
-        inv_totals = {"train": 0, "val": 0, "test": 0, "st": 0}
-        for row in inv_rows:
-            part = row["partition"]
-            inv_totals[part] += int(row["epochs_valid_e0"])
-        inv_match = all(
-            inv_totals[p] == e0[p]["X"].shape[0]
-            for p in PARTICIONES
-        )
-    check("Inventario vs tensores: épocas coinciden",
-          inv_exists and inv_match,
-          f"inv={inv_totals if inv_exists else 'NO EXISTE'} vs tensores={{{p}: e0[p]['X'].shape[0] for p in PARTICIONES}})")
+    with np.load(META / "norm_params.npz", allow_pickle=False) as norm:
+        mean = norm["media"]
+        std = norm["std"]
+    c.check("Parametros de normalizacion validos", mean.shape == (3,) and
+            std.shape == (3,) and np.isfinite(mean).all() and
+            np.isfinite(std).all() and (std > 0).all())
+    c.check("Normalizacion coherente con split_info", np.allclose(
+            mean, info["norm_media_por_canal"], rtol=1e-8, atol=1e-12)
+            and np.allclose(std, info["norm_std_por_canal"], rtol=1e-8, atol=1e-12))
+    c.check("Longitud de secuencia y frecuencia", info.get("seq_len") == SEQ_LEN
+            and info.get("n_muestras_epoca") == N_MUESTRAS
+            and info.get("sample_rate_hz") == 100)
 
-    # [11] norm_params.npz existe y es válido
-    np_path = META_DIR / "norm_params.npz"
-    np_exists = np_path.exists()
-    np_valid = False
-    if np_exists:
-        np_data = np.load(np_path)
-        media = np_data["media"]
-        std = np_data["std"]
-        np_valid = (
-            len(media) == 3 and len(std) == 3 and
-            not np.isnan(media).any() and not np.isnan(std).any() and
-            all(s > 0 for s in std)
-        )
-    check("norm_params.npz: 3 medias, 3 stds, sin NaN, std>0",
-          np_exists and np_valid,
-          f"existe={np_exists}")
+    # La prueba sintética detecta que no se permiten ventanas a traves de huecos.
+    synthetic_starts = np.arange(10, dtype=np.int64) * N_MUESTRAS
+    synthetic_starts[5:] += N_MUESTRAS
+    c.check("Control sintetico de discontinuidades temporales",
+            _centros_validos(synthetic_starts).tolist() == [2, 7])
 
-    # [12] Mini-batch PyTorch
-    batch_X = np.array(e0["train"]["X"][:32])
-    batch_ok = batch_X.shape == (32, 3, 3000) and batch_X.dtype == np.float32
-    check("Mini-batch E0: shape (32,3,3000) float32 → PyTorch compatible", batch_ok,
-          f"shape={batch_X.shape} dtype={batch_X.dtype}")
+    all_gids = {}
+    for part in PARTS:
+        print(f"\n--- {part.upper()} ---", flush=True)
+        X = load_npy(E0 / f"X_{part}.npy", mmap=True)
+        y = load_npy(E0 / f"y_{part}.npy", mmap=True)
+        groups = load_npy(E0 / f"groups_{part}.npy", mmap=True)
+        recids = load_npy(E0 / f"record_ids_{part}.npy", mmap=True)
+        starts = load_npy(E0 / f"epoch_starts_{part}.npy", mmap=True)
+        n = len(y)
+        c.check(f"{part} E0: dimensiones y dtypes", X.shape == (n, 3, N_MUESTRAS)
+                and X.dtype == np.float32 and y.dtype == np.int64
+                and groups.dtype == np.int64 and recids.dtype == np.int64
+                and starts.dtype == np.int64 and len(groups) == len(recids) == len(starts) == n)
+        c.check(f"{part} E0: etiquetas en 0..4", n > 0 and
+                np.isin(np.unique(y), np.arange(5)).all())
+        c.check(f"{part} E0: IDs de persona reales", set(np.unique(groups).tolist()) ==
+                {subject_map[sid] for sid in subjects[part]})
+        all_gids[part] = set(np.unique(groups).tolist())
+        c.check(f"{part} E0: IDs de registro reales", set(np.unique(recids).tolist()) ==
+                {record_map[r["record_id"]] for r in records[part]})
+        c.check(f"{part} E0: conteos e inventario", n ==
+                sum(int(r["epochs_valid_e0"]) for r in records[part])
+                and n == info["conteos_e0"][part]["total"])
+        counts = np.bincount(y, minlength=5)
+        c.check(f"{part} E0: distribucion por clase", all(
+                int(info["conteos_e0"][part]["por_clase"][CLASS_NAMES[k]]) == int(counts[k])
+                for k in range(5)))
+        c.check(f"{part} E0: senales finitas en muestra", all(
+                np.isfinite(X[int(i)]).all() for i in sample_indices(n, 32)))
 
-    # ══════════════════════════════════════════════════════════════════════
-    # FASE 2 — SECUENCIAS E1/E2 (checks 13–21)
-    # ══════════════════════════════════════════════════════════════════════
-    print("\n── FASE 2: Secuencias E1/E2 ─────────────────────────────────")
+        X_seq = load_npy(SEQ / f"X_seq_{part}.npy", mmap=True)
+        y_seq = load_npy(SEQ / f"y_seq_{part}.npy", mmap=True)
+        g_seq = load_npy(SEQ / f"groups_seq_{part}.npy", mmap=True)
+        eligible = load_npy(SEQ / f"eligible_indices_{part}.npy", mmap=True)
+        m = len(eligible)
+        c.check(f"{part} secuencias: dimensiones y dtypes",
+                X_seq.shape == (m, 5, 3, N_MUESTRAS) and X_seq.dtype == np.float32
+                and y_seq.dtype == np.int64 and g_seq.dtype == np.int64
+                and eligible.dtype == np.int64 and len(y_seq) == len(g_seq) == m)
+        c.check(f"{part} secuencias: indices validos y sin duplicados", m > 0
+                and eligible.min() >= 2 and eligible.max() < n - 2
+                and len(np.unique(eligible)) == m)
+        c.check(f"{part} secuencias: etiquetas centrales exactas",
+                np.array_equal(y_seq, y[eligible]))
+        c.check(f"{part} secuencias: personas centrales exactas",
+                np.array_equal(g_seq, groups[eligible]))
+        offsets = np.arange(-2, 3, dtype=np.int64)
+        neighbors = eligible[:, None] + offsets
+        c.check(f"{part} ventanas: sin cruces de registro", np.all(
+                recids[neighbors] == recids[eligible, None]))
+        c.check(f"{part} ventanas: tiempo continuo 30 s", np.all(
+                np.diff(starts[neighbors], axis=1) == N_MUESTRAS))
+        c.check(f"{part} ventanas: grupos estables", np.all(
+                groups[neighbors] == groups[eligible, None]))
 
-    seq = {}
-    elig = {}
-    for p in PARTICIONES:
-        seq[p] = {
-            "X": np.load(SEQ_DIR / f"X_seq_{p}.npy", mmap_mode="r"),
-            "y": np.load(SEQ_DIR / f"y_seq_{p}.npy"),
-            "g": np.load(SEQ_DIR / f"groups_seq_{p}.npy"),
-        }
-        elig[p] = np.load(SEQ_DIR / f"eligible_indices_{p}.npy")
+        # Verificacion exhaustiva de centros y conteos por registro.
+        expected_centers = []
+        detail_border = 0
+        detail_gaps = 0
+        for row in records[part]:
+            rid = row["record_id"]
+            r_gid = record_map[rid]
+            idx = np.flatnonzero(recids == r_gid)
+            s = starts[idx]
+            center_local = _centros_validos(s)
+            expected_centers.extend(idx[center_local].tolist())
+            excluded_border = min(len(idx), SEQ_LEN - 1)
+            excluded_gap = max(0, len(idx) - excluded_border - len(center_local))
+            detail_border += excluded_border
+            detail_gaps += excluded_gap
+            if (len(idx) != int(row["epochs_valid_e0"])
+                    or len(center_local) != int(row["epochs_valid_seq"])
+                    or excluded_border != int(row["epochs_excluded_border"])
+                    or excluded_gap != int(row["epochs_excluded_discontinuity"])):
+                raise AssertionError(f"Inventario E0/SEQ/EXCLUSIONES incorrecto: {rid}")
+            if len(idx) and (not np.all(np.diff(idx) == 1)
+                             or not np.all(groups[idx] == subject_map[row["subject_id"]])
+                             or not np.all(np.diff(s) >= N_MUESTRAS)):
+                raise AssertionError(f"Registro fragmentado/mezclado/solapado: {rid}")
+            perclass = np.bincount(y[idx], minlength=5)
+            for k in range(5):
+                if int(row[f"count_{CLASS_NAMES[k].lower()}"]) != int(perclass[k]):
+                    raise AssertionError(f"Conteo de clase incorrecto en: {rid}")
+        c.check(f"{part} secuencias: centros exhaustivos por registro",
+                np.array_equal(eligible, np.asarray(expected_centers, dtype=np.int64)))
+        c.check(f"{part} inventario: exclusiones borde y discontinuidad",
+                n - m == detail_border + detail_gaps and
+                info["exclusiones_detalle"][part] == {
+                    "border": detail_border, "discontinuity": detail_gaps})
+        c.check(f"{part} secuencias: total y clases en metadatos",
+                m == info["conteos_seq"][part]["total"] and
+                all(int(info["conteos_seq"][part]["por_clase"][CLASS_NAMES[k]]) ==
+                    int(np.count_nonzero(y_seq == k)) for k in range(5)))
+        for i in sample_indices(m, 24):
+            j = int(i)
+            if not np.array_equal(X_seq[j], X[neighbors[j]]):
+                raise AssertionError(f"Señal no coincide en {part}, secuencia {j}")
+        c.check(f"{part} secuencias: señales completas (muestra de 24)", True)
+        print(f"  Resultado: {n:,} E0, {m:,} secuencias, "
+              f"{detail_border} bordes, {detail_gaps} discontinuidades")
 
-    # [13] Shapes secuencias
-    seq_shapes_ok = all(
-        seq[p]["X"].shape[1] == 5 and
-        seq[p]["X"].shape[2] == 3 and
-        seq[p]["X"].shape[3] == 3000
-        for p in PARTICIONES
-    )
-    seq_shapes_detail = {p: seq[p]["X"].shape for p in PARTICIONES}
-    check("Shapes seq: (N', 5, 3, 3000) en 4 conjuntos", seq_shapes_ok,
-          str(seq_shapes_detail))
-
-    # [14] N' < N
-    n_prime_lt_n = all(
-        seq[p]["X"].shape[0] < e0[p]["X"].shape[0]
-        for p in PARTICIONES
-    )
-    check("N' < N: secuencias < épocas E0 en cada partición", n_prime_lt_n,
-          {p: f"{seq[p]['X'].shape[0]} < {e0[p]['X'].shape[0]}" for p in PARTICIONES})
-
-    # [15] Etiquetas secuencias = época central
-    labels_central_ok = True
-    for p in PARTICIONES:
-        y_e0_eligible = e0[p]["y"][elig[p]]
-        if not np.array_equal(seq[p]["y"], y_e0_eligible):
-            labels_central_ok = False
-    check("Etiquetas seq corresponden a época central (via eligible_indices)", labels_central_ok)
-
-    # [16] Cohorte común: len(X_seq) == len(eligible_indices)
-    cohort_ok = all(
-        seq[p]["X"].shape[0] == len(elig[p])
-        for p in PARTICIONES
-    )
-    check("Cohorte común: len(X_seq)==len(eligible_indices) por partición", cohort_ok,
-          {p: f"seq={seq[p]['X'].shape[0]} elig={len(elig[p])}" for p in PARTICIONES})
-
-    # [17] Eligible indices: rango válido y sin duplicados
-    elig_valid = True
-    for p in PARTICIONES:
-        e = elig[p]
-        n_e0 = e0[p]["X"].shape[0]
-        if e.min() < 0 or e.max() >= n_e0:
-            elig_valid = False
-        if len(np.unique(e)) != len(e):
-            elig_valid = False
-    check("Eligible indices: rango [0, N_e0) y sin duplicados", elig_valid)
-
-    # [18] Exclusiones por borde vs inventario
-    if inv_exists:
-        inv_border_by_part = {"train": 0, "val": 0, "test": 0, "st": 0}
-        for row in inv_rows:
-            part = row["partition"]
-            inv_border_by_part[part] += int(row.get("epochs_excluded_border", 0))
-
-        actual_border = {
-            p: e0[p]["X"].shape[0] - seq[p]["X"].shape[0]
-            for p in PARTICIONES
-        }
-        # El inventario puede no tener epochs_excluded_border por sujeto
-        # (se calcula a nivel de partición en split_info), así que verificamos
-        # contra split_info si el inventario no lo tiene
-        si_path = META_DIR / "split_info.json"
-        border_check_ok = True
-        if si_path.exists():
-            with open(si_path) as f:
-                si = json.load(f)
-            if "exclusiones_borde" in si:
-                for p in PARTICIONES:
-                    expected = si["exclusiones_borde"].get(p, {}).get("excluded_border", -1)
-                    if expected != actual_border[p]:
-                        border_check_ok = False
-        check("Exclusiones borde: split_info coincide con diferencia E0-seq",
-              border_check_ok,
-              f"actual={actual_border}")
-    else:
-        check("Exclusiones borde: inventario no existe", False)
-
-    # [19] Sin cruce de límites de registro dentro de secuencias
-    # Verificar que groups es constante dentro de cada secuencia (muestreo)
-    no_cross_ok = True
-    for p in ["train", "test"]:  # muestra en train y test
-        n_seq = seq[p]["X"].shape[0]
-        sample_idx = rng.choice(n_seq, min(200, n_seq), replace=False)
-        for idx in sample_idx:
-            # Los groups de las 5 épocas deberían ser iguales
-            # Verificamos indirectamente: eligible_indices consecutivos deben
-            # pertenecer al mismo grupo en E0
-            center = elig[p][idx]
-            indices_ventana = np.arange(center - 2, center + 3)
-            if indices_ventana[0] < 0 or indices_ventana[-1] >= len(e0[p]["g"]):
-                no_cross_ok = False
-                break
-            groups_ventana = e0[p]["g"][indices_ventana]
-            if len(np.unique(groups_ventana)) != 1:
-                no_cross_ok = False
-                break
-    check("Sin cruce de límites: groups constante en ventanas (muestra 200)", no_cross_ok)
-
-    # [20] Mini-batch secuencias PyTorch
-    batch_seq = np.array(seq["train"]["X"][:32])
-    batch_seq_ok = batch_seq.shape == (32, 5, 3, 3000) and batch_seq.dtype == np.float32
-    check("Mini-batch seq: shape (32,5,3,3000) float32 → PyTorch compatible",
-          batch_seq_ok, f"shape={batch_seq.shape} dtype={batch_seq.dtype}")
-
-    # [21] split_info.json completo
-    si_path = META_DIR / "split_info.json"
-    si_complete = False
-    if si_path.exists():
-        with open(si_path) as f:
-            si = json.load(f)
-        required_keys = ["split_seed", "split_proporciones", "canales", "sujetos",
-                         "n_sujetos", "conteos_e0", "conteos_seq",
-                         "exclusiones_borde", "norm_params_file"]
-        si_complete = all(k in si for k in required_keys)
-        missing = [k for k in required_keys if k not in si]
-    check("split_info.json: todas las claves requeridas presentes",
-          si_complete,
-          f"faltan: {missing}" if not si_complete and si_path.exists() else "")
-
-    # ══════════════════════════════════════════════════════════════════════
-    # RESUMEN
-    # ══════════════════════════════════════════════════════════════════════
-    print(f"\n{'=' * 70}")
-    if ERRORES == 0:
-        print(f"  ✅  {CHECK_NUM} / {CHECK_NUM} CHECKS PASADOS")
-        print(f"  Pipeline validado contra protocolo experimental unificado")
-    else:
-        print(f"  ❌  {ERRORES} FALLO(S) de {CHECK_NUM} checks")
-        print(f"  Revisar antes de entregar a Omar")
-    print(f"{'=' * 70}\n")
-
-    # Imprimir resumen de datos
-    print("── Resumen de artefactos ────────────────────────────────────")
-    for p in PARTICIONES:
-        n_e0 = e0[p]["X"].shape[0]
-        n_seq = seq[p]["X"].shape[0]
-        n_suj = len(np.unique(e0[p]["g"]))
-        print(f"  {p:6s}: {n_e0:>7,} épocas E0 | {n_seq:>7,} secuencias | {n_suj:>3} sujetos | borde excluido: {n_e0 - n_seq}")
-    print()
-
-    sys.exit(ERRORES)
+    c.check("Sin identificadores numericos compartidos entre conjuntos", all(
+            not all_gids[p].intersection(all_gids[q])
+            for i, p in enumerate(PARTS) for q in PARTS[i + 1:]))
+    print(f"\nVALIDACION INTEGRAL SUPERADA: {c.passed} verificaciones.", flush=True)
+    print("Listo para auditar loaders y entrenamiento E0/E1/E2.")
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        validate()
+    except Exception as exc:
+        print(f"\nVALIDACION FALLIDA: {type(exc).__name__}: {exc}", file=sys.stderr)
+        raise SystemExit(1) from exc
