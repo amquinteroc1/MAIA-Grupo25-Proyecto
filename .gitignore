@@ -28,3 +28,9 @@ experiments/E1/
 experiments/E2/
 mlruns.db
 src/evaluation/imagenes/
+
+# Archivos temporales regenerables
+/_hf_stage_*/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/

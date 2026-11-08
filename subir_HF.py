@@ -3,8 +3,8 @@
 Instalar: python -m pip install -U huggingface_hub hf_xet
 Autenticar: hf auth login
 Ejecutar desde raiz del repositorio:
-    python -m src.evaluation.subir_huggingface_tesis --dry-run
-    python -m src.evaluation.subir_huggingface_tesis
+    python subir_HF.py --folder revision-luigi --dry-run
+    python subir_HF.py --folder revision-luigi
 
 Deja intactos los archivos anteriores creando una nueva carpeta remota.
 No sube EDF brutos, tokens, .env, Git, ni datos procesados grandes salvo opt-in.
@@ -174,8 +174,8 @@ def repo_type(api, repo_id: str):
 
 def main():
     p = argparse.ArgumentParser(description="Subida segura de resultados E0/E1/E2 al Hub")
-    p.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[2],
-                   help="Raiz del repositorio local (por defecto, dos niveles sobre src/evaluation)")
+    p.add_argument("--root", type=Path, default=Path(__file__).resolve().parent,
+                   help="Raiz del repositorio local (por defecto, carpeta que contiene subir_HF.py)")
     p.add_argument("--folder", default=DEFAULT_FOLDER, help="Nueva carpeta en ambos repositorios HF")
     p.add_argument("--branch", default="main", help="Rama HF; puede ser nueva")
     p.add_argument("--data-repo", default=DATA_REPO)

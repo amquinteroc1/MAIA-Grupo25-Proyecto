@@ -1,10 +1,10 @@
 """Entrenamiento E0/E1/E2 con los datos corregidos de Sleep-EDF.
 
-Ubicacion: src/training/train_tesis.py
+Ubicacion: src/training/train.py
 Uso desde la raiz del proyecto:
-  python -m src.training.train_tesis --experiment E0 --seed 42 --dry-run
-  python -m src.training.train_tesis --experiment E0 --seed 42
-  python -m src.training.train_tesis --experiment all --seed all
+  python -m src.training.train --experiment E0 --seed 42 --dry-run
+  python -m src.training.train --experiment E0 --seed 42
+  python -m src.training.train --experiment all --seed all
 """
 
 import argparse

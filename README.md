@@ -1,5 +1,97 @@
 # MAIA Grupo 25 - Clasificación de Etapas del Sueño
 
+<!-- INICIO: TESIS E0-E1-E2 2026 -->
+
+## Tesis 2026: efecto del contexto temporal en la clasificación de estadios del sueño
+
+**Estado:** entrenamiento y evaluación finalizados para E0, E1 y E2; resultados externos en
+Sleep-Telemetry (ST). Los experimentos anteriores SVM/LightGBM/CNN1D se mantienen como
+antecedentes del microproyecto y **no son directamente comparables** con estas métricas:
+se utilizaron particiónes y condiciones de evaluación diferentes.
+
+### Datos y protocolo experimental actual
+
+- Fuente: PhysioNet Sleep-EDF Expanded, versiónes SC (Sleep-Cassette) y ST (Sleep-Telemetry).
+- Entrada: EEG Fpz-Cz, EEG Pz-Oz y EOG horizontal; 100 Hz; épocas de 30 segundos.
+- Etiquetas: Wake, N1, N2, N3 y REM.
+- División por sujeto SC: entrenamiento 49, validación 13, prueba 16; ST externo 22 sujetos.
+- Evaluación SC-test: **39.961 épocas** comúnes para las tres arquitecturas.
+- Evaluación ST: **42.003 épocas** comúnes para las tres arquitecturas.
+- Semillas por modelo: `42`, `123` y `2026` (nueve entrenamientos independientes).
+
+### Arquitecturas
+
+| Modelo | Entrada y agregación temporal                                    |
+| ------ | ---------------------------------------------------------------- |
+| E0     | CNN 1D sobre una epoca de 30 s, sin contexto                     |
+| E1     | CNN compartida sobre 5 épocas y concatenacion de embeddings      |
+| E2     | CNN compartida sobre 5 épocas y una GRU para agregación temporal |
+
+La ventana objetivo en E1 y E2 es la epoca central de las cinco consecutivas.
+El extractor CNN tiene cuatro bloques convolucionales, con 32/64/128/256 filtros.
+Los tres modelos usan un protocolo de entrenamiento común; consultar `src/config.py`.
+
+### Resultados: promedio de tres semillas
+
+| Modelo | Accuracy SC-test | F1-macro SC-test | Accuracy ST | F1-macro ST |   F1 N1 ST |
+| ------ | ---------------: | ---------------: | ----------: | ----------: | ---------: |
+| E0     |          78,36 % |           0,7601 |     65,26 % |      0,6090 |     0,3603 |
+| E1     |          81,51 % |           0,7814 |     61,19 % |      0,5893 |     0,3282 |
+| **E2** |      **82,34 %** |       **0,7888** | **67,81 %** |  **0,6354** | **0,3884** |
+
+En SC-test, E1 y E2 superan a E0. En ST, E2 mantiene el mejor F1-macro,
+mientras E1 obtiene un resultado inferior a E0. Son medias descriptivas;
+no constituyen una prueba de significacion estadistica por sujeto.
+
+### Comandos de reproducibilidad de la tesis
+
+Ejecutar desde la raiz del repositorio, con las dependencias ya instaladas:
+
+```powershell
+# Revisar la partición y los datos preparados
+python -m src.data_tesis.test_data_tesis
+
+# Regenerar datos de tesis cuando se disponga de los EDF originales
+python -m src.data_tesis.crear_dataset_tesis --fase todo
+
+# Comprobar configuración y particiónes sin entrenar
+python -m src.training.train --experiment E0 --seed 42 --dry-run
+
+# Entrenar las nueve corridas (solo si es necesario)
+python -m src.training.train --experiment all --seed all
+
+# Recalcular evaluación ST y matrices desde predicciones ya guardadas
+python -m src.evaluation.evaluacion_st
+python -m src.evaluation.generar_matrices_confusion
+
+# Inventario para una futura publicación en Hugging Face (sin subida)
+python subir_HF.py --root . --folder revision-luigi --dry-run
+```
+
+Los artefactos locales se guardan en `experiments/E0/`, `experiments/E1/`,
+`experiments/E2/`, `outputs/metrics/` y `src/evaluation/imagenes/`.
+No es necesario reentrenar para reproducir las métricas a partir de las predicciones guardadas.
+
+### Versionado de datos y artefactos
+
+- `data.dvc` registra el directorio `data/` (399 archivos y 8,72 GB en el metadato
+  versiónado de Git). El remote DVC configurado es `cnn-remote` en S3. Su
+  sincronización **debe verificarse** con `dvc status -c` antes de hacer limpieza.
+- Los checkpoints, matrices y predicciones de los nueve experimentos permanecen
+  locales hasta que se confirme su copia en Hugging Face u otro almacenamiento.
+- Git versióna código y metadatos, pero **no sustituye** `dvc push` ni el respaldo
+  de los pesos.
+- Los repositorios Hugging Face originales son históricos; los repositorios `-v2`
+  todavía requieren creacion/permisos antes de documentarlos como disponibles.
+
+### Componentes anteriores
+
+Las secciones siguientes documentan el **microproyecto previo** (SVM, LightGBM,
+CNN1D, API, dashboard y despliegue). Se conservan como referencia, pero sus
+comandos, rutas y resultados pueden corresponder a una versión distinta de la tesis.
+
+<!-- FIN: TESIS E0-E1-E2 2026 -->
+
 Proyecto de Machine Learning para la clasificación automática de etapas del sueño a partir de señales polisomnográficas del dataset **Sleep-EDF Expanded** de PhysioNet.
 
 El objetivo es clasificar ventanas de 30 segundos en cinco etapas:
@@ -91,6 +183,7 @@ pip install -r requirements.txt
 ## 2.1 Configuración de entorno y Hugging Face Hub
 
 El proyecto utiliza **Hugging Face Hub** como repositorio oficial de almacenamiento para datos y modelos bajo la organización `maia-grupo25`:
+
 - **Dataset Repo:** `maia-grupo25/sleep-edfx-data` (almacena datos crudos y preprocesados)
 - **Model Repo:** `maia-grupo25/sleep-edfx-models` (almacena modelos serializados y métricas)
 
@@ -98,10 +191,13 @@ El proyecto utiliza **Hugging Face Hub** como repositorio oficial de almacenamie
 
 1. **Vía archivo `.env` (Recomendado):**
    Copia la plantilla y coloca tu token personal de Hugging Face (con rol `Write`):
+
    ```powershell
    Copy-Item .env.example .env
    ```
+
    Edita `.env`:
+
    ```env
    HUGGING_FACE_API_KEY=hf_tu_token_aqui
    HF_DATA_REPO=maia-grupo25/sleep-edfx-data
@@ -109,11 +205,13 @@ El proyecto utiliza **Hugging Face Hub** como repositorio oficial de almacenamie
    ```
 
 2. **Vía PowerShell (Sesión actual):**
+
    ```powershell
    $env:HUGGING_FACE_API_KEY = "hf_tu_token_aqui"
    ```
 
 3. **Vía PowerShell (Permanente de usuario):**
+
    ```powershell
    [System.Environment]::SetEnvironmentVariable('HUGGING_FACE_API_KEY', 'hf_tu_token_aqui', 'User')
    ```
@@ -147,7 +245,6 @@ dvc pull
 ```
 
 Después de la sincronización, existirá la carpeta `data/` con los registros y los modelos en `models/` y `experiments/cnn1d/`.
-
 
 ---
 
@@ -209,11 +306,11 @@ El proyecto implementa y evalúa tres enfoques de Machine Learning y Deep Learni
 
 ### Resumen Comparativo de Modelos:
 
-| Modelo | Arquitectura | Entrada | Comando de Ejecución | Artefacto Serializado | Experimento MLflow |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **SVM** | Support Vector Machine (RBF) | 30 features (Espectrales / Temporales) | `python -m experiments.experiment_svm` | `models/svm_sleep.joblib` | `sleep-stage-svm` |
-| **LightGBM** | Gradient Boosting Decision Trees | 30 features (Espectrales / Temporales) | `python -m experiments.experiment_lightgbm` | `models/lightgbm_sleep.joblib` | `sleep-stage-lightgbm` |
-| **CNN 1D** | Red Neuronal Convolucional Profunda | Señal cruda 3 canales × 3000 muestras (100 Hz) | `python src/models/train_cnn.py` | `experiments/cnn1d/best_cnn1d.pt` | `sleep-stage-mlp-gpu` |
+| Modelo       | Arquitectura                        | Entrada                                        | Comando de Ejecución                        | Artefacto Serializado             | Experimento MLflow     |
+| :----------- | :---------------------------------- | :--------------------------------------------- | :------------------------------------------ | :-------------------------------- | :--------------------- |
+| **SVM**      | Support Vector Machine (RBF)        | 30 features (Espectrales / Temporales)         | `python -m experiments.experiment_svm`      | `models/svm_sleep.joblib`         | `sleep-stage-svm`      |
+| **LightGBM** | Gradient Boosting Decision Trees    | 30 features (Espectrales / Temporales)         | `python -m experiments.experiment_lightgbm` | `models/lightgbm_sleep.joblib`    | `sleep-stage-lightgbm` |
+| **CNN 1D**   | Red Neuronal Convolucional Profunda | Señal cruda 3 canales × 3000 muestras (100 Hz) | `python src/models/train_cnn.py`            | `experiments/cnn1d/best_cnn1d.pt` | `sleep-stage-mlp-gpu`  |
 
 ---
 
@@ -354,7 +451,6 @@ Abrir en el navegador:
 http://localhost:8501
 ```
 
-
 El dashboard permite:
 
 - Cargar un archivo PSG EDF (`*-PSG.edf`).
@@ -387,13 +483,13 @@ Abrir en el navegador para probar los endpoints interactivamente con Swagger UI:
 
 ### Endpoints principales:
 
-| Método | Endpoint | Descripción |
-| :--- | :--- | :--- |
-| `GET` | `/health` | Estado de salud y modelos activos en memoria |
-| `GET` | `/api/v1/models` | Catálogo de modelos registrados y disponibilidad |
-| `POST` | `/api/v1/edf/info` | Sube un EDF y obtiene duración, canales y cantidad de ventanas sin costo de inferencia |
+| Método | Endpoint                 | Descripción                                                                                       |
+| :----- | :----------------------- | :------------------------------------------------------------------------------------------------ |
+| `GET`  | `/health`                | Estado de salud y modelos activos en memoria                                                      |
+| `GET`  | `/api/v1/models`         | Catálogo de modelos registrados y disponibilidad                                                  |
+| `POST` | `/api/v1/edf/info`       | Sube un EDF y obtiene duración, canales y cantidad de ventanas sin costo de inferencia            |
 | `POST` | `/api/v1/analyze/window` | **Análisis de ventana con selección múltiple**: Diagnóstico por modelo, probabilidades y consenso |
-| `POST` | `/api/v1/analyze/batch` | Análisis por lotes para construcción de hipnograma secuencial |
+| `POST` | `/api/v1/analyze/batch`  | Análisis por lotes para construcción de hipnograma secuencial                                     |
 
 ### Ejemplo de consumo desde Python (`requests`):
 
@@ -534,7 +630,6 @@ Debido al desbalance entre las etapas del sueño, se priorizan **Balanced Accura
 ---
 
 ## 13. Reproducibilidad
-
 
 El flujo completo puede ejecutarse con:
 
