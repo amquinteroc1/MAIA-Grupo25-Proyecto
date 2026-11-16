@@ -19,8 +19,8 @@ ROOT = Path(__file__).resolve().parents[1]
 PATHS = {
     # Datos procesados por Diego (descargados desde HuggingFace)
     # Nota: los archivos están planos en processed/ (no en subdirectorios e0/ y seq/)
-    "data_e0":   ROOT / "data" / "processed",
-    "data_seq":  ROOT / "data" / "processed",
+    "data_e0":   ROOT / "data" / "processed" / "e0",
+    "data_seq":  ROOT / "data" / "processed" / "seq",
     "data_meta": ROOT / "data" / "processed" / "meta",
 
     # Artefactos de experimentos (modelos, predicciones, logs)
