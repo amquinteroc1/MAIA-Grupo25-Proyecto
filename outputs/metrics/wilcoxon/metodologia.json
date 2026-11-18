@@ -1,0 +1,30 @@
+{
+  "origen": "C:\\Users\\Luigi Di Biase\\Desktop\\MAIA\\despliegue de soluciones-tesis\\repo_tesis\\MAIA-Grupo25-Proyecto\\experiments",
+  "dominios": {
+    "SC-test": {
+      "epocas": 39961,
+      "sujetos": 16
+    },
+    "ST": {
+      "epocas": 42003,
+      "sujetos": 22
+    }
+  },
+  "modelos": [
+    "E0",
+    "E1",
+    "E2"
+  ],
+  "semillas": [
+    42,
+    123,
+    2026
+  ],
+  "unidad_inferencial": "persona, promedio F1 de 3 semillas por arquitectura",
+  "cohorte": "las mismas etiquetas y grupos en los nueve pares modelo-semilla",
+  "metrica_principal": "F1-macro con labels=0..4; clases ausentes tienen F1=0",
+  "metrica_secundaria": "F1-N1, NA cuando un sujeto no presenta N1 real",
+  "correccion": "Holm sobre 6 contrastes de F1-macro y separadamente 6 de F1-N1",
+  "bootstrap": "intervalo percentil descriptivo para mediana de diferencia, 10000 remuestreos por defecto",
+  "observacion": "Wilcoxon asume simetria de diferencias para interpretacion de localizacion; inspeccionar graficas"
+}
