@@ -1,0 +1,11 @@
+md5: 6a09f5e9d68202f1642a6dc7d1510aff
+frozen: true
+deps:
+- path: tesis-final-2026
+  repo:
+    url: https://huggingface.co/datasets/maia-grupo25/sleep-edfx-models
+    rev: bc92051faa30afe1a0a8497175625cad39c8863c
+    rev_lock: bc92051faa30afe1a0a8497175625cad39c8863c
+outs:
+- hash: md5
+  path: modelos
