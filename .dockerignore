@@ -20,7 +20,12 @@ htmlcov
 Thumbs.db
 
 # ── Datos pesados y artefactos temporales ──
-data/
+data/*
+!data/processed/
+data/processed/*
+!data/processed/meta/
+data/processed/meta/*
+!data/processed/meta/norm_params.npz
 data_processed/
 *.edf
 *.parquet

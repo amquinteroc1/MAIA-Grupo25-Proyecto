@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monitor del Sueño AI · Polisomnografía (MAIA Grupo 25)</title>
+  <link rel="icon" type="image/png" href="/static/assets/favicon.png" />
+  <link rel="apple-touch-icon" href="/static/assets/favicon.png" />
+  <style>
+    :root {
+      --bg-main: #ffffff;
+      --bg-surface: #f8fafc;
+      --bg-subtle: #f1f5f9;
+      --border-color: #cbd5e1;
+      --border-soft: #e2e8f0;
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #475569;
+      --brand-primary: #123b63;
+      --brand-hover: #1b4f84;
+      --focus-ring: #0284c7;
+      --success-bg: #f0fdf4;
+      --success-border: #86efac;
+      --success-text: #166534;
+      --info-bg: #eff6ff;
+      --info-border: #bfdbfe;
+      --info-text: #1e3a8a;
+      --warn-bg: #fefce8;
+      --warn-border: #fde047;
+      --warn-text: #854d0e;
+      --err-bg: #fef2f2;
+      --err-border: #fecaca;
+      --err-text: #991b1b;
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0;
+      background: var(--bg-main);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Topbar Mobile + Desktop ── */
+    .topbar {
+      position: sticky; top: 0; z-index: 30;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.7rem 1rem;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border-soft);
+    }
+    .topbar-left { display: flex; align-items: center; gap: 0.75rem; }
+    .topbar-brand { font-weight: 800; color: var(--brand-primary); font-size: 1.05rem; }
+    .topbar-links { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+    .topbar-link {
+      text-decoration: none; font-size: 0.85rem; font-weight: 600;
+      color: var(--brand-primary); padding: 0.4rem 0.75rem;
+      border-radius: 8px; border: 1px solid var(--border-soft);
+      background: var(--bg-surface);
+    }
+    .topbar-link:hover { background: var(--info-bg); border-color: var(--info-border); }
+    .menu-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 44px; min-height: 40px; border-radius: 8px;
+      border: 1px solid var(--border-color); background: #fff;
+      color: var(--text-primary); font-size: 1.1rem; cursor: pointer;
+    }
+
+    /* ── Layout Mobile-First ── */
+    .app-shell { display: flex; min-height: calc(100vh - 58px); }
+    .sidebar {
+      width: 310px; flex-shrink: 0;
+      background: var(--bg-surface);
+      border-right: 1px solid var(--border-soft);
+      padding: 1.25rem 1rem 2rem 1rem;
+      overflow-y: auto;
+    }
+    .main-content {
+      flex: 1; min-width: 0;
+      padding: 1.1rem 0.9rem 2.5rem 0.9rem;
+      max-width: 1320px; margin: 0 auto;
+    }
+    @media (min-width: 960px) {
+      .menu-btn { display: none; }
+      .main-content { padding: 1.75rem 2rem 3rem 2rem; }
+    }
+    @media (max-width: 959px) {
+      .sidebar {
+        position: fixed; top: 57px; left: 0; bottom: 0; z-index: 40;
+        transform: translateX(-100%); transition: transform 0.22s ease;
+        box-shadow: 8px 0 24px rgba(15, 23, 42, 0.14);
+      }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-backdrop {
+        display: none; position: fixed; inset: 57px 0 0 0; z-index: 35;
+        background: rgba(15, 23, 42, 0.35);
+      }
+      .sidebar-backdrop.open { display: block; }
+    }
+
+    .sidebar-section { margin-bottom: 1.2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-soft); }
+    .sidebar-section:last-child { border-bottom: none; }
+    .sidebar h2 {
+      margin: 0 0 0.65rem 0; font-size: 0.98rem; font-weight: 700; color: #1e3a5f;
+    }
+
+    /* ── Dropzone ── */
+    .dropzone {
+      border: 2px dashed #94a3b8; border-radius: 12px;
+      background: #ffffff; padding: 1rem 0.8rem; text-align: center;
+      cursor: pointer; transition: border-color 0.2s, background 0.2s;
+    }
+    .dropzone:hover, .dropzone.dragover { border-color: var(--brand-primary); background: #f0f9ff; }
+    .dropzone-text { font-size: 0.85rem; color: var(--text-secondary); margin: 0 0 0.45rem 0; }
+    .dropzone-sub { font-size: 0.76rem; color: var(--text-muted); margin: 0; }
+    .file-pill {
+      display: none; margin-top: 0.6rem; padding: 0.5rem 0.7rem;
+      background: var(--info-bg); border: 1px solid var(--info-border);
+      border-radius: 8px; font-size: 0.82rem; color: var(--info-text);
+      font-weight: 600; word-break: break-all;
+    }
+
+    /* ── Checkboxes & Radios ── */
+    .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem; }
+    .check-item, .radio-item {
+      display: flex; align-items: center; gap: 0.45rem;
+      font-size: 0.86rem; color: var(--text-primary);
+      cursor: pointer; padding: 0.25rem 0;
+    }
+    .radio-stack { display: flex; flex-direction: column; gap: 0.25rem; }
+    .custom-models-box {
+      display: none; margin-top: 0.5rem; padding: 0.6rem;
+      background: #fff; border: 1px solid var(--border-soft); border-radius: 10px;
+    }
+    .custom-models-box.show { display: grid; grid-template-columns: 1fr 1fr; gap: 0.35rem; }
+    input[type="checkbox"], input[type="radio"] { accent-color: var(--brand-primary); width: 16px; height: 16px; }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.45rem;
+      width: 100%; min-height: 44px; padding: 0.6rem 1rem;
+      border-radius: 10px; border: none; font-weight: 600; font-size: 0.92rem;
+      cursor: pointer; transition: background-color 0.18s, box-shadow 0.18s, opacity 0.18s;
+    }
+    .btn-primary { background: var(--brand-primary); color: #ffffff; }
+    .btn-primary:hover:not(:disabled) { background: var(--brand-hover); box-shadow: 0 4px 12px rgba(18, 59, 99, 0.22); }
+    .btn-secondary { background: #ffffff; color: var(--brand-primary); border: 1px solid var(--border-color); }
+    .btn-secondary:hover:not(:disabled) { background: var(--info-bg); border-color: var(--brand-primary); }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+    button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible {
+      outline: 3px solid var(--focus-ring); outline-offset: 2px;
+    }
+
+    /* ── Alerts & Banners ── */
+    .alert {
+      padding: 0.8rem 1rem; border-radius: 12px; font-size: 0.9rem;
+      line-height: 1.45; margin-bottom: 1rem; border: 1px solid transparent;
+    }
+    .alert-info { background: var(--info-bg); border-color: var(--info-border); color: var(--info-text); }
+    .alert-success { background: var(--success-bg); border-color: var(--success-border); color: var(--success-text); }
+    .alert-error { background: var(--err-bg); border-color: var(--err-border); color: var(--err-text); }
+
+    /* ── Hero, Pills, Thesis Cards ── */
+    .hero-banner {
+      background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
+      border: 1px solid var(--info-border); border-radius: 16px;
+      padding: clamp(1.1rem, 2.5vw, 1.7rem); margin-bottom: 1.15rem;
+    }
+    .hero-title {
+      font-size: clamp(1.35rem, 2.5vw, 1.95rem); font-weight: 800;
+      color: var(--brand-primary); margin: 0 0 0.35rem 0; line-height: 1.2;
+    }
+    .hero-sub { font-size: 0.96rem; color: var(--text-secondary); margin: 0; line-height: 1.5; }
+    .stage-pills { display: flex; flex-wrap: wrap; gap: 8px; margin: 0.75rem 0 1.2rem 0; }
+    .stage-pill {
+      padding: 6px 12px; border-radius: 999px; background: var(--bg-subtle);
+      border: 1px solid var(--border-soft); font-size: 0.84rem;
+      color: var(--text-primary); font-weight: 600;
+    }
+    .thesis-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px; margin-bottom: 1.4rem;
+    }
+    .thesis-card {
+      background: #fff; border: 1px solid var(--border-soft);
+      border-radius: 14px; padding: 16px;
+      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04);
+    }
+    .thesis-card.highlight {
+      border: 2px solid var(--focus-ring);
+      background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 100%);
+    }
+    .thesis-card h3 { margin: 0 0 6px 0; color: var(--brand-primary); font-size: 1.02rem; font-weight: 800; }
+    .thesis-card p { margin: 0 0 8px 0; font-size: 0.87rem; color: var(--text-secondary); line-height: 1.45; }
+    .metric-pill {
+      display: inline-block; padding: 3px 9px; border-radius: 999px;
+      font-size: 0.78rem; font-weight: 700; background: #e0f2fe;
+      color: #0369a1; margin-right: 4px; margin-top: 4px;
+    }
+
+    /* ── Workspace PSG + Diagnosis Split ── */
+    .workspace-grid {
+      display: none; gap: 1.4rem; margin-bottom: 1.5rem;
+      grid-template-columns: 1fr;
+    }
+    .workspace-grid.active { display: grid; }
+    @media (min-width: 1080px) {
+      .workspace-grid.active { grid-template-columns: minmax(0, 2.2fr) minmax(300px, 1fr); }
+    }
+    .panel-card {
+      background: #fff; border: 1px solid var(--border-soft);
+      border-radius: 14px; padding: 1.15rem;
+      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04);
+    }
+    .meta-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1rem; }
+    .meta-chip {
+      padding: 5px 11px; background: var(--bg-subtle); border: 1px solid var(--border-soft);
+      border-radius: 16px; font-size: 0.82rem; color: var(--text-primary);
+    }
+    .window-nav {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 0.65rem;
+      padding: 0.75rem; background: var(--bg-surface);
+      border: 1px solid var(--border-soft); border-radius: 12px; margin-bottom: 1rem;
+    }
+    .window-nav input[type="range"] { flex: 1; min-width: 160px; accent-color: var(--brand-primary); }
+    .window-nav input[type="number"] {
+      width: 84px; min-height: 38px; padding: 0.3rem 0.5rem;
+      border: 1px solid var(--border-color); border-radius: 8px;
+      font-weight: 700; text-align: center;
+    }
+    .step-btn {
+      min-width: 40px; min-height: 38px; border-radius: 8px;
+      border: 1px solid var(--border-color); background: #fff;
+      font-weight: 700; cursor: pointer; color: var(--brand-primary);
+    }
+    .step-btn:hover { background: var(--info-bg); }
+    .wave-card {
+      border: 1px solid var(--border-soft); border-radius: 10px;
+      padding: 0.65rem 0.8rem; margin-bottom: 0.75rem; background: #fff;
+    }
+    .wave-title {
+      display: flex; justify-content: space-between; font-size: 0.85rem;
+      font-weight: 700; color: var(--text-primary); margin-bottom: 0.35rem;
+    }
+    canvas.wave-canvas { width: 100%; height: 118px; display: block; }
+
+    /* ── Diagnosis Cards ── */
+    .consensus-card {
+      padding: 18px; border-radius: 14px; text-align: center; margin-bottom: 14px;
+      background: linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 100%);
+      border: 1px solid var(--success-border);
+    }
+    .pred-card {
+      padding: 14px; border-radius: 12px; text-align: center; margin-bottom: 10px;
+      background: var(--bg-surface); border: 1px solid var(--border-soft);
+    }
+    .model-badge {
+      display: inline-block; padding: 3px 10px; border-radius: 6px;
+      font-size: 0.76rem; font-weight: 700; background: #e2e8f0; color: #0f172a; margin-bottom: 6px;
+    }
+    .stage-big { font-size: 2.2rem; font-weight: 800; color: var(--brand-primary); line-height: 1.1; }
+    .stage-desc { font-size: 0.9rem; font-weight: 600; color: var(--text-muted); margin-top: 3px; }
+    .conf-big { font-size: 1.1rem; font-weight: 700; color: #1e3a8a; margin-top: 5px; }
+    .agreement-badge {
+      display: inline-block; padding: 4px 12px; border-radius: 999px;
+      font-size: 0.82rem; font-weight: 700; margin-top: 8px;
+      background: #dcfce7; color: #166534; border: 1px solid #86efac;
+    }
+    .agreement-badge.partial { background: #fef9c3; color: #854d0e; border-color: #fde047; }
+    .prob-row { margin-bottom: 0.5rem; }
+    .prob-hdr { display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 600; margin-bottom: 2px; }
+    .prob-track { height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+    .prob-fill { height: 100%; background: var(--brand-primary); border-radius: 999px; transition: width 0.25s ease; }
+
+    /* ── Kaggle Batch Panel ── */
+    details.kaggle-panel {
+      background: #fff; border: 1px solid var(--border-color);
+      border-radius: 14px; overflow: visible; position: relative;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+    }
+    details.kaggle-panel summary {
+      background: var(--bg-surface); color: var(--brand-primary);
+      font-weight: 700; padding: 0.95rem 1.15rem; cursor: pointer;
+      border-bottom: 1px solid var(--border-soft); list-style: none;
+      border-radius: 13px 13px 0 0; display: flex; align-items: center; justify-content: space-between;
+    }
+    details.kaggle-panel summary::after {
+      content: "▾"; font-size: 1rem; color: var(--brand-primary); transition: transform 0.2s ease;
+    }
+    details.kaggle-panel:not([open]) summary::after { transform: rotate(-90deg); }
+    details.kaggle-panel:not([open]) summary { border-radius: 13px; border-bottom: none; }
+    .kaggle-body { padding: 1.15rem; }
+    .kaggle-controls {
+      display: grid; gap: 0.65rem; align-items: end; margin-bottom: 1rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 768px) {
+      .kaggle-controls { grid-template-columns: 2fr 1fr 1fr 1fr; }
+    }
+    .field-label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.35rem; color: var(--text-primary); }
+    select.select-input {
+      width: 100%; min-height: 44px; padding: 0.5rem 0.75rem;
+      border: 1px solid var(--border-color); border-radius: 10px;
+      background: #fff; color: var(--text-primary); font-size: 0.9rem; font-weight: 500;
+    }
+    .table-wrap { overflow-x: auto; margin-top: 0.75rem; border: 1px solid var(--border-soft); border-radius: 10px; }
+    table.data-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    table.data-table th {
+      background: var(--bg-surface); color: var(--brand-primary);
+      text-align: left; padding: 0.65rem 0.75rem; border-bottom: 1px solid var(--border-soft);
+      white-space: nowrap;
+    }
+    table.data-table td {
+      padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border-soft);
+      color: var(--text-primary); white-space: nowrap;
+    }
+    table.data-table tr:last-child td { border-bottom: none; }
+    pre.json-box {
+      background: var(--bg-surface); border: 1px solid var(--border-soft);
+      border-radius: 10px; padding: 0.85rem; overflow-x: auto;
+      font-size: 0.78rem; max-height: 320px; color: var(--text-primary);
+    }
+    .batch-intro {
+      margin: 0 0 0.85rem 0; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5;
+    }
+    .help-tip {
+      position: relative; display: inline-flex; align-items: center; justify-content: center;
+      width: 20px; height: 20px; border-radius: 999px; margin-left: 0.4rem;
+      background: #e2ecf6; color: var(--brand-primary); font-size: 0.76rem; font-weight: 800;
+      cursor: help; vertical-align: middle; border: 1px solid #c5daf0;
+    }
+    .help-tip .tip-bubble {
+      visibility: hidden; opacity: 0; transition: opacity 0.18s ease;
+      position: absolute; top: calc(100% + 10px); left: 50%; transform: translateX(-50%);
+      width: min(340px, 82vw); padding: 0.7rem 0.85rem; border-radius: 10px;
+      background: #0f2942; color: #f8fafc; font-size: 0.8rem; font-weight: 500;
+      line-height: 1.45; text-align: left; box-shadow: 0 10px 24px rgba(15,41,66,0.28);
+      z-index: 999; pointer-events: none;
+    }
+    .help-tip:hover .tip-bubble, .help-tip:focus .tip-bubble { visibility: visible; opacity: 1; }
+
+    /* ── Brand Icon & Breadcrumb (Miga de pan) ── */
+    .brand-icon { width: 28px; height: 28px; border-radius: 7px; object-fit: contain; }
+    .topbar-brand { display: inline-flex; align-items: center; gap: 0.5rem; }
+    .breadcrumb {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem;
+      font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.85rem;
+      padding: 0.45rem 0.75rem; background: var(--bg-surface);
+      border: 1px solid var(--border-soft); border-radius: 10px;
+    }
+    .breadcrumb a {
+      color: var(--brand-primary); text-decoration: none; font-weight: 600;
+    }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb .bc-sep { color: #94a3b8; user-select: none; }
+    .breadcrumb .bc-current { color: var(--text-primary); font-weight: 700; }
+
+    /* ── Footer Institucional & Académico ── */
+    .site-footer {
+      background: #f8fafc; border-top: 1px solid var(--border-soft);
+      color: var(--text-secondary); margin-top: auto;
+    }
+    .footer-inner {
+      max-width: 1380px; margin: 0 auto; padding: 2rem 1.5rem 1.25rem;
+    }
+    .footer-grid {
+      display: grid; gap: 1.75rem; grid-template-columns: 1fr;
+    }
+    @media (min-width: 860px) {
+      .footer-grid { grid-template-columns: 1.35fr 1.35fr 0.9fr; }
+    }
+    .footer-logo {
+      height: 44px; width: auto; object-fit: contain; display: block; margin-bottom: 0.75rem;
+    }
+    .footer-title {
+      margin: 0 0 0.65rem 0; font-size: 0.88rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.04em; color: var(--brand-primary);
+    }
+    .footer-desc {
+      margin: 0 0 0.5rem 0; font-size: 0.85rem; line-height: 1.55; color: var(--text-secondary);
+    }
+    .author-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.45rem; }
+    .author-list li {
+      font-size: 0.84rem; line-height: 1.35; display: flex; flex-direction: column;
+    }
+    .author-name { font-weight: 600; color: var(--text-primary); }
+    .author-mail {
+      color: var(--brand-primary); text-decoration: none; font-size: 0.8rem;
+    }
+    .author-mail:hover { text-decoration: underline; }
+    .footer-links { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.45rem; }
+    .footer-links a {
+      color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; font-weight: 500;
+      display: inline-flex; align-items: center; gap: 0.35rem;
+    }
+    .footer-links a:hover { color: var(--brand-primary); text-decoration: underline; }
+    .footer-bottom {
+      margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-soft);
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: 0.75rem; font-size: 0.8rem; color: var(--text-muted);
+    }
+    .back-top-btn {
+      background: #fff; border: 1px solid var(--border-color); color: var(--brand-primary);
+      border-radius: 8px; padding: 0.35rem 0.7rem; font-size: 0.78rem; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+    }
+    .back-top-btn:hover { background: var(--info-bg); border-color: var(--brand-primary); }
+
+    /* ── Matriz 3x3 (Arquitecturas × Semillas) ── */
+    .matrix-presets {
+      display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.55rem;
+    }
+    .matrix-preset-btn {
+      flex: 1; min-width: 72px; padding: 0.3rem 0.45rem; border-radius: 7px;
+      border: 1px solid var(--border-color); background: #fff; color: var(--brand-primary);
+      font-size: 0.74rem; font-weight: 700; cursor: pointer;
+    }
+    .matrix-preset-btn:hover { background: var(--info-bg); border-color: var(--brand-primary); }
+    table.matrix-3x3 {
+      width: 100%; border-collapse: collapse; font-size: 0.78rem; text-align: center;
+    }
+    table.matrix-3x3 th {
+      color: var(--text-muted); font-weight: 700; padding: 0.25rem 0.2rem;
+      border-bottom: 1px solid var(--border-soft);
+    }
+    table.matrix-3x3 td { padding: 0.32rem 0.2rem; border-bottom: 1px solid #f1f5f9; }
+    table.matrix-3x3 tr:last-child td { border-bottom: none; }
+    table.matrix-3x3 td.arch-col {
+      text-align: left; font-weight: 700; color: var(--brand-primary); white-space: nowrap;
+    }
+    table.matrix-3x3 input[type="checkbox"] {
+      width: 16px; height: 16px; accent-color: var(--brand-primary); cursor: pointer;
+    }
+    .preds-compact-grid {
+      display: grid; gap: 0.5rem; grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+      margin-bottom: 0.75rem;
+    }
+    .pred-card.compact {
+      padding: 0.65rem 0.55rem; margin-bottom: 0;
+    }
+    .pred-card.compact .model-badge { font-size: 0.69rem; padding: 2px 7px; margin-bottom: 4px; }
+    .pred-card.compact .compact-stage { font-size: 1.15rem; font-weight: 800; color: var(--brand-primary); }
+    .pred-card.compact .conf-big { font-size: 0.78rem; margin-top: 2px; }
+
+    /* ── Mapa Visual de Estadios en la Línea de Tiempo ── */
+    .timeline-map-box {
+      background: var(--bg-surface); border: 1px solid var(--border-soft);
+      border-radius: 12px; padding: 0.65rem 0.85rem; margin-bottom: 1rem;
+    }
+    .timeline-map-hdr {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: 0.4rem; margin-bottom: 0.45rem; font-size: 0.8rem;
+    }
+    .timeline-map-title { font-weight: 700; color: var(--brand-primary); }
+    .timeline-map-hint { color: var(--text-muted); font-size: 0.76rem; }
+    .timeline-canvas-wrap {
+      position: relative; width: 100%; height: 28px; border-radius: 8px;
+      overflow: visible; background: #e2e8f0; cursor: pointer;
+      border: 1px solid var(--border-color);
+    }
+    canvas#timelineCanvas {
+      width: 100%; height: 100%; display: block; border-radius: 7px;
+    }
+    .timeline-hover-tip {
+      position: absolute; bottom: calc(100% + 7px); transform: translateX(-50%);
+      background: #0f2942; color: #f8fafc; font-size: 0.74rem; font-weight: 600;
+      padding: 4px 9px; border-radius: 7px; white-space: nowrap; pointer-events: none;
+      box-shadow: 0 6px 16px rgba(15,41,66,0.25); opacity: 0; transition: opacity 0.12s ease;
+      z-index: 40;
+    }
+    .timeline-hover-tip.visible { opacity: 1; }
+    .stage-jump-bar {
+      display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.55rem;
+    }
+    .stage-jump-btn {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      padding: 0.28rem 0.62rem; border-radius: 999px;
+      border: 1px solid var(--border-color); background: #fff;
+      color: var(--text-primary); font-size: 0.76rem; font-weight: 600;
+      cursor: pointer; transition: all 0.15s ease;
+    }
+    .stage-jump-btn:hover:not(:disabled) {
+      border-color: var(--brand-primary); background: var(--info-bg); transform: translateY(-1px);
+    }
+    .stage-jump-btn:disabled { opacity: 0.42; cursor: not-allowed; }
+    .stage-dot {
+      width: 10px; height: 10px; border-radius: 999px; display: inline-block; flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="menu-btn" id="menuToggle" aria-label="Abrir panel de controles">☰</button>
+      <span class="topbar-brand">
+        <img src="/static/assets/favicon.png" alt="Logo Monitor del Sueño AI" class="brand-icon" />
+        Monitor del Sueño AI
+      </span>
+    </div>
+    <nav class="topbar-links" aria-label="Accesos rápidos">
+      <a class="topbar-link" href="/docs" target="_blank" rel="noopener">📘 Swagger (/docs)</a>
+      <a class="topbar-link" href="/redoc" target="_blank" rel="noopener">📕 ReDoc (/redoc)</a>
+      <a class="topbar-link" id="mlflowLink" href="https://sleep-mlflow.whitesky-80270a35.eastus.azurecontainerapps.io" target="_blank" rel="noopener">📊 MLflow</a>
+    </nav>
+  </header>
+
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <div class="app-shell">
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar" id="sidebar" aria-label="Panel de configuración y carga">
+      <div class="sidebar-section">
+        <h2>📂 Archivo PSG (EDF)</h2>
+        <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Seleccionar o arrastrar archivo EDF">
+          <p class="dropzone-text"><b>Arrastra aquí</b> o haz clic para subir</p>
+          <p class="dropzone-sub">Formato <code>*-PSG.edf</code> (se sube una sola vez)</p>
+          <input type="file" id="edfInput" accept=".edf" hidden />
+        </div>
+        <div class="file-pill" id="filePill"></div>
+      </div>
+
+      <div class="sidebar-section">
+        <h2>📈 Señales a Visualizar</h2>
+        <div class="check-grid">
+          <label class="check-item"><input type="checkbox" id="chFpz" checked /> EEG Fpz-Cz</label>
+          <label class="check-item"><input type="checkbox" id="chEog" checked /> EOG horiz.</label>
+          <label class="check-item"><input type="checkbox" id="chPz" checked /> EEG Pz-Oz</label>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h2>🤖 Modelo Clasificador</h2>
+        <div class="radio-stack" role="radiogroup" aria-label="Modo de evaluación">
+          <label class="radio-item"><input type="radio" name="modelMode" value="thesis" checked /> 🏆 Consenso Tesis (E0 + E1 + E2)</label>
+          <label class="radio-item"><input type="radio" name="modelMode" value="e2" /> 🚀 E2 — CNN 1D + GRU 5 épocas</label>
+          <label class="radio-item"><input type="radio" name="modelMode" value="e1" /> 🔗 E1 — CNN 1D + Concat 5 épocas</label>
+          <label class="radio-item"><input type="radio" name="modelMode" value="e0" /> 🧠 E0 — CNN 1D Época individual</label>
+          <label class="radio-item"><input type="radio" name="modelMode" value="all" /> 🌟 Todos los modelos disponibles (9 corridas)</label>
+          <label class="radio-item"><input type="radio" name="modelMode" value="custom" /> 🔀 Selección personalizada (Matriz 3×3)</label>
+        </div>
+        <div class="custom-models-box" id="customModelsBox"></div>
+        <div class="alert alert-info" id="activeModelsInfo" style="margin-top:0.65rem;margin-bottom:0;font-size:0.82rem;">
+          Cargando catálogo de modelos...
+        </div>
+      </div>
+
+      <div>
+        <button class="btn btn-primary" id="btnAnalyze" disabled>🔬 Analizar Ventana</button>
+      </div>
+    </aside>
+
+    <!-- ── Contenido Principal ── -->
+    <main class="main-content" id="topAnchor">
+      <nav class="breadcrumb" aria-label="Miga de pan">
+        <a href="#topAnchor" id="bcHome">🏠 Inicio</a>
+        <span class="bc-sep" aria-hidden="true">›</span>
+        <span>Monitor Clínico PSG</span>
+        <span class="bc-sep" aria-hidden="true">›</span>
+        <span class="bc-current" id="bcCurrent" aria-current="page">Resumen General</span>
+      </nav>
+
+      <section class="hero-banner" role="region" aria-label="Bienvenida Monitor Clínico">
+        <h1 class="hero-title">Monitor Clínico de Polisomnografía AI</h1>
+        <p class="hero-sub">
+          Clasificación automática de estadios del sueño según el estándar clínico <b>R&amp;K / AASM</b>
+          con contexto temporal sobre señales crudas EEG/EOG a 100 Hz.
+        </p>
+      </section>
+
+      <div id="globalAlert"></div>
+
+      <!-- ── Vista Bienvenida ── -->
+      <section id="welcomeSection">
+        <div class="alert alert-info">
+          👈 Carga un archivo <code>*-PSG.edf</code> en el panel lateral para visualizar señales en vivo y clasificar ventanas de 30s, o consulta abajo la auditoría y resultados de validación masiva en la nube.
+        </div>
+
+        <div class="stage-pills" aria-label="Etapas del sueño soportadas">
+          <span class="stage-pill">☀️ Wake · Vigilia</span>
+          <span class="stage-pill">🌙 N1 · Sueño ligero</span>
+          <span class="stage-pill">💤 N2 · Intermedio</span>
+          <span class="stage-pill">🌊 N3 · Profundo (Delta)</span>
+          <span class="stage-pill">✨ REM · Paradójico</span>
+        </div>
+
+        <div class="thesis-grid">
+          <article class="thesis-card">
+            <h3>🧠 E0 · CNN 1D Base</h3>
+            <p>Clasifica cada época individual de 30 s (3×3.000) sin contexto temporal. Línea base del estudio.</p>
+            <span class="metric-pill">SC-test F1: 0,7601</span>
+            <span class="metric-pill">ST F1: 0,6090</span>
+          </article>
+          <article class="thesis-card">
+            <h3>🔗 E1 · Concatenación (5 épocas)</h3>
+            <p>CNN 1D compartida sobre 5 épocas consecutivas (150 s) con concatenación posicional fija.</p>
+            <span class="metric-pill">SC-test F1: 0,7814</span>
+            <span class="metric-pill">ST F1: 0,5893</span>
+          </article>
+          <article class="thesis-card highlight">
+            <h3>🚀 E2 · CNN 1D + GRU (Mejor)</h3>
+            <p>Integración recurrente con compuertas sobre 5 épocas. Retención cross-domain R = +0,92.</p>
+            <span class="metric-pill">SC-test F1: 0,7888</span>
+            <span class="metric-pill">ST F1: 0,6354</span>
+          </article>
+        </div>
+      </section>
+
+      <!-- ── Workspace Interactivo PSG + Diagnóstico ── -->
+      <section class="workspace-grid" id="workspaceSection" aria-label="Análisis de señales y diagnóstico">
+        <div class="panel-card">
+          <h2 style="margin:0 0 0.75rem 0;color:var(--brand-primary);font-size:1.15rem;">Visualización de Señales Fisiológicas</h2>
+          <div class="meta-chips" id="metaChips"></div>
+
+          <div class="window-nav">
+            <button class="step-btn" id="btnPrevWin" title="Ventana anterior" aria-label="Ventana anterior">◀</button>
+            <input type="range" id="winSlider" min="0" max="0" value="0" aria-label="Selector de ventana de 30 segundos" />
+            <button class="step-btn" id="btnNextWin" title="Ventana siguiente" aria-label="Ventana siguiente">▶</button>
+            <input type="number" id="winNumber" min="0" max="0" value="0" aria-label="Número de ventana" />
+            <span id="winTimeLabel" style="font-size:0.84rem;font-weight:700;color:var(--brand-primary);">[00:00:00 – 00:00:30]</span>
+          </div>
+
+          <div class="timeline-map-box" id="timelineMapBox" aria-label="Mapa visual de estadios en la línea de tiempo">
+            <div class="timeline-map-hdr">
+              <span class="timeline-map-title">🗺️ Mapa Visual de Estadios del Registro</span>
+              <span class="timeline-map-hint" id="timelineHint">Cargando distribución de la noche...</span>
+            </div>
+            <div class="timeline-canvas-wrap" id="timelineWrap">
+              <canvas id="timelineCanvas"></canvas>
+              <div class="timeline-hover-tip" id="timelineHoverTip"></div>
+            </div>
+            <div class="stage-jump-bar" id="stageJumpBar"></div>
+          </div>
+
+          <div id="waveformsContainer"></div>
+        </div>
+
+        <div class="panel-card" id="diagnosisPanel">
+          <h2 style="margin:0 0 0.75rem 0;color:var(--brand-primary);font-size:1.15rem;">Diagnóstico Clínico</h2>
+          <div id="diagnosisContent">
+            <div class="alert alert-info">Selecciona una ventana y pulsa <b>🔬 Analizar Ventana</b> para ejecutar inferencia en vivo.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Panel de Evaluación Masiva y Auditoría Clínica (colapsado por defecto) ── -->
+      <details class="kaggle-panel">
+        <summary>
+          <span>
+            📊 Evaluación Masiva y Auditoría Clínica (Procesamiento en la Nube)
+            <span class="help-tip" tabindex="0" aria-label="¿Para qué sirve esta sección?">?
+              <span class="tip-bubble">
+                Mientras el panel superior analiza un solo paciente en tiempo real, este módulo permite auditar el desempeño oficial de los modelos sobre toda la cohorte clínica de prueba (SC-test) o lanzar una re-evaluación por lotes en la nube sin bloquear tu navegador.
+              </span>
+            </span>
+          </span>
+        </summary>
+        <div class="kaggle-body">
+          <p class="batch-intro">
+            Consulta las métricas oficiales de validación ya calculadas sobre la cohorte completa de estudio (precisión, F1-Macro, sensibilidad en fase N1 y concordancia Kappa). Solo necesitas <b>Re-evaluar Cohorte</b> si se publicaron nuevos pesos de modelos.
+          </p>
+          <div id="kaggleConfigStatus" class="alert alert-info">Verificando disponibilidad del motor de procesamiento en la nube...</div>
+
+          <div class="kaggle-controls">
+            <div>
+              <label class="field-label" for="kaggleModelSelect">Arquitectura / Cohorte a Auditar</label>
+              <select class="select-input" id="kaggleModelSelect">
+                <option value="all">Todos los modelos clínicos (E0 + E1 + E2)</option>
+                <option value="e2">E2 — CNN 1D + GRU · 5 épocas (Recomendado)</option>
+                <option value="e1">E1 — CNN 1D + Concatenación · 5 épocas</option>
+                <option value="e0">E0 — CNN 1D Base · Época individual</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" id="btnKOutputs" disabled title="Descarga y muestra las tablas oficiales de precisión, F1-Macro, F1-N1 y Kappa ya calculadas (no requiere re-evaluar)">📋 Ver Resultados</button>
+            <button class="btn btn-secondary" id="btnKStatus" disabled title="Verifica si la última evaluación masiva en la nube finalizó correctamente o sigue en ejecución">📡 Verificar Estado</button>
+            <button class="btn btn-secondary" id="btnKRun" disabled title="Opcional: lanza una nueva auditoría por lotes en la nube cuando existan nuevos modelos o datos">🚀 Re-evaluar Cohorte</button>
+          </div>
+
+          <div id="kaggleResults"></div>
+        </div>
+      </details>
+    </main>
+  </div>
+
+  <!-- ── Footer Institucional y Académico ── -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div>
+          <img src="/static/assets/uniandes-logo.png" alt="Universidad de los Andes" class="footer-logo" />
+          <p class="footer-desc">
+            <b>MAIA Grupo 25 — Maestría en Inteligencia Artificial</b><br />
+            Universidad de los Andes · Bogotá, Colombia.
+          </p>
+          <p class="footer-desc" style="font-size:0.8rem;color:var(--text-muted);">
+            Plataforma académica e investigativa de apoyo a la estadificación automática del sueño sobre señales de polisomnografía (Sleep-EDF · estándar R&amp;K / AASM). No sustituye el criterio médico especialista.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="footer-title">Equipo de Desarrollo</h3>
+          <ul class="author-list">
+            <li>
+              <span class="author-name">Diego Andrés Burbano Arturo</span>
+              <a class="author-mail" href="mailto:d.burbanoa@uniandes.edu.co">d.burbanoa@uniandes.edu.co</a>
+            </li>
+            <li>
+              <span class="author-name">Luigi Daniele Di Biase Giusti</span>
+              <a class="author-mail" href="mailto:l.dib@uniandes.edu.co">l.dib@uniandes.edu.co</a>
+            </li>
+            <li>
+              <span class="author-name">Omar Darío Díaz Hernandez</span>
+              <a class="author-mail" href="mailto:o.diazh@uniandes.edu.co">o.diazh@uniandes.edu.co</a>
+            </li>
+            <li>
+              <span class="author-name">Andrés Mauricio Quintero Correal</span>
+              <a class="author-mail" href="mailto:am.quinteroc1@uniandes.edu.co">am.quinteroc1@uniandes.edu.co</a>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="footer-title">Recursos y Navegación</h3>
+          <ul class="footer-links">
+            <li><a href="#topAnchor">🏠 Monitor Clínico (/ui)</a></li>
+            <li><a href="/docs" target="_blank" rel="noopener">📘 Documentación Swagger (/docs)</a></li>
+            <li><a href="/redoc" target="_blank" rel="noopener">📕 Especificación ReDoc (/redoc)</a></li>
+            <li><a id="footerMlflowLink" href="https://sleep-mlflow.whitesky-80270a35.eastus.azurecontainerapps.io" target="_blank" rel="noopener">📊 Tracking de Experimentos (MLflow)</a></li>
+            <li><a href="https://github.com/amquinteroc1/MAIA-Grupo25-Proyecto" target="_blank" rel="noopener">💻 Repositorio del Proyecto (GitHub)</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© <span id="footerYear">2026</span> MAIA Grupo 25 · Universidad de los Andes · Proyecto de Grado · <span id="footerDate">Noviembre 2026</span></span>
+        <a class="back-top-btn" href="#topAnchor">↑ Volver arriba</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const STATE = {
+      catalog: {},
+      edfId: null,
+      edfInfo: null,
+      windowIndex: 0,
+      lastSignals: null,
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    // ── Mobile Sidebar Drawer ──
+    const toggleSidebar = (open) => {
+      $("sidebar").classList.toggle("open", open);
+      $("sidebarBackdrop").classList.toggle("open", open);
+    };
+    $("menuToggle").addEventListener("click", () => toggleSidebar(!$("sidebar").classList.contains("open")));
+    $("sidebarBackdrop").addEventListener("click", () => toggleSidebar(false));
+
+    const fmtSec = (s) => {
+      const h = String(Math.floor(s / 3600)).padStart(2, "0");
+      const m = String(Math.floor((s % 3600) / 60)).padStart(2, "0");
+      const sec = String(Math.floor(s % 60)).padStart(2, "0");
+      return `${h}:${m}:${sec}`;
+    };
+
+    const showAlert = (msg, type = "info") => {
+      $("globalAlert").innerHTML = msg ? `<div class="alert alert-${type}">${msg}</div>` : "";
+    };
+
+    // ── Cargar Catálogo de Modelos y Configuración Kaggle al iniciar ──
+    async function initApp() {
+      try {
+        const res = await fetch("/api/v1/models");
+        const data = await res.json();
+        data.models.forEach((m) => { STATE.catalog[m.id] = m; });
+        renderCustomModelCheckboxes();
+        updateActiveModelsHint();
+      } catch (e) {
+        $("activeModelsInfo").textContent = "Error consultando catálogo de modelos.";
+      }
+
+      try {
+        const kres = await fetch("/api/v1/kaggle/config");
+        const kcfg = await kres.json();
+        const box = $("kaggleConfigStatus");
+        const setBatchButtons = (enabled) => {
+          $("btnKOutputs").disabled = !enabled;
+          $("btnKStatus").disabled = !enabled;
+          $("btnKRun").disabled = !enabled;
+        };
+        if (kcfg.configured) {
+          box.className = "alert alert-success";
+          box.innerHTML = "✅ Servicio de auditoría en la nube disponible. Puedes consultar <b>Ver Resultados</b> o <b>Verificar Estado</b> de inmediato.";
+          setBatchButtons(true);
+        } else {
+          box.className = "alert alert-info";
+          box.innerHTML = "ℹ️ El procesamiento masivo remoto no está habilitado en este entorno.";
+          setBatchButtons(false);
+        }
+      } catch (e) {
+        $("kaggleConfigStatus").textContent = "No se pudo verificar el estado del motor de procesamiento remoto.";
+      }
+    }
+
+    const ALL_9_THESIS_MODELS = [
+      "e2_seed42", "e2_seed123", "e2_seed2026",
+      "e1_seed42", "e1_seed123", "e1_seed2026",
+      "e0_seed42", "e0_seed123", "e0_seed2026",
+    ];
+
+    function renderCustomModelCheckboxes() {
+      const box = $("customModelsBox");
+      const archs = [
+        { id: "e2", label: "🚀 E2" },
+        { id: "e1", label: "🔗 E1" },
+        { id: "e0", label: "🧠 E0" },
+      ];
+      const seeds = ["42", "123", "2026"];
+      const rows = archs.map((a) => {
+        const cells = seeds.map((s) => {
+          const mid = `${a.id}_seed${s}`;
+          const m = STATE.catalog[mid];
+          const ok = m && m.available;
+          const checked = ok ? "checked" : "";
+          const dis = ok ? "" : "disabled";
+          return `<td><input type="checkbox" class="custom-model-cb" value="${mid}" aria-label="${a.id.toUpperCase()} Seed ${s}" ${checked} ${dis} /></td>`;
+        }).join("");
+        return `<tr><td class="arch-col">${a.label}</td>${cells}</tr>`;
+      }).join("");
+
+      box.innerHTML = `
+        <div class="matrix-presets">
+          <button type="button" class="matrix-preset-btn" id="presetAll9">Todas (9)</button>
+          <button type="button" class="matrix-preset-btn" id="presetE2">Solo E2 (3)</button>
+          <button type="button" class="matrix-preset-btn" id="presetS42">Seed 42 (3)</button>
+        </div>
+        <table class="matrix-3x3" aria-label="Matriz 3x3 de modelos de tesis">
+          <thead><tr><th style="text-align:left;">Modelo</th><th>S42</th><th>S123</th><th>S2026</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+
+      const applyPreset = (filterFn) => {
+        box.querySelectorAll(".custom-model-cb:not(:disabled)").forEach((cb) => {
+          cb.checked = filterFn(cb.value);
+        });
+        onModelSelectionChanged();
+      };
+      $("presetAll9").addEventListener("click", () => applyPreset(() => true));
+      $("presetE2").addEventListener("click", () => applyPreset((v) => v.startsWith("e2_")));
+      $("presetS42").addEventListener("click", () => applyPreset((v) => v.endsWith("_seed42")));
+      box.querySelectorAll(".custom-model-cb").forEach((el) => el.addEventListener("change", onModelSelectionChanged));
+    }
+
+    function getSelectedModels() {
+      const mode = document.querySelector('input[name="modelMode"]:checked').value;
+      const avail = (arr) => arr.filter((id) => STATE.catalog[id]?.available);
+      if (mode === "thesis") return avail(["e0", "e1", "e2"]);
+      if (mode === "all") return avail(ALL_9_THESIS_MODELS);
+      if (mode === "custom") {
+        return Array.from(document.querySelectorAll(".custom-model-cb:checked")).map((el) => el.value);
+      }
+      return avail([mode]);
+    }
+
+    const fmtModelChip = (id) => id.replace("_seed", "·S").toUpperCase();
+
+    function updateActiveModelsHint() {
+      const mode = document.querySelector('input[name="modelMode"]:checked').value;
+      $("customModelsBox").classList.toggle("show", mode === "custom");
+      const sel = getSelectedModels();
+      $("activeModelsInfo").innerHTML = sel.length
+        ? `🏆 Evaluando <b>${sel.length} modelo(s)</b>: ${sel.map(fmtModelChip).join(", ")}`
+        : "⚠️ Selecciona al menos un modelo en la matriz.";
+    }
+
+    function onModelSelectionChanged() {
+      updateActiveModelsHint();
+      if (STATE.edfId && STATE.edfInfo?.is_valid && getSelectedModels().length > 0) {
+        clearTimeout(inferTimer);
+        inferTimer = setTimeout(() => runInference(true), 120);
+      }
+    }
+
+    document.querySelectorAll('input[name="modelMode"]').forEach((r) => r.addEventListener("change", onModelSelectionChanged));
+
+    // ── Subida de EDF (una sola vez, stateless HTTP) ──
+    const dropzone = $("dropzone");
+    const edfInput = $("edfInput");
+    dropzone.addEventListener("click", () => edfInput.click());
+    dropzone.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); edfInput.click(); } });
+    dropzone.addEventListener("dragover", (e) => { e.preventDefault(); dropzone.classList.add("dragover"); });
+    dropzone.addEventListener("dragleave", () => dropzone.classList.remove("dragover"));
+    dropzone.addEventListener("drop", (e) => {
+      e.preventDefault(); dropzone.classList.remove("dragover");
+      if (e.dataTransfer.files.length) uploadEDF(e.dataTransfer.files[0]);
+    });
+    edfInput.addEventListener("change", () => { if (edfInput.files.length) uploadEDF(edfInput.files[0]); });
+
+    async function uploadEDF(file) {
+      showAlert(`⏳ Subiendo <b>${file.name}</b> (${(file.size / 1e6).toFixed(1)} MB) al servidor FastAPI...`, "info");
+      $("btnAnalyze").disabled = true;
+      const fd = new FormData();
+      fd.append("file", file);
+      try {
+        const res = await fetch("/api/v1/edf/upload", { method: "POST", body: fd });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || "Error al procesar el archivo EDF.");
+
+        STATE.edfId = data.edf_id;
+        STATE.edfInfo = data;
+        STATE.windowIndex = Math.min(500, Math.max(0, data.total_windows_30s - 1));
+
+        $("filePill").style.display = "block";
+        $("filePill").textContent = `✅ ${data.filename} (${data.total_windows_30s} ventanas)`;
+        $("welcomeSection").style.display = "none";
+        $("workspaceSection").classList.add("active");
+        $("btnAnalyze").disabled = !data.is_valid;
+
+        const maxIdx = Math.max(0, data.total_windows_30s - 1);
+        $("winSlider").max = maxIdx; $("winSlider").value = STATE.windowIndex;
+        $("winNumber").max = maxIdx; $("winNumber").value = STATE.windowIndex;
+
+        $("metaChips").innerHTML = `
+          <span class="meta-chip">📁 <b>Archivo:</b> ${data.filename}</span>
+          <span class="meta-chip">⏱️ <b>Duración:</b> ${data.duration_hours} h (${data.total_windows_30s} ventanas)</span>
+          <span class="meta-chip">📡 <b>Frecuencia:</b> ${data.sampling_rate_hz} Hz</span>
+          <span class="meta-chip">🧠 <b>Canales:</b> ${data.channels_present.join(", ")}</span>
+        `;
+
+        showAlert(data.is_valid ? "" : `⚠️ ${data.message}`, "error");
+        toggleSidebar(false);
+        STATE.timeline = null;
+        if (data.is_valid) loadTimelineMap(data.edf_id);
+        await loadWindowSignals(STATE.windowIndex);
+        if (data.is_valid) await runInference();
+      } catch (err) {
+        showAlert(`❌ ${err.message}`, "error");
+      }
+    }
+
+    // ── Carga instantánea y dibujo 60fps de señales PSG ──
+    async function loadWindowSignals(idx) {
+      if (!STATE.edfId) return;
+      STATE.windowIndex = idx;
+      $("winSlider").value = idx;
+      $("winNumber").value = idx;
+      $("winTimeLabel").textContent = `[${fmtSec(idx * 30)} – ${fmtSec((idx + 1) * 30)}]`;
+      if (STATE.edfInfo) {
+        $("bcCurrent").textContent = `Análisis PSG · ${STATE.edfInfo.filename} (Ventana #${idx})`;
+      }
+      try {
+        const res = await fetch(`/api/v1/edf/${STATE.edfId}/window/${idx}/signals`);
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || "Error cargando señales.");
+        STATE.lastSignals = data;
+        drawWaveforms();
+      } catch (err) {
+        showAlert(`❌ ${err.message}`, "error");
+      }
+    }
+
+    function drawWaveforms() {
+      const container = $("waveformsContainer");
+      if (!STATE.lastSignals) return;
+      const visible = [];
+      if ($("chFpz").checked) visible.push("EEG Fpz-Cz");
+      if ($("chPz").checked) visible.push("EEG Pz-Oz");
+      if ($("chEog").checked) visible.push("EOG horizontal");
+
+      if (!visible.length) {
+        container.innerHTML = `<div class="alert alert-info">Activa al menos un canal en el panel lateral para visualizar señales.</div>`;
+        return;
+      }
+
+      container.innerHTML = visible
+        .filter((ch) => STATE.lastSignals.channels[ch])
+        .map((ch, i) => `
+          <div class="wave-card">
+            <div class="wave-title"><span>${ch}</span><span style="color:var(--text-muted);font-weight:500;">30 s · µV</span></div>
+            <canvas class="wave-canvas" id="waveCanvas_${i}"></canvas>
+          </div>
+        `).join("");
+
+      visible.filter((ch) => STATE.lastSignals.channels[ch]).forEach((ch, i) => {
+        const canvas = $(`waveCanvas_${i}`);
+        const dpr = window.devicePixelRatio || 1;
+        const w = canvas.clientWidth || 720;
+        const h = 118;
+        canvas.width = w * dpr; canvas.height = h * dpr;
+        const ctx = canvas.getContext("2d");
+        ctx.scale(dpr, dpr);
+
+        const vals = STATE.lastSignals.channels[ch];
+        let min = Infinity, max = -Infinity;
+        for (const v of vals) { if (v < min) min = v; if (v > max) max = v; }
+        const pad = (max - min) * 0.1 || 1;
+        min -= pad; max += pad;
+
+        // Grid
+        ctx.strokeStyle = "#e2e8f0"; ctx.lineWidth = 1;
+        for (let g = 1; g <= 3; g++) {
+          const y = (h / 4) * g;
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+        }
+        // Signal
+        ctx.strokeStyle = "#123b63"; ctx.lineWidth = 1.25;
+        ctx.beginPath();
+        for (let k = 0; k < vals.length; k++) {
+          const x = (k / (vals.length - 1)) * w;
+          const y = h - ((vals[k] - min) / (max - min)) * (h - 14) - 7;
+          if (k === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+
+        // Min/Max labels
+        ctx.fillStyle = "#64748b"; ctx.font = "11px sans-serif";
+        ctx.fillText(`${max.toFixed(0)} µV`, 6, 13);
+        ctx.fillText(`${min.toFixed(0)} µV`, 6, h - 5);
+      });
+    }
+
+    ["chFpz", "chPz", "chEog"].forEach((id) => $(id).addEventListener("change", drawWaveforms));
+    window.addEventListener("resize", () => { drawWaveforms(); drawTimelineMap(); });
+
+    // ── Mapa Visual de Estadios en la Barra de Desplazamiento ──
+    const STAGE_STYLE = {
+      Wake: { color: "#f59e0b", emoji: "☀️", label: "Wake" },
+      N1:   { color: "#38bdf8", emoji: "🌙", label: "N1" },
+      N2:   { color: "#2563eb", emoji: "💤", label: "N2" },
+      N3:   { color: "#4338ca", emoji: "🌊", label: "N3" },
+      REM:  { color: "#a855f7", emoji: "✨", label: "REM" },
+    };
+
+    async function loadTimelineMap(edfId) {
+      $("timelineHint").textContent = "⏳ Escaneando toda la noche...";
+      $("stageJumpBar").innerHTML = "";
+      try {
+        const res = await fetch(`/api/v1/edf/${edfId}/timeline?max_points=240`);
+        const data = await res.json();
+        if (!res.ok || STATE.edfId !== edfId) return;
+        STATE.timeline = data;
+        $("timelineHint").textContent = `Listo (${(data.execution_time_ms / 1000).toFixed(1)} s) · Haz clic en la barra o en una etiqueta para saltar`;
+        renderStageJumpChips();
+        drawTimelineMap();
+      } catch (e) {
+        $("timelineHint").textContent = "No se pudo generar el mapa visual.";
+      }
+    }
+
+    function drawTimelineMap() {
+      const canvas = $("timelineCanvas");
+      if (!canvas || !STATE.timeline) return;
+      const pts = STATE.timeline.points || [];
+      if (!pts.length) return;
+
+      const dpr = window.devicePixelRatio || 1;
+      const w = canvas.clientWidth || 680;
+      const h = canvas.clientHeight || 26;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      const ctx = canvas.getContext("2d");
+      ctx.scale(dpr, dpr);
+
+      const segW = w / pts.length;
+      for (let i = 0; i < pts.length; i++) {
+        ctx.fillStyle = (STAGE_STYLE[pts[i].stage] || STAGE_STYLE.Wake).color;
+        ctx.fillRect(Math.floor(i * segW), 0, Math.ceil(segW) + 1, h);
+      }
+
+      // Indicador (playhead) de la ventana actual
+      const maxIdx = Math.max(1, (STATE.edfInfo?.total_windows_30s || 1) - 1);
+      const px = Math.min(w - 2, Math.max(2, (STATE.windowIndex / maxIdx) * w));
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(px - 2.5, 0, 5, h);
+      ctx.fillStyle = "#0f172a";
+      ctx.fillRect(px - 1, 0, 2, h);
+    }
+
+    function renderStageJumpChips() {
+      const bar = $("stageJumpBar");
+      const tl = STATE.timeline;
+      if (!tl) { bar.innerHTML = ""; return; }
+      const total = Math.max(1, tl.points.length);
+      bar.innerHTML = ["Wake", "N1", "N2", "N3", "REM"].map((st) => {
+        const meta = STAGE_STYLE[st];
+        const count = tl.stage_counts[st] || 0;
+        const pct = Math.round((count / total) * 100);
+        const dis = count === 0 ? "disabled" : "";
+        return `
+          <button type="button" class="stage-jump-btn" data-stage="${st}" ${dis} title="${count > 0 ? `Saltar a la siguiente ventana en etapa ${st}` : `No se detectaron bloques en etapa ${st}`}">
+            <span class="stage-dot" style="background:${meta.color};"></span>
+            ${meta.emoji} ${meta.label} <span style="color:var(--text-muted);font-weight:500;">${pct}%</span>
+          </button>
+        `;
+      }).join("");
+
+      bar.querySelectorAll(".stage-jump-btn").forEach((btn) => {
+        btn.addEventListener("click", () => jumpToNextStage(btn.dataset.stage));
+      });
+    }
+
+    function jumpToNextStage(stage) {
+      const pts = STATE.timeline?.points || [];
+      const matching = pts.filter((p) => p.stage === stage).map((p) => p.window_index);
+      if (!matching.length) return;
+      // Buscar la siguiente ventana mayor a la actual; si ya pasamos la última, volver a la primera
+      const next = matching.find((w) => w > STATE.windowIndex) ?? matching[0];
+      navigateToWindow(next);
+    }
+
+    // Interacción clic + hover sobre el mapa de colores
+    $("timelineCanvas").addEventListener("mousemove", (e) => {
+      if (!STATE.timeline?.points?.length) return;
+      const rect = e.target.getBoundingClientRect();
+      const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+      const idx = Math.min(STATE.timeline.points.length - 1, Math.floor(ratio * STATE.timeline.points.length));
+      const pt = STATE.timeline.points[idx];
+      const meta = STAGE_STYLE[pt.stage] || STAGE_STYLE.Wake;
+      const tip = $("timelineHoverTip");
+      tip.textContent = `${meta.emoji} ${pt.stage} · Ventana #${pt.window_index} [${fmtSec(pt.window_index * 30)}]`;
+      tip.style.left = `${Math.min(88, Math.max(12, ratio * 100))}%`;
+      tip.classList.add("visible");
+    });
+    $("timelineCanvas").addEventListener("mouseleave", () => {
+      $("timelineHoverTip").classList.remove("visible");
+    });
+    $("timelineCanvas").addEventListener("click", (e) => {
+      if (!STATE.timeline?.points?.length) return;
+      const rect = e.target.getBoundingClientRect();
+      const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+      const maxIdx = Math.max(0, (STATE.edfInfo?.total_windows_30s || 1) - 1);
+      const targetWin = Math.round(ratio * maxIdx);
+      navigateToWindow(targetWin);
+    });
+
+    let sliderTimer = null;
+    let inferTimer = null;
+    let inferSeq = 0;
+
+    async function navigateToWindow(idx) {
+      await loadWindowSignals(idx);
+      drawTimelineMap();
+      if (STATE.edfInfo?.is_valid) {
+        clearTimeout(inferTimer);
+        inferTimer = setTimeout(() => runInference(true), 120);
+      }
+    }
+
+    $("winSlider").addEventListener("input", (e) => {
+      const idx = parseInt(e.target.value, 10);
+      STATE.windowIndex = idx;
+      $("winNumber").value = idx;
+      $("winTimeLabel").textContent = `[${fmtSec(idx * 30)} – ${fmtSec((idx + 1) * 30)}]`;
+      if (STATE.edfInfo) {
+        $("bcCurrent").textContent = `Análisis PSG · ${STATE.edfInfo.filename} (Ventana #${idx})`;
+      }
+      drawTimelineMap();
+      clearTimeout(sliderTimer);
+      sliderTimer = setTimeout(() => navigateToWindow(idx), 90);
+    });
+    $("winNumber").addEventListener("change", (e) => {
+      const maxIdx = Math.max(0, (STATE.edfInfo?.total_windows_30s || 1) - 1);
+      const idx = Math.min(maxIdx, Math.max(0, parseInt(e.target.value || "0", 10)));
+      navigateToWindow(idx);
+    });
+    $("btnPrevWin").addEventListener("click", () => { if (STATE.windowIndex > 0) navigateToWindow(STATE.windowIndex - 1); });
+    $("btnNextWin").addEventListener("click", () => {
+      const maxIdx = Math.max(0, (STATE.edfInfo?.total_windows_30s || 1) - 1);
+      if (STATE.windowIndex < maxIdx) navigateToWindow(STATE.windowIndex + 1);
+    });
+
+    // ── Inferencia en vivo sin re-subir el EDF ──
+    async function runInference(silent = false) {
+      if (!STATE.edfId) return;
+      const models = getSelectedModels();
+      if (!models.length) { showAlert("⚠️ Selecciona al menos un modelo disponible.", "error"); return; }
+
+      const reqId = ++inferSeq;
+      const targetWin = STATE.windowIndex;
+      if (!silent) {
+        $("btnAnalyze").disabled = true;
+        $("diagnosisContent").innerHTML = `<div class="alert alert-info">⏳ Ejecutando inferencia en ventana #${targetWin} (${models.map((m) => m.toUpperCase()).join(", ")})...</div>`;
+      } else {
+        $("diagnosisPanel").style.opacity = "0.7";
+      }
+      try {
+        const res = await fetch(`/api/v1/edf/${STATE.edfId}/analyze`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ window_index: targetWin, models }),
+        });
+        const data = await res.json();
+        if (reqId !== inferSeq) return; // Descartar respuesta obsoleta si el usuario siguió moviendo el slider
+        if (!res.ok) throw new Error(data.detail || "Error durante la inferencia.");
+        renderDiagnosis(data);
+      } catch (err) {
+        if (reqId !== inferSeq) return;
+        $("diagnosisContent").innerHTML = `<div class="alert alert-error">❌ ${err.message}</div>`;
+      } finally {
+        if (reqId === inferSeq) {
+          $("btnAnalyze").disabled = false;
+          $("diagnosisPanel").style.opacity = "1";
+        }
+      }
+    }
+    $("btnAnalyze").addEventListener("click", () => runInference(false));
+
+    function renderDiagnosis(data) {
+      const c = data.consensus;
+      const preds = Object.values(data.predictions);
+      const agreeClass = c.agreement ? "" : "partial";
+      let html = `
+        <div class="consensus-card">
+          <div class="model-badge">🌟 Consenso Clínico · Ventana #${data.window_index} · ${data.execution_time_ms} ms</div>
+          <div class="stage-big">${c.consensus_stage}</div>
+          <div class="stage-desc">${c.consensus_description}</div>
+          <div class="agreement-badge ${agreeClass}">🎯 ${c.agreement_percentage}% de Acuerdo · Confianza ${(c.mean_confidence * 100).toFixed(1)}%</div>
+        </div>
+      `;
+
+      if (preds.length > 3) {
+        html += `<div class="preds-compact-grid">`;
+        preds.forEach((p) => {
+          const shortTitle = p.model_name.replace(" — CNN 1D ", " · ").replace(" (Tesis)", "");
+          html += `
+            <div class="pred-card compact">
+              <div class="model-badge">${shortTitle}</div>
+              <div class="compact-stage">${p.stage}</div>
+              <div class="conf-big">${(p.confidence * 100).toFixed(1)}%</div>
+            </div>
+          `;
+        });
+        html += `</div>`;
+      } else {
+        preds.forEach((p) => {
+          html += `
+            <div class="pred-card">
+              <div class="model-badge">${p.model_name}</div>
+              <div style="font-size:1.55rem;font-weight:800;color:var(--brand-primary);">${p.stage}</div>
+              <div class="stage-desc">${p.stage_description}</div>
+              <div class="conf-big">${(p.confidence * 100).toFixed(1)}% confianza</div>
+            </div>
+          `;
+        });
+      }
+
+      // Distribución promedio de probabilidad
+      const stages = ["Wake", "N1", "N2", "N3", "REM"];
+      html += `<h3 style="margin:0.85rem 0 0.5rem 0;font-size:0.95rem;color:var(--brand-primary);">Distribución de Probabilidad (Promedio)</h3>`;
+      stages.forEach((st) => {
+        const avg = preds.reduce((acc, p) => acc + (p.probabilities[st] || 0), 0) / preds.length;
+        const pct = (avg * 100).toFixed(1);
+        html += `
+          <div class="prob-row">
+            <div class="prob-hdr"><span>${st}</span><span>${pct}%</span></div>
+            <div class="prob-track"><div class="prob-fill" style="width:${pct}%"></div></div>
+          </div>
+        `;
+      });
+      $("diagnosisContent").innerHTML = html;
+    }
+
+    // ── Evaluación Masiva y Auditoría Remota ──
+    const getKaggleTargets = () => {
+      const v = $("kaggleModelSelect").value;
+      return v === "all" ? ["e0", "e1", "e2"] : [v];
+    };
+
+    const MODEL_LABELS = {
+      e0: "E0 · CNN 1D Base (Época individual)",
+      e1: "E1 · CNN 1D + Concatenación (5 épocas)",
+      e2: "E2 · CNN 1D + GRU (5 épocas · Recomendado)",
+    };
+
+    const fmtBatchStatus = (raw) => {
+      const s = String(raw || "").toUpperCase();
+      if (s.includes("COMPLETE")) return "✅ Completado";
+      if (s.includes("RUNNING")) return "⏳ En ejecución";
+      if (s.includes("QUEUED")) return "🕒 En cola";
+      if (s.includes("ERROR") || s.includes("CANCEL")) return "❌ Con incidencia";
+      return raw || "Desconocido";
+    };
+
+    $("btnKStatus").addEventListener("click", async () => {
+      const box = $("kaggleResults");
+      $("btnKStatus").disabled = true;
+      box.innerHTML = `<div class="alert alert-info">⏳ Consultando estado de la evaluación masiva en la nube...</div>`;
+      try {
+        const rows = [];
+        for (const m of getKaggleTargets()) {
+          const r = await fetch(`/api/v1/kaggle/status/${m}`);
+          const d = await r.json();
+          if (!r.ok) throw new Error(d.detail || `Error consultando ${m.toUpperCase()}`);
+          rows.push({ modelo: MODEL_LABELS[m] || m.toUpperCase(), raw: String(d.status || "").toUpperCase(), status: fmtBatchStatus(d.status) });
+        }
+        const anyActive = rows.some((r) => r.raw.includes("RUNNING") || r.raw.includes("QUEUED"));
+        $("btnKRun").disabled = anyActive;
+        box.innerHTML = `
+          <div class="table-wrap"><table class="data-table">
+            <thead><tr><th>Arquitectura Clínica</th><th>Estado de Última Corrida</th></tr></thead>
+            <tbody>${rows.map((r) => `
+              <tr>
+                <td><b>${r.modelo}</b></td>
+                <td>${r.status}</td>
+              </tr>`).join("")}</tbody>
+          </table></div>
+        `;
+      } catch (e) {
+        box.innerHTML = `<div class="alert alert-error">❌ ${e.message}</div>`;
+      } finally {
+        $("btnKStatus").disabled = false;
+      }
+    });
+
+    $("btnKOutputs").addEventListener("click", async () => {
+      const box = $("kaggleResults");
+      box.innerHTML = `<div class="alert alert-info">⏳ Cargando resultados oficiales de validación clínica...</div>`;
+      try {
+        const outs = [];
+        for (const m of getKaggleTargets()) {
+          const r = await fetch(`/api/v1/kaggle/outputs/${m}`);
+          const d = await r.json();
+          if (!r.ok) throw new Error(d.detail || `Error descargando resultados de ${m.toUpperCase()}`);
+          outs.push({ model: m, data: d });
+        }
+
+        const ckpts = [], metrics = [];
+        outs.forEach(({ model, data }) => {
+          Object.values(data.json_summaries || {}).forEach((payload) => {
+            if (!payload || !payload.seeds) return;
+            const exp = payload.experiment || model.toUpperCase();
+            if (payload.checkpoint_verified) {
+              const c = payload.checkpoint_verified;
+              ckpts.push({ exp, file: c.file, mb: c.size_mb, epoch: c.epoch, val_f1: Number(c.val_f1_macro).toFixed(4) });
+            }
+            Object.entries(payload.seeds).forEach(([seed, sd]) => {
+              const tm = sd.test_metrics || {};
+              metrics.push({
+                exp, seed, best_ep: sd.best_epoch,
+                acc: Number(tm.test_accuracy || 0).toFixed(4),
+                f1m: Number(tm.test_f1_macro || 0).toFixed(4),
+                f1n1: Number(tm.test_f1_n1 || 0).toFixed(4),
+                kappa: Number(tm.test_kappa || 0).toFixed(4),
+                inf: Number(tm.inference_time_test_s || 0).toFixed(2),
+              });
+            });
+          });
+        });
+
+        let html = "";
+        if (ckpts.length) {
+          html += `<h4 style="margin:0.8rem 0 0.4rem 0;color:var(--brand-primary);">✅ Modelos Auditados y Verificados</h4>
+          <div class="table-wrap"><table class="data-table">
+            <thead><tr><th>Modelo</th><th>Artefacto Verificado</th><th>Peso (MB)</th><th>Mejor Época</th><th>F1-Macro Validación</th></tr></thead>
+            <tbody>${ckpts.map((c) => `<tr><td><b>${c.exp}</b></td><td><code>${c.file}</code></td><td>${c.mb}</td><td>${c.epoch}</td><td><b>${c.val_f1}</b></td></tr>`).join("")}</tbody>
+          </table></div>`;
+        }
+        if (metrics.length) {
+          html += `<h4 style="margin:1rem 0 0.4rem 0;color:var(--brand-primary);">📊 Desempeño Oficial sobre Cohorte de Prueba (SC-test)</h4>
+          <div class="table-wrap"><table class="data-table">
+            <thead><tr><th>Modelo</th><th>Réplica (Semilla)</th><th>Mejor Época</th><th>Exactitud</th><th>F1-Macro</th><th>F1 Fase N1</th><th>Kappa Cohen</th><th>Tiempo Cohorte (s)</th></tr></thead>
+            <tbody>${metrics.map((m) => `<tr><td><b>${m.exp}</b></td><td>${m.seed}</td><td>${m.best_ep}</td><td>${m.acc}</td><td><b>${m.f1m}</b></td><td>${m.f1n1}</td><td>${m.kappa}</td><td>${m.inf}</td></tr>`).join("")}</tbody>
+          </table></div>`;
+        }
+        html += `<details style="margin-top:0.85rem;"><summary style="cursor:pointer;font-size:0.85rem;font-weight:600;color:var(--brand-primary);">Ver detalle técnico de auditoría (JSON)</summary><pre class="json-box">${JSON.stringify(outs, null, 2)}</pre></details>`;
+        box.innerHTML = html;
+      } catch (e) { box.innerHTML = `<div class="alert alert-error">❌ ${e.message}</div>`; }
+    });
+
+    $("btnKRun").addEventListener("click", async () => {
+      const ok = window.confirm(
+        "Los resultados oficiales ya están disponibles en 'Ver Resultados'.\n\n¿Deseas lanzar de todos modos una nueva re-evaluación masiva en la nube?"
+      );
+      if (!ok) return;
+      const box = $("kaggleResults");
+      $("btnKRun").disabled = true;
+      box.innerHTML = `<div class="alert alert-info">🚀 Iniciando re-evaluación por lotes en la nube...</div>`;
+      try {
+        const rows = [];
+        for (const m of getKaggleTargets()) {
+          const r = await fetch(`/api/v1/kaggle/run/${m}`, { method: "POST" });
+          const d = await r.json();
+          if (!r.ok) throw new Error(d.detail || `Error iniciando ${m.toUpperCase()}`);
+          rows.push({ modelo: MODEL_LABELS[m] || m.toUpperCase(), status: fmtBatchStatus(d.status) });
+        }
+        box.innerHTML = `<div class="alert alert-success">✅ Re-evaluación masiva enviada a la nube. Consulta el avance con <b>Verificar Estado</b> (el botón de re-evaluación se reactivará al finalizar).</div>
+          <div class="table-wrap"><table class="data-table">
+            <thead><tr><th>Arquitectura Clínica</th><th>Estado</th></tr></thead>
+            <tbody>${rows.map((r) => `
+              <tr>
+                <td><b>${r.modelo}</b></td>
+                <td>${r.status}</td>
+              </tr>`).join("")}</tbody>
+          </table></div>`;
+      } catch (e) {
+        $("btnKRun").disabled = false;
+        box.innerHTML = `<div class="alert alert-error">❌ ${e.message}</div>`;
+      }
+    });
+
+    // Ajustar enlaces de MLflow automáticamente entre local y Azure + fecha del footer
+    if (["localhost", "127.0.0.1"].includes(window.location.hostname)) {
+      ["mlflowLink", "footerMlflowLink"].forEach((id) => {
+        const el = $(id);
+        if (el) el.href = "http://localhost:5000";
+      });
+    }
+    const now = new Date();
+    const meses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+    if ($("footerYear")) $("footerYear").textContent = String(now.getFullYear());
+    if ($("footerDate")) $("footerDate").textContent = `${meses[now.getMonth()]} ${now.getFullYear()}`;
+
+    initApp();
+  </script>
+</body>
+</html>

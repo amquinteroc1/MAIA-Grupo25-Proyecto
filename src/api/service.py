@@ -3,7 +3,8 @@ service.py
 Capa de servicio que orquesta la carga de EDF, validación de señales y ejecución multimodelo.
 """
 
-from collections import Counter
+from collections import Counter, OrderedDict
+import hashlib
 from pathlib import Path
 import tempfile
 from time import perf_counter
@@ -13,20 +14,192 @@ import mne
 import numpy as np
 
 from src.api.schemas import (
+    BatchAnalysisResponse,
     ConsensusAnalysis,
     EDFInfoResponse,
+    EDFTimelineResponse,
+    EDFUploadResponse,
     HypnogramEpoch,
     ModelPrediction,
+    TimelinePoint,
     WindowAnalysisResponse,
-    BatchAnalysisResponse,
+    WindowSignalsResponse,
 )
 from src.inference.predict import (
     CANALES_ML,
+    CLASES_CANONICAS,
     DESCRIPCION_ETAPAS,
+    cargar_norm_params,
     ejecutar_inferencia_modelo,
     get_model_catalog,
+    obtener_modelo,
     preparar_features,
 )
+
+# ── Caché LRU de archivos EDF en disco (preload=False → <5 MB RAM) ────────────
+_EDF_CACHE_DIR = Path(tempfile.gettempdir()) / "sleep_ai_api_edf_cache"
+_EDF_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+_EDF_REGISTRY: "OrderedDict[str, Tuple[str, Path, mne.io.BaseRaw]]" = OrderedDict()
+_TIMELINE_CACHE: Dict[str, EDFTimelineResponse] = {}
+_MAX_CACHED_EDFS = 6
+
+
+def registrar_edf_en_cache(file_bytes: bytes, filename: str) -> EDFUploadResponse:
+    """
+    Valida y guarda el EDF una sola vez en disco abriéndolo con preload=False.
+    Retorna un `edf_id` para consultar señales e inferencias en milisegundos sin re-subir.
+    """
+    if "hypnogram" in filename.lower():
+        raise ValueError(
+            f"El archivo cargado '{filename}' es un hipnograma de anotaciones clínicas, no un registro PSG continuo. "
+            "Para clasificar ventanas, carga el archivo de señales correspondiente (ejemplo: 'SC4001E0-PSG.edf')."
+        )
+
+    digest = hashlib.sha256(file_bytes[:1_048_576] + str(len(file_bytes)).encode()).hexdigest()[:12]
+    edf_id = f"{digest}"
+    target_path = _EDF_CACHE_DIR / f"{edf_id}_{Path(filename).name}"
+
+    if edf_id in _EDF_REGISTRY:
+        _EDF_REGISTRY.move_to_end(edf_id)
+        _, _, raw = _EDF_REGISTRY[edf_id]
+    else:
+        if not target_path.exists() or target_path.stat().st_size != len(file_bytes):
+            target_path.write_bytes(file_bytes)
+        raw = mne.io.read_raw_edf(target_path, preload=False, verbose=False)
+        _EDF_REGISTRY[edf_id] = (filename, target_path, raw)
+        while len(_EDF_REGISTRY) > _MAX_CACHED_EDFS:
+            _, (_, old_path, _) = _EDF_REGISTRY.popitem(last=False)
+            try:
+                if old_path.exists():
+                    old_path.unlink()
+            except OSError:
+                pass
+
+    info = obtener_info_edf(raw, filename)
+    return EDFUploadResponse(edf_id=edf_id, **info.model_dump())
+
+
+def obtener_edf_cacheado(edf_id: str) -> Tuple[str, mne.io.BaseRaw]:
+    """Recupera el objeto Raw cacheado por su edf_id."""
+    if edf_id not in _EDF_REGISTRY:
+        raise ValueError(
+            f"Sesión EDF '{edf_id}' no encontrada o expirada. Vuelve a cargar el archivo EDF."
+        )
+    _EDF_REGISTRY.move_to_end(edf_id)
+    filename, _, raw = _EDF_REGISTRY[edf_id]
+    return filename, raw
+
+
+def extraer_senales_ventana(
+    edf_id: str, window_index: int, max_points: int = 600
+) -> WindowSignalsResponse:
+    """Extrae las señales en µV de una ventana de 30s diezmadas para graficar a 60 fps."""
+    _, raw = obtener_edf_cacheado(edf_id)
+    fs = float(raw.info["sfreq"])
+    duracion = float(raw.times[-1]) if len(raw.times) > 0 else 0.0
+    total_ventanas = int(duracion // 30)
+    if window_index < 0 or window_index >= total_ventanas:
+        raise ValueError(f"Índice de ventana {window_index} fuera de rango (0 a {total_ventanas - 1}).")
+
+    start_sec = float(window_index * 30.0)
+    end_sec = start_sec + 30.0
+    start_idx = int(round(start_sec * fs))
+    stop_idx = min(raw.n_times, int(round(end_sec * fs)))
+
+    presentes = [ch for ch in CANALES_ML if ch in raw.ch_names]
+    data = raw.get_data(picks=presentes, start=start_idx, stop=stop_idx) * 1e6  # µV
+    n_samples = data.shape[1]
+    step = max(1, n_samples // max_points)
+
+    channels_out: Dict[str, List[float]] = {}
+    for i, ch in enumerate(presentes):
+        channels_out[ch] = [round(float(v), 2) for v in data[i, ::step]]
+
+    time_axis = [round(float(idx / fs), 3) for idx in range(0, n_samples, step)]
+    return WindowSignalsResponse(
+        edf_id=edf_id,
+        window_index=window_index,
+        start_second=start_sec,
+        end_second=end_sec,
+        sampling_rate_hz=round(fs, 2),
+        time_axis=time_axis,
+        channels=channels_out,
+    )
+
+
+def generar_timeline_edf(
+    edf_id: str,
+    max_points: int = 240,
+    model_id: str = "e0",
+) -> EDFTimelineResponse:
+    """
+    Escanea de forma vectorizada todo el registro EDF (~0.9 s para 22 h) para generar
+    el mapa visual de estadios de sueño sobre la barra de desplazamiento.
+    """
+    cache_key = f"{edf_id}:{model_id}:{max_points}"
+    if cache_key in _TIMELINE_CACHE:
+        return _TIMELINE_CACHE[cache_key]
+
+    t0 = perf_counter()
+    _, raw = obtener_edf_cacheado(edf_id)
+    presentes, faltantes, is_valid = validar_canales(raw)
+    if not is_valid:
+        raise ValueError(f"El EDF carece de canales requeridos: {faltantes}")
+
+    fs = float(raw.info["sfreq"])
+    duracion = float(raw.times[-1]) if len(raw.times) > 0 else 0.0
+    total_ventanas = int(duracion // 30)
+    if total_ventanas <= 0:
+        raise ValueError("El archivo EDF no contiene ventanas completas de 30s.")
+
+    n_samples = min(total_ventanas, max(10, max_points))
+    indices = np.linspace(0, total_ventanas - 1, n_samples, dtype=int)
+    indices = np.unique(indices)
+
+    n_muestras = 3000
+    win_len_raw = int(round(30.0 * fs))
+    norm = cargar_norm_params()
+    batch = np.empty((len(indices), 3, n_muestras), dtype=np.float32)
+
+    for i, win in enumerate(indices):
+        start_idx = int(round(int(win) * 30.0 * fs))
+        stop_idx = min(raw.n_times, start_idx + win_len_raw)
+        seg = raw.get_data(picks=CANALES_ML, start=start_idx, stop=stop_idx).astype(np.float32)
+        if seg.shape[1] != n_muestras:
+            if abs(fs - 100.0) > 0.5 and seg.shape[1] > 1:
+                from scipy.signal import resample
+                seg = resample(seg, n_muestras, axis=1).astype(np.float32)
+            else:
+                pad_w = max(0, n_muestras - seg.shape[1])
+                seg = np.pad(seg, ((0, 0), (0, pad_w)))[:, :n_muestras]
+        if norm is not None:
+            media, std = norm
+            seg = (seg - media[:, None]) / np.where(std[:, None] > 0, std[:, None], 1.0)
+        batch[i] = seg
+
+    import torch
+    model = obtener_modelo(model_id)
+    with torch.no_grad():
+        logits = model(torch.from_numpy(batch))
+        preds = logits.argmax(dim=1).cpu().numpy()
+
+    points = [
+        TimelinePoint(window_index=int(win), stage=CLASES_CANONICAS[int(cls_idx)])
+        for win, cls_idx in zip(indices, preds)
+    ]
+    stage_counts = {stage: int(sum(1 for p in points if p.stage == stage)) for stage in CLASES_CANONICAS}
+    elapsed_ms = round((perf_counter() - t0) * 1000, 2)
+
+    resp = EDFTimelineResponse(
+        edf_id=edf_id,
+        total_windows_30s=total_ventanas,
+        model_used=model_id,
+        points=points,
+        stage_counts=stage_counts,
+        execution_time_ms=elapsed_ms,
+    )
+    _TIMELINE_CACHE[cache_key] = resp
+    return resp
 
 
 def cargar_edf_desde_bytes(file_bytes: bytes, filename: str) -> mne.io.Raw:

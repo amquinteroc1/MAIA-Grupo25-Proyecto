@@ -53,6 +53,21 @@ DEFAULT_REPO_TYPE = os.getenv("HF_REPO_TYPE", "dataset")
 # Mapeo de modelos del proyecto
 ROOT_DIR = Path(__file__).resolve().parents[2]
 KNOWN_MODELS = {
+    "e0": {
+        "local_path": ROOT_DIR / "experiments" / "E0" / "seed42" / "best_model_E0_seed42.pt",
+        "path_in_repo": "tesis-final-2026/experiments/E0/seed42/best_model_E0_seed42.pt",
+        "dvc_file": ROOT_DIR / "hf_registry" / "modelos.dvc",
+    },
+    "e1": {
+        "local_path": ROOT_DIR / "experiments" / "E1" / "seed42" / "best_model_E1_seed42.pt",
+        "path_in_repo": "tesis-final-2026/experiments/E1/seed42/best_model_E1_seed42.pt",
+        "dvc_file": ROOT_DIR / "hf_registry" / "modelos.dvc",
+    },
+    "e2": {
+        "local_path": ROOT_DIR / "experiments" / "E2" / "seed42" / "best_model_E2_seed42.pt",
+        "path_in_repo": "tesis-final-2026/experiments/E2/seed42/best_model_E2_seed42.pt",
+        "dvc_file": ROOT_DIR / "hf_registry" / "modelos.dvc",
+    },
     "svm": {
         "local_path": ROOT_DIR / "models" / "svm_sleep.joblib",
         "path_in_repo": "models/svm_sleep.joblib",
@@ -281,11 +296,35 @@ def download_model_artifact(
         filename=filename_in_repo,
         repo_type=repo_type,
         token=token,
-        local_dir=str(ROOT_DIR),
-        local_dir_use_symlinks=False,
     )
-    log.info("✓ Descarga completada: %s", downloaded)
-    return Path(downloaded)
+    import shutil
+    if Path(downloaded).resolve() != target_path.resolve():
+        shutil.copy2(downloaded, target_path)
+    log.info("✓ Descarga completada: %s", target_path)
+    return target_path
+
+
+def download_norm_params(
+    repo_id: str = DEFAULT_DATA_REPO,
+    repo_type: str = DEFAULT_REPO_TYPE,
+    force: bool = False,
+) -> Path:
+    """Descarga norm_params.npz (media/std de SC-train) desde Hugging Face Hub."""
+    target_path = ROOT_DIR / "data" / "processed" / "meta" / "norm_params.npz"
+    if target_path.exists() and not force:
+        return target_path
+    target_path.parent.mkdir(parents=True, exist_ok=True)
+    token = get_hf_token(required=False)
+    downloaded = hf_hub_download(
+        repo_id=repo_id,
+        filename="tesis-final-2026/data/processed/meta/norm_params.npz",
+        repo_type=repo_type,
+        token=token,
+    )
+    import shutil
+    shutil.copy2(downloaded, target_path)
+    log.info("✓ norm_params.npz descargado en: %s", target_path)
+    return target_path
 
 
 def sync_all_models_to_hf(

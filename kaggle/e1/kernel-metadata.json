@@ -1,0 +1,15 @@
+{
+  "id": "amquinteroc1/sleep-edfx-e1-batch",
+  "title": "Sleep EDFx E1 Batch",
+  "code_file": "batch_e1.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": false,
+  "enable_internet": true,
+  "dataset_sources": [],
+  "competition_sources": [],
+  "kernel_sources": [],
+  "model_sources": []
+}

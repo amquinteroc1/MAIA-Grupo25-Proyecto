@@ -1,0 +1,145 @@
+{
+  "experiment": "E1",
+  "source": "hf://maia-grupo25/sleep-edfx-data",
+  "seeds": {
+    "42": {
+      "experiment": "E1",
+      "seed": 42,
+      "finished_at_utc": "2026-11-07T10:09:43.101821+00:00",
+      "dataset_sizes": {
+        "train": 119364,
+        "val": 34981,
+        "test": 39961,
+        "st": 42003
+      },
+      "training_config": {
+        "batch_size": 128,
+        "lr": 0.001,
+        "weight_decay": 0.0001,
+        "scheduler_patience": 5,
+        "scheduler_factor": 0.5,
+        "scheduler_min_lr": 1e-06,
+        "max_epochs": 30,
+        "early_stopping_patience": 10,
+        "monitor_metric": "val_f1_macro",
+        "class_weight_strategy": "balanced",
+        "num_workers": 0,
+        "pin_memory": true
+      },
+      "best_epoch": 14,
+      "best_val_f1": 0.7761911193099403,
+      "mlflow_run_id": "9ce73d274c1c4ee49a9f8eb9a749f5b7",
+      "test_metrics": {
+        "test_accuracy": 0.8169965716573659,
+        "test_balanced_accuracy": 0.7797519505302162,
+        "test_f1_macro": 0.7807392386122602,
+        "test_kappa": 0.7494512851942017,
+        "test_f1_wake": 0.9037787300350604,
+        "test_f1_n1": 0.5198167695678152,
+        "test_f1_n2": 0.8425676143044891,
+        "test_f1_n3": 0.8209150326797385,
+        "test_f1_rem": 0.8166180464741978,
+        "best_epoch": 14.0,
+        "train_time_s": 41313.919769500004,
+        "inference_time_test_s": 38.39502860000357,
+        "gpu_mem_peak_mb": 1098.17041015625,
+        "n_params": 2114629.0
+      }
+    },
+    "123": {
+      "experiment": "E1",
+      "seed": 123,
+      "finished_at_utc": "2026-11-07T12:33:03.121704+00:00",
+      "dataset_sizes": {
+        "train": 119364,
+        "val": 34981,
+        "test": 39961,
+        "st": 42003
+      },
+      "training_config": {
+        "batch_size": 128,
+        "lr": 0.001,
+        "weight_decay": 0.0001,
+        "scheduler_patience": 5,
+        "scheduler_factor": 0.5,
+        "scheduler_min_lr": 1e-06,
+        "max_epochs": 30,
+        "early_stopping_patience": 10,
+        "monitor_metric": "val_f1_macro",
+        "class_weight_strategy": "balanced",
+        "num_workers": 0,
+        "pin_memory": true
+      },
+      "best_epoch": 17,
+      "best_val_f1": 0.7691453433093094,
+      "mlflow_run_id": "fdb566d0c75840149b46e62abade35f5",
+      "test_metrics": {
+        "test_accuracy": 0.8100898375916519,
+        "test_balanced_accuracy": 0.7729640358350902,
+        "test_f1_macro": 0.7716707160140446,
+        "test_kappa": 0.7408732969968344,
+        "test_f1_wake": 0.91228470400365,
+        "test_f1_n1": 0.49755799755799757,
+        "test_f1_n2": 0.8276034952012605,
+        "test_f1_n3": 0.8305968707745799,
+        "test_f1_rem": 0.7903105125327348,
+        "best_epoch": 17.0,
+        "train_time_s": 8485.974865900003,
+        "inference_time_test_s": 53.72597989998758,
+        "gpu_mem_peak_mb": 1098.17041015625,
+        "n_params": 2114629.0
+      }
+    },
+    "2026": {
+      "experiment": "E1",
+      "seed": 2026,
+      "finished_at_utc": "2026-11-07T14:20:09.148578+00:00",
+      "dataset_sizes": {
+        "train": 119364,
+        "val": 34981,
+        "test": 39961,
+        "st": 42003
+      },
+      "training_config": {
+        "batch_size": 128,
+        "lr": 0.001,
+        "weight_decay": 0.0001,
+        "scheduler_patience": 5,
+        "scheduler_factor": 0.5,
+        "scheduler_min_lr": 1e-06,
+        "max_epochs": 30,
+        "early_stopping_patience": 10,
+        "monitor_metric": "val_f1_macro",
+        "class_weight_strategy": "balanced",
+        "num_workers": 0,
+        "pin_memory": true
+      },
+      "best_epoch": 9,
+      "best_val_f1": 0.7744798656800507,
+      "mlflow_run_id": "fc407b68716248d3a171331f06b7034c",
+      "test_metrics": {
+        "test_accuracy": 0.8180726208052852,
+        "test_balanced_accuracy": 0.7940473940427651,
+        "test_f1_macro": 0.7917432106706053,
+        "test_kappa": 0.7527490752607734,
+        "test_f1_wake": 0.8995619645695236,
+        "test_f1_n1": 0.5472234970169803,
+        "test_f1_n2": 0.8408455750627015,
+        "test_f1_n3": 0.8464666021297192,
+        "test_f1_rem": 0.8246184145741015,
+        "best_epoch": 9.0,
+        "train_time_s": 6305.9077621999895,
+        "inference_time_test_s": 59.522167399991304,
+        "gpu_mem_peak_mb": 1098.17041015625,
+        "n_params": 2114629.0
+      }
+    }
+  },
+  "status": "ok",
+  "checkpoint_verified": {
+    "file": "best_model_E1_seed42.pt",
+    "size_mb": 8.47,
+    "epoch": 14,
+    "val_f1_macro": 0.7761911193099403
+  }
+}

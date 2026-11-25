@@ -3,7 +3,7 @@ schemas.py
 Esquemas Pydantic v2 para validación, serialización y documentación OpenAPI (Swagger).
 """
 
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field
 
 
@@ -39,6 +39,44 @@ class EDFInfoResponse(BaseModel):
     channels_missing: List[str] = Field(..., description="Canales requeridos ausentes en el archivo")
     is_valid: bool = Field(..., description="True si contiene todos los canales para realizar inferencia")
     message: str = Field(..., description="Mensaje explicativo del estado del archivo")
+
+
+class EDFUploadResponse(EDFInfoResponse):
+    """Respuesta al registrar un archivo EDF en caché para navegación rápida sin re-subida."""
+    edf_id: str = Field(..., description="Identificador único del EDF cacheado en el servidor")
+
+
+class WindowSignalsResponse(BaseModel):
+    """Señales fisiológicas en µV de una ventana de 30s listas para graficar en el frontend."""
+    edf_id: str
+    window_index: int
+    start_second: float
+    end_second: float
+    sampling_rate_hz: float
+    time_axis: List[float]
+    channels: Dict[str, List[float]]
+
+
+class CachedWindowAnalyzeRequest(BaseModel):
+    """Petición JSON ligera para inferir una ventana sobre un EDF ya subido."""
+    window_index: int = Field(0, ge=0)
+    models: List[str] = Field(default_factory=lambda: ["e0", "e1", "e2"])
+
+
+class TimelinePoint(BaseModel):
+    """Punto muestreado del mapa rápido de estadios del sueño a lo largo de la noche."""
+    window_index: int
+    stage: str
+
+
+class EDFTimelineResponse(BaseModel):
+    """Mapa de color completo de estadios detectados a lo largo de todo el archivo EDF."""
+    edf_id: str
+    total_windows_30s: int
+    model_used: str
+    points: List[TimelinePoint]
+    stage_counts: Dict[str, int]
+    execution_time_ms: float
 
 
 # ── Predicción y Análisis de una Ventana ───────────────────────────────────────
@@ -113,3 +151,53 @@ class HealthResponse(BaseModel):
     version: str = Field(..., description="Versión de la API")
     available_models: List[str] = Field(..., description="Modelos listos para recibir peticiones")
     docs_url: str = Field(..., description="Ruta a la documentación interactiva Swagger")
+
+
+# ── Kaggle Batch API ──────────────────────────────────────────────────────────
+class KaggleKernelEntry(BaseModel):
+    """Configuración de un kernel remoto en Kaggle."""
+    model_id: str
+    env_var: str
+    slug: str
+    kernel_dir: str
+
+
+class KaggleConfigResponse(BaseModel):
+    """Estado de configuración de credenciales y slugs de Kaggle Batch API."""
+    configured: bool
+    username: Optional[str] = None
+    has_key: bool
+    kernels: Dict[str, KaggleKernelEntry]
+
+
+class KaggleKernelStatusResponse(BaseModel):
+    """Estado de ejecución remota de un notebook en Kaggle."""
+    slug: str
+    status: str
+    failure_message: Optional[str] = None
+    kaggle_url: str
+
+
+class KaggleKernelRunResponse(BaseModel):
+    """Respuesta al disparar una ejecución batch remota en Kaggle."""
+    slug: str
+    ref: str
+    status: str
+    kaggle_url: str
+    message: str
+
+
+class KaggleOutputFile(BaseModel):
+    """Archivo de salida descargado desde un notebook de Kaggle."""
+    file: str
+    size_bytes: int
+
+
+class KaggleKernelOutputsResponse(BaseModel):
+    """Predicciones, resúmenes JSON y archivos obtenidos de Kaggle."""
+    slug: str
+    output_dir: str
+    file_count: int
+    files: List[KaggleOutputFile]
+    json_summaries: Dict[str, Any]
+    kaggle_url: str

@@ -15,14 +15,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir mlflow boto3
 
-# Crear directorios para persistencia de artefactos
+# Copiar base de datos y artefactos locales de MLflow para visualización inmediata
 RUN mkdir -p /app/mlruns
+COPY mlflow.db /app/mlflow.db
+COPY mlruns/ /app/mlruns/
 
+ENV MLFLOW_DISABLE_TELEMETRY=true
 EXPOSE 5000
 
 # Chequeo de salud del servicio MLflow
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
     CMD curl -f http://localhost:5000/health || exit 1
 
-# Iniciar servidor centralizado de MLflow con backend SQLite y soporte de artefactos
-CMD ["mlflow", "server", "--backend-store-uri", "sqlite:////app/mlflow.db", "--default-artifact-root", "/app/mlruns", "--host", "0.0.0.0", "--port", "5000"]
+# Iniciar servidor centralizado de MLflow (1 worker para bajo consumo de RAM en Azure Container Apps)
+CMD ["mlflow", "server", "--backend-store-uri", "sqlite:////app/mlflow.db", "--default-artifact-root", "/app/mlruns", "--host", "0.0.0.0", "--port", "5000", "--workers", "1", "--allowed-hosts", "*"]
