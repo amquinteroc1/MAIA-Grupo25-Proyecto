@@ -5,7 +5,6 @@ scipy
 scikit-learn
 mlflow
 joblib
-streamlit
 pyarrow
 matplotlib
 dvc[s3]

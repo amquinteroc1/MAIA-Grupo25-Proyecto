@@ -1,7 +1,7 @@
 """
 test_api.py
-Suite de pruebas de integración para la API REST de Clasificación de Sueño.
-Verifica endpoints de salud, catálogo, metadatos EDF y análisis multimodelo.
+Suite de pruebas de integración para la API REST y Dashboard Web Stateless (/ui)
+de Clasificación de Etapas del Sueño (MAIA Grupo 25 — E0, E1, E2 × 3 semillas).
 """
 
 from pathlib import Path
@@ -16,159 +16,108 @@ from src.api.main import app
 SAMPLE_PSG = ROOT / "data" / "sleep-cassette" / "SC4001E0-PSG.edf"
 SAMPLE_HYP = ROOT / "data" / "sleep-cassette" / "SC4001EC-Hypnogram.edf"
 
+ALL_9_THESIS = [
+    f"{arch}_seed{seed}"
+    for arch in ("e0", "e1", "e2")
+    for seed in ("42", "123", "2026")
+]
+
 client = TestClient(app)
 
 
-def test_root_endpoint():
-    """Prueba el endpoint raíz /"""
-    response = client.get("/")
-    assert response.status_code == 200
-    data = response.json()
+def test_root_and_ui_endpoints():
+    """Verifica el endpoint raíz /, el dashboard stateless /ui y los assets institucionales."""
+    r_root = client.get("/")
+    assert r_root.status_code == 200
+    data = r_root.json()
     assert data["status"] == "online"
-    assert "swagger_docs" in data
+    assert data["web_dashboard"] == "/ui"
     assert data["swagger_docs"] == "/docs"
 
+    r_ui = client.get("/ui")
+    assert r_ui.status_code == 200
+    assert "text/html" in r_ui.headers.get("content-type", "")
+    html = r_ui.text
+    for marker in ("timelineCanvas", "stageJumpBar", "matrix-3x3", "uniandes-logo.png", "site-footer"):
+        assert marker in html
 
-def test_health_endpoint():
-    """Prueba el health check /health"""
-    response = client.get("/health")
-    assert response.status_code == 200
-    data = response.json()
-    assert data["status"] == "online"
-    assert "available_models" in data
-    assert "svm" in data["available_models"]
-    assert "lightgbm" in data["available_models"]
-
-
-def test_models_catalog_endpoint():
-    """Prueba el listado de modelos /api/v1/models"""
-    response = client.get("/api/v1/models")
-    assert response.status_code == 200
-    data = response.json()
-    assert data["count"] >= 3
-    model_ids = [m["id"] for m in data["models"]]
-    assert "svm" in model_ids
-    assert "lightgbm" in model_ids
-    assert "cnn1d" in model_ids
+    assert client.get("/favicon.ico").status_code == 200
+    assert client.get("/static/assets/uniandes-logo.png").status_code == 200
 
 
-def test_edf_info_endpoint():
-    """Prueba la inspección de metadatos de un archivo EDF real."""
-    if not SAMPLE_PSG.exists():
-        print("Aviso: Archivo de prueba PSG no encontrado, omitiendo test")
-        return
+def test_health_and_models_catalog():
+    """Verifica /health y que las 9 corridas oficiales E0/E1/E2 estén disponibles."""
+    r_health = client.get("/health")
+    assert r_health.status_code == 200
+    health = r_health.json()
+    assert health["status"] == "online"
 
-    with open(SAMPLE_PSG, "rb") as f:
-        response = client.post(
-            "/api/v1/edf/info",
-            files={"file": (SAMPLE_PSG.name, f, "application/octet-stream")},
-        )
-
-    assert response.status_code == 200
-    data = response.json()
-    assert data["filename"] == SAMPLE_PSG.name
-    assert data["sampling_rate_hz"] == 100.0
-    assert data["total_windows_30s"] > 0
-    assert data["is_valid"] is True
-    assert "EEG Fpz-Cz" in data["channels_present"]
+    r_models = client.get("/api/v1/models")
+    assert r_models.status_code == 200
+    catalog = {m["id"]: m for m in r_models.json()["models"]}
+    for mid in ["e0", "e1", "e2"] + ALL_9_THESIS:
+        assert mid in catalog, f"Modelo faltante en catálogo: {mid}"
+        assert catalog[mid]["available"] is True, f"Modelo no disponible: {mid}"
 
 
 def test_edf_info_rejects_hypnogram():
-    """Prueba el rechazo explicativo al subir un hipnograma en vez de un PSG."""
+    """Verifica el rechazo explicativo al subir un hipnograma en vez de un PSG."""
     if not SAMPLE_HYP.exists():
-        print("Aviso: Archivo de prueba Hypnogram no encontrado, omitiendo test")
         return
-
-    with open(SAMPLE_HYP, "rb") as f:
+    with SAMPLE_HYP.open("rb") as f:
         response = client.post(
             "/api/v1/edf/info",
             files={"file": (SAMPLE_HYP.name, f, "application/octet-stream")},
         )
-
     assert response.status_code == 400
-    data = response.json()
-    assert "hipnograma" in data["detail"].lower()
+    assert "hipnograma" in response.json()["detail"].lower()
 
 
-def test_analyze_window_multimodel():
-    """Prueba el análisis de una ventana de 30s con selección múltiple (SVM + LightGBM)."""
+def test_cached_edf_signals_timeline_and_inference():
+    """Verifica el flujo completo: upload cacheado -> señales -> mapa de estadios -> inferencia E0/E1/E2."""
     if not SAMPLE_PSG.exists():
-        print("Aviso: Archivo de prueba PSG no encontrado, omitiendo test")
         return
 
-    with open(SAMPLE_PSG, "rb") as f:
-        response = client.post(
-            "/api/v1/analyze/window",
+    with SAMPLE_PSG.open("rb") as f:
+        r_up = client.post(
+            "/api/v1/edf/upload",
             files={"file": (SAMPLE_PSG.name, f, "application/octet-stream")},
-            data={"window_index": 0, "models": ["svm", "lightgbm"]},
         )
+    assert r_up.status_code == 200
+    up = r_up.json()
+    edf_id = up["edf_id"]
+    assert up["is_valid"] is True
+    assert up["total_windows_30s"] > 0
 
-    assert response.status_code == 200
-    data = response.json()
+    # Señales para graficar
+    r_sig = client.get(f"/api/v1/edf/{edf_id}/window/500/signals")
+    assert r_sig.status_code == 200
+    sig = r_sig.json()
+    assert set(sig["channels"].keys()) == {"EEG Fpz-Cz", "EEG Pz-Oz", "EOG horizontal"}
 
-    assert data["window_index"] == 0
-    assert data["start_second"] == 0.0
-    assert data["end_second"] == 30.0
-    assert "svm" in data["models_analyzed"]
-    assert "lightgbm" in data["models_analyzed"]
+    # Mapa de estadios de toda la noche
+    r_tl = client.get(f"/api/v1/edf/{edf_id}/timeline?max_points=120")
+    assert r_tl.status_code == 200
+    tl = r_tl.json()
+    assert len(tl["points"]) >= 100
+    assert sum(tl["stage_counts"].values()) == len(tl["points"])
 
-    # Verificación predicción SVM
-    pred_svm = data["predictions"]["svm"]
-    assert pred_svm["stage"] in ["Wake", "N1", "N2", "N3", "REM"]
-    assert 0.0 <= pred_svm["confidence"] <= 1.0
-    assert len(pred_svm["probabilities"]) == 5
-
-    # Verificación predicción LightGBM
-    pred_lgb = data["predictions"]["lightgbm"]
-    assert pred_lgb["stage"] in ["Wake", "N1", "N2", "N3", "REM"]
-    assert 0.0 <= pred_lgb["confidence"] <= 1.0
-    assert len(pred_lgb["probabilities"]) == 5
-
-    # Verificación de consenso
-    assert "consensus" in data
-    assert data["consensus"]["consensus_stage"] in ["Wake", "N1", "N2", "N3", "REM"]
-    assert isinstance(data["consensus"]["agreement"], bool)
-    assert 0.0 <= data["consensus"]["agreement_percentage"] <= 100.0
-
-
-def test_analyze_batch():
-    """Prueba el análisis por lotes de 2 épocas consecutivas."""
-    if not SAMPLE_PSG.exists():
-        print("Aviso: Archivo de prueba PSG no encontrado, omitiendo test")
-        return
-
-    with open(SAMPLE_PSG, "rb") as f:
-        response = client.post(
-            "/api/v1/analyze/batch",
-            files={"file": (SAMPLE_PSG.name, f, "application/octet-stream")},
-            data={"start_window": 0, "max_windows": 2, "models": ["svm", "lightgbm"]},
-        )
-
-    assert response.status_code == 200
-    data = response.json()
-    assert data["total_windows_analyzed"] == 2
-    assert len(data["epochs"]) == 2
-    assert "svm" in data["stage_distribution_by_model"]
-    assert "lightgbm" in data["stage_distribution_by_model"]
+    # Inferencia multimodelo con consenso (E0 + E1 + E2 y combinación personalizada)
+    r_inf = client.post(
+        f"/api/v1/edf/{edf_id}/analyze",
+        json={"window_index": 500, "models": ["e0_seed42", "e1_seed123", "e2_seed2026"]},
+    )
+    assert r_inf.status_code == 200
+    inf = r_inf.json()
+    assert len(inf["predictions"]) == 3
+    assert inf["consensus"]["consensus_stage"] in ["Wake", "N1", "N2", "N3", "REM"]
+    assert 0.0 <= inf["consensus"]["agreement_percentage"] <= 100.0
 
 
-if __name__ == "__main__":
-    if hasattr(sys.stdout, "reconfigure"):
-        sys.stdout.reconfigure(encoding="utf-8")
-
-    print("Ejecutando tests directos...")
-    test_root_endpoint()
-    print("[OK] test_root_endpoint")
-    test_health_endpoint()
-    print("[OK] test_health_endpoint")
-    test_models_catalog_endpoint()
-    print("[OK] test_models_catalog_endpoint")
-    test_edf_info_endpoint()
-    print("[OK] test_edf_info_endpoint")
-    test_edf_info_rejects_hypnogram()
-    print("[OK] test_edf_info_rejects_hypnogram")
-    test_analyze_window_multimodel()
-    print("[OK] test_analyze_window_multimodel")
-    test_analyze_batch()
-    print("[OK] test_analyze_batch")
-    print("\n>>> TODOS LOS TESTS DE LA API PASARON EXITOSAMENTE! <<<")
+def test_kaggle_config_endpoint():
+    """Verifica el endpoint de configuración del módulo de auditoría batch remota."""
+    r = client.get("/api/v1/kaggle/config")
+    assert r.status_code == 200
+    data = r.json()
+    assert "configured" in data
+    assert set(data["kernels"].keys()) == {"e0", "e1", "e2"}

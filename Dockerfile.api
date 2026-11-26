@@ -20,12 +20,10 @@ RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu && \
     pip install --no-cache-dir -r requirements.txt
 
-# Copiar código fuente, artefactos del modelo, normalización y metadatos de Kaggle
+# Copiar código fuente, normalización, metadatos de Kaggle y los 9 checkpoints oficiales (E0/E1/E2 × 3 semillas)
 COPY src/ ./src/
-COPY models/ ./models/
 COPY kaggle/ ./kaggle/
 COPY data/processed/meta/norm_params.npz ./data/processed/meta/norm_params.npz
-COPY experiments/cnn1d/ ./experiments/cnn1d/
 COPY experiments/E0/ ./experiments/E0/
 COPY experiments/E1/ ./experiments/E1/
 COPY experiments/E2/ ./experiments/E2/
