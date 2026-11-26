@@ -7,6 +7,8 @@
 
 ## Despliegue en Producción (Azure Container Apps)
 
+<img width="1582" height="985" alt="image" src="https://github.com/user-attachments/assets/531f80d6-854b-4995-a2c8-94b64ed1acff" />
+
 | Servicio | URL Pública (HTTPS) | Descripción |
 | :--- | :--- | :--- |
 | **Dashboard Clínico Web** | https://sleep-ai-api.whitesky-80270a35.eastus.azurecontainerapps.io/ui | Interfaz stateless responsiva (HTML5 + Canvas 60fps), visor PSG, mapa de colores de estadios y matriz 3×3 de modelos |
