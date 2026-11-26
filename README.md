@@ -22,6 +22,9 @@
 
 Se comparan tres arquitecturas profundas sobre **[Sleep-EDF Expanded (PhysioNet)](https://physionet.org/content/sleep-edfx/1.0.0/)** usando 3 canales crudos a 100 Hz (`EEG Fpz-Cz`, `EEG Pz-Oz`, `EOG horizontal`), épocas de 30 s (estándar **R&K / AASM**: `Wake`, `N1`, `N2`, `N3`, `REM`), partición estricta por sujeto (`SC`: 49 train / 13 val / 16 test; `ST` externo: 22 sujetos) y normalización Z-score ajustada en `SC-train` (`norm_params.npz`). Cada arquitectura se entrenó con 3 semillas (`42`, `123`, `2026` — **9 corridas independientes**):
 
+<img width="1572" height="985" alt="image" src="https://github.com/user-attachments/assets/5bcbf713-f352-4412-95c3-68896e2c66f9" />
+
+
 | Modelo | Contexto Temporal | Accuracy `SC-test` | F1-Macro `SC-test` | Accuracy `ST` (externo) | F1-Macro `ST` | F1 `N1` (`ST`) |
 | :--- | :--- | ---: | ---: | ---: | ---: | ---: |
 | **E0** (`SleepCNN1D`) | 1 época (30 s) | 78,36 % | 0,7601 | 65,26 % | 0,6090 | 0,3603 |
