@@ -488,6 +488,95 @@
     .stage-dot {
       width: 10px; height: 10px; border-radius: 999px; display: inline-block; flex-shrink: 0;
     }
+
+    /* ── Wizard / Modal Instructivo de Primera Vez ── */
+    button.topbar-link {
+      font-family: inherit; cursor: pointer;
+    }
+    .wizard-backdrop {
+      position: fixed; inset: 0; z-index: 120;
+      background: rgba(15, 23, 42, 0.56); backdrop-filter: blur(3px);
+      display: none; align-items: center; justify-content: center;
+      padding: 1rem;
+    }
+    .wizard-backdrop.open { display: flex; animation: wizFadeIn 0.18s ease; }
+    @keyframes wizFadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .wizard-modal {
+      width: 100%; max-width: 620px; max-height: 90vh; overflow-y: auto;
+      background: #ffffff; color: var(--text-primary);
+      border: 1px solid var(--border-color); border-radius: 16px;
+      box-shadow: 0 22px 48px rgba(15, 41, 66, 0.25);
+      display: flex; flex-direction: column;
+    }
+    .wizard-header {
+      display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
+      padding: 1.05rem 1.25rem; background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-soft); border-radius: 16px 16px 0 0;
+    }
+    .wizard-badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: var(--info-bg); color: var(--brand-primary);
+      border: 1px solid var(--info-border); border-radius: 999px;
+      padding: 0.2rem 0.65rem; font-size: 0.76rem; font-weight: 700;
+    }
+    .wizard-close {
+      background: #fff; border: 1px solid var(--border-color); color: var(--text-secondary);
+      width: 34px; height: 34px; border-radius: 9px; font-size: 1rem; font-weight: 700;
+      cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+    }
+    .wizard-close:hover { border-color: var(--brand-primary); color: var(--brand-primary); background: var(--info-bg); }
+    .wizard-progress-track { height: 4px; background: var(--border-soft); width: 100%; }
+    .wizard-progress-fill { height: 100%; background: var(--brand-primary); transition: width 0.25s ease; }
+    .wizard-body { padding: 1.35rem 1.35rem 1rem; }
+    .wizard-step { display: none; }
+    .wizard-step.active { display: block; }
+    .wizard-step-icon {
+      font-size: 2rem; line-height: 1; margin-bottom: 0.55rem; display: inline-block;
+    }
+    .wizard-step h2 {
+      margin: 0 0 0.5rem 0; font-size: 1.22rem; color: var(--brand-primary);
+    }
+    .wizard-step p {
+      margin: 0 0 0.85rem 0; font-size: 0.92rem; line-height: 1.55; color: var(--text-secondary);
+    }
+    .wizard-list {
+      margin: 0; padding: 0; list-style: none; display: grid; gap: 0.55rem;
+    }
+    .wizard-list li {
+      background: var(--bg-surface); border: 1px solid var(--border-soft);
+      border-radius: 10px; padding: 0.65rem 0.8rem; font-size: 0.86rem; line-height: 1.45;
+      color: var(--text-primary);
+    }
+    .wizard-footer {
+      padding: 0.95rem 1.25rem; background: var(--bg-surface);
+      border-top: 1px solid var(--border-soft); border-radius: 0 0 16px 16px;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem;
+    }
+    .wizard-opt {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-size: 0.8rem; color: var(--text-muted); cursor: pointer; user-select: none;
+    }
+    .wizard-opt input { width: 15px; height: 15px; accent-color: var(--brand-primary); }
+    .wizard-actions { display: flex; align-items: center; gap: 0.5rem; margin-left: auto; }
+    .wizard-dots { display: flex; align-items: center; gap: 0.35rem; margin-right: 0.35rem; }
+    .wizard-dot {
+      width: 9px; height: 9px; border-radius: 999px; border: none; padding: 0;
+      background: #cbd5e1; cursor: pointer; transition: all 0.2s ease;
+    }
+    .wizard-dot.active { width: 22px; background: var(--brand-primary); }
+    .wizard-btn {
+      min-height: 38px; padding: 0.45rem 0.95rem; border-radius: 9px;
+      font-size: 0.85rem; font-weight: 700; cursor: pointer;
+    }
+    .wizard-btn-ghost {
+      background: #fff; color: var(--brand-primary); border: 1px solid var(--border-color);
+    }
+    .wizard-btn-ghost:hover:not(:disabled) { background: var(--info-bg); border-color: var(--brand-primary); }
+    .wizard-btn-ghost:disabled { opacity: 0.45; cursor: not-allowed; }
+    .wizard-btn-primary {
+      background: var(--brand-primary); color: #fff; border: 1px solid var(--brand-primary);
+    }
+    .wizard-btn-primary:hover { background: var(--brand-hover); }
   </style>
 </head>
 <body>
@@ -500,6 +589,7 @@
       </span>
     </div>
     <nav class="topbar-links" aria-label="Accesos rápidos">
+      <button type="button" class="topbar-link" id="btnOpenWizard" title="Abrir guía rápida de uso">❓ Guía rápida</button>
       <a class="topbar-link" href="/docs" target="_blank" rel="noopener">📘 Swagger (/docs)</a>
       <a class="topbar-link" href="/redoc" target="_blank" rel="noopener">📕 ReDoc (/redoc)</a>
       <a class="topbar-link" id="mlflowLink" href="https://sleep-mlflow.whitesky-80270a35.eastus.azurecontainerapps.io" target="_blank" rel="noopener">📊 MLflow</a>
@@ -724,6 +814,7 @@
           <h3 class="footer-title">Recursos y Navegación</h3>
           <ul class="footer-links">
             <li><a href="#topAnchor">🏠 Monitor Clínico (/ui)</a></li>
+            <li><a href="#" id="footerWizardLink">❓ Guía rápida de uso</a></li>
             <li><a href="/docs" target="_blank" rel="noopener">📘 Documentación Swagger (/docs)</a></li>
             <li><a href="/redoc" target="_blank" rel="noopener">📕 Especificación ReDoc (/redoc)</a></li>
             <li><a id="footerMlflowLink" href="https://sleep-mlflow.whitesky-80270a35.eastus.azurecontainerapps.io" target="_blank" rel="noopener">📊 Tracking de Experimentos (MLflow)</a></li>
@@ -738,6 +829,93 @@
       </div>
     </div>
   </footer>
+
+  <!-- ── Modal Instructivo / Wizard de Primera Vez ── -->
+  <div class="wizard-backdrop" id="wizardBackdrop" role="dialog" aria-modal="true" aria-labelledby="wizardTitle" aria-hidden="true">
+    <div class="wizard-modal">
+      <div class="wizard-header">
+        <span class="wizard-badge" id="wizardStepBadge">Paso 1 de 4 · Guía rápida</span>
+        <button type="button" class="wizard-close" id="btnCloseWizard" aria-label="Cerrar guía instructiva">✕</button>
+      </div>
+      <div class="wizard-progress-track">
+        <div class="wizard-progress-fill" id="wizardProgress" style="width:25%;"></div>
+      </div>
+
+      <div class="wizard-body">
+        <section class="wizard-step active" data-step="0">
+          <span class="wizard-step-icon">💤</span>
+          <h2 id="wizardTitle">Bienvenido al Monitor Clínico de Polisomnografía AI</h2>
+          <p>
+            Esta plataforma clasifica automáticamente las 5 etapas del sueño (<b>Wake, N1, N2, N3 y REM</b>)
+            bajo el estándar <b>R&amp;K / AASM</b> usando los modelos profundos de tesis <b>E0, E1 y E2</b> sobre señales crudas EEG y EOG a 100 Hz.
+          </p>
+          <ul class="wizard-list">
+            <li><b>🧠 E0 · CNN 1D Base:</b> analiza una sola época de 30 s sin contexto temporal.</li>
+            <li><b>🔗 E1 · Concatenación (5 épocas):</b> agrega 150 s de contexto mediante concatenación fija.</li>
+            <li><b>🚀 E2 · CNN 1D + GRU (Mejor):</b> modela la dinámica temporal con compuertas GRU (mayor F1-Macro en SC-test y generalización externa ST).</li>
+          </ul>
+        </section>
+
+        <section class="wizard-step" data-step="1">
+          <span class="wizard-step-icon">📂</span>
+          <h2>1. Carga un archivo de estudio PSG (.edf)</h2>
+          <p>
+            En el panel lateral izquierdo arrastra o selecciona un registro continuo <code>*-PSG.edf</code>
+            (por ejemplo <code>SC4001E0-PSG.edf</code>). No subas archivos de anotaciones <code>*-Hypnogram.edf</code>.
+          </p>
+          <ul class="wizard-list">
+            <li><b>⚡ Carga única y liviana:</b> el archivo se sube una sola vez y se indexa bajo demanda, sin recargar la página ni congelar el navegador.</li>
+            <li><b>📈 Control de canales:</b> activa o desactiva en cualquier momento <code>EEG Fpz-Cz</code>, <code>EEG Pz-Oz</code> y <code>EOG horizontal</code>.</li>
+          </ul>
+        </section>
+
+        <section class="wizard-step" data-step="2">
+          <span class="wizard-step-icon">🗺️</span>
+          <h2>2. Navega la noche con el Mapa Visual de Estadios</h2>
+          <p>
+            Al cargar el archivo, el sistema escanea toda la noche en menos de 1 segundo y pinta un
+            <b>mapa de colores debajo del slider</b> para que encuentres cualquier fase del sueño sin adivinar.
+          </p>
+          <ul class="wizard-list">
+            <li><b>🎨 Clic en la barra de colores:</b> haz clic o pasa el cursor sobre la barra para ver la hora exacta y saltar a esa ventana.</li>
+            <li><b>🏷️ Etiquetas de salto rápido:</b> pulsa <b>☀️ Wake</b>, <b>🌙 N1</b>, <b>💤 N2</b>, <b>🌊 N3</b> o <b>✨ REM</b> para saltar automáticamente al siguiente bloque de esa etapa.</li>
+            <li><b>⚡ Diagnóstico en tiempo real:</b> cada vez que mueves el slider o saltas de ventana, el consenso clínico se recalcula al instante.</li>
+          </ul>
+        </section>
+
+        <section class="wizard-step" data-step="3">
+          <span class="wizard-step-icon">🤖</span>
+          <h2>3. Compara las 9 corridas y audita la cohorte</h2>
+          <p>
+            Desde el selector de <b>Modelo Clasificador</b> puedes evaluar desde 1 arquitectura hasta las
+            <b>9 corridas oficiales</b> (<code>E0/E1/E2 × semillas 42, 123 y 2026</code>) emparejadas 1-a-1 con MLflow.
+          </p>
+          <ul class="wizard-list">
+            <li><b>🔀 Matriz 3×3 personalizada:</b> marca cualquier combinación de arquitecturas y semillas para medir acuerdo e incertidumbre.</li>
+            <li><b>📊 Evaluación Masiva y Auditoría Clínica:</b> despliega el panel inferior cuando necesites revisar métricas oficiales de toda la cohorte sin subir ningún archivo.</li>
+            <li><b>❓ Siempre disponible:</b> puedes ocultar esta guía y volver a abrirla en cualquier momento desde el botón <b>❓ Guía rápida</b> en la barra superior.</li>
+          </ul>
+        </section>
+      </div>
+
+      <div class="wizard-footer">
+        <label class="wizard-opt">
+          <input type="checkbox" id="wizardDontShow" checked />
+          No volver a mostrar al iniciar
+        </label>
+        <div class="wizard-actions">
+          <div class="wizard-dots" id="wizardDots" aria-label="Indicador de pasos">
+            <button type="button" class="wizard-dot active" data-goto="0" aria-label="Ir al paso 1"></button>
+            <button type="button" class="wizard-dot" data-goto="1" aria-label="Ir al paso 2"></button>
+            <button type="button" class="wizard-dot" data-goto="2" aria-label="Ir al paso 3"></button>
+            <button type="button" class="wizard-dot" data-goto="3" aria-label="Ir al paso 4"></button>
+          </div>
+          <button type="button" class="wizard-btn wizard-btn-ghost" id="btnWizPrev" disabled>← Anterior</button>
+          <button type="button" class="wizard-btn wizard-btn-primary" id="btnWizNext">Siguiente →</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
     const STATE = {
@@ -1412,6 +1590,60 @@
     const meses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
     if ($("footerYear")) $("footerYear").textContent = String(now.getFullYear());
     if ($("footerDate")) $("footerDate").textContent = `${meses[now.getMonth()]} ${now.getFullYear()}`;
+
+    // ── Controlador del Wizard Instructivo (Primera Vez + Reapertura Manual) ──
+    const WIZARD_STORAGE_KEY = "sleep_ai_wizard_dismissed_v1";
+    let wizardStep = 0;
+    const wizardSteps = Array.from(document.querySelectorAll(".wizard-step"));
+    const wizardDots = Array.from(document.querySelectorAll(".wizard-dot"));
+
+    function renderWizardStep(idx) {
+      wizardStep = Math.max(0, Math.min(wizardSteps.length - 1, idx));
+      wizardSteps.forEach((s, i) => s.classList.toggle("active", i === wizardStep));
+      wizardDots.forEach((d, i) => d.classList.toggle("active", i === wizardStep));
+      $("wizardStepBadge").textContent = `Paso ${wizardStep + 1} de ${wizardSteps.length} · Guía rápida`;
+      $("wizardProgress").style.width = `${((wizardStep + 1) / wizardSteps.length) * 100}%`;
+      $("btnWizPrev").disabled = wizardStep === 0;
+      $("btnWizNext").textContent = wizardStep === wizardSteps.length - 1 ? "Empezar a usar ✓" : "Siguiente →";
+    }
+
+    function openWizard(startAt = 0) {
+      renderWizardStep(startAt);
+      $("wizardDontShow").checked = localStorage.getItem(WIZARD_STORAGE_KEY) !== "0";
+      $("wizardBackdrop").classList.add("open");
+      $("wizardBackdrop").setAttribute("aria-hidden", "false");
+    }
+
+    function closeWizard() {
+      if ($("wizardDontShow").checked) {
+        localStorage.setItem(WIZARD_STORAGE_KEY, "1");
+      } else {
+        localStorage.setItem(WIZARD_STORAGE_KEY, "0");
+      }
+      $("wizardBackdrop").classList.remove("open");
+      $("wizardBackdrop").setAttribute("aria-hidden", "true");
+    }
+
+    $("btnOpenWizard").addEventListener("click", () => openWizard(0));
+    $("footerWizardLink").addEventListener("click", (e) => { e.preventDefault(); openWizard(0); });
+    $("btnCloseWizard").addEventListener("click", closeWizard);
+    $("wizardBackdrop").addEventListener("click", (e) => { if (e.target === $("wizardBackdrop")) closeWizard(); });
+    $("btnWizPrev").addEventListener("click", () => renderWizardStep(wizardStep - 1));
+    $("btnWizNext").addEventListener("click", () => {
+      if (wizardStep === wizardSteps.length - 1) closeWizard();
+      else renderWizardStep(wizardStep + 1);
+    });
+    wizardDots.forEach((d) => d.addEventListener("click", () => renderWizardStep(parseInt(d.dataset.goto, 10))));
+    document.addEventListener("keydown", (e) => {
+      if (!$("wizardBackdrop").classList.contains("open")) return;
+      if (e.key === "Escape") closeWizard();
+      if (e.key === "ArrowRight" && wizardStep < wizardSteps.length - 1) renderWizardStep(wizardStep + 1);
+      if (e.key === "ArrowLeft" && wizardStep > 0) renderWizardStep(wizardStep - 1);
+    });
+
+    if (localStorage.getItem(WIZARD_STORAGE_KEY) !== "1") {
+      openWizard(0);
+    }
 
     initApp();
   </script>

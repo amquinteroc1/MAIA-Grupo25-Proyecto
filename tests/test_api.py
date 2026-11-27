@@ -38,7 +38,7 @@ def test_root_and_ui_endpoints():
     assert r_ui.status_code == 200
     assert "text/html" in r_ui.headers.get("content-type", "")
     html = r_ui.text
-    for marker in ("timelineCanvas", "stageJumpBar", "matrix-3x3", "uniandes-logo.png", "site-footer"):
+    for marker in ("timelineCanvas", "stageJumpBar", "matrix-3x3", "uniandes-logo.png", "site-footer", "wizardBackdrop", "btnOpenWizard"):
         assert marker in html
 
     assert client.get("/favicon.ico").status_code == 200
