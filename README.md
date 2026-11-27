@@ -7,6 +7,8 @@
 
 ## 1. Enlaces Relevantes y Despliegue en Producción
 
+<img width="1582" height="985" alt="Dashboard Clínico desplegado en Azure Container Apps" src="https://github.com/user-attachments/assets/531f80d6-854b-4995-a2c8-94b64ed1acff" />
+
 | Recurso | Enlace Oficial | Descripción |
 | :--- | :--- | :--- |
 | **Repositorio GitHub** | https://github.com/amquinteroc1/MAIA-Grupo25-Proyecto | Código fuente, notebooks, modelos finales, datos y pruebas |
@@ -23,6 +25,9 @@
 ## 2. Descripción del Proyecto y Resultados
 
 Sistema clínico-investigativo de apoyo al diagnóstico automático de las 5 etapas canónicas del sueño (**Wake, N1, N2, N3 y REM**, estándar **R&K / AASM**) a partir de 3 canales crudos a 100 Hz (`EEG Fpz-Cz`, `EEG Pz-Oz`, `EOG horizontal`) en ventanas de 30 s. Se evalúan tres arquitecturas bajo partición estricta por sujeto (`SC`: 49 train / 13 val / 16 test; `ST` externo: 22 sujetos) y normalización Z-score ajustada en `SC-train` (`Datos/norm_params.npz`), entrenadas con 3 semillas (`42`, `123`, `2026` — **9 corridas**):
+
+<img width="1572" height="985" alt="image" src="https://github.com/user-attachments/assets/5bcbf713-f352-4412-95c3-68896e2c66f9" />
+
 
 | Modelo | Contexto Temporal | Accuracy `SC-test` | F1-Macro `SC-test` | Accuracy `ST` (externo) | F1-Macro `ST` | F1 `N1` (`ST`) |
 | :--- | :--- | ---: | ---: | ---: | ---: | ---: |
