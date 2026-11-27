@@ -15,5 +15,5 @@ Esta carpeta contiene los checkpoints oficiales representativos (`.pt`) de las t
 Para mantener el repositorio ágil, aquí se versionan los checkpoints principales (`seed42`). Las **9 corridas oficiales completas** (`E0`, `E1`, `E2` × semillas `42`, `123`, `2026`) están alojadas en Hugging Face Hub ([`maia-grupo25/sleep-edfx-models`](https://huggingface.co/datasets/maia-grupo25/sleep-edfx-models)) y se descargan automáticamente en tiempo de ejecución o mediante:
 
 ```powershell
-python -m src.utils.hf_hub --download-models
+python -m src.utils.hf_hub pull-models
 ```

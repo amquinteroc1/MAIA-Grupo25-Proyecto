@@ -47,6 +47,8 @@ Sistema clínico-investigativo de apoyo al diagnóstico automático de las 5 eta
 | **`Modelos/`** | Checkpoints finales entrenados en PyTorch (`best_model_E0_seed42.pt`, `best_model_E1_seed42.pt`, `best_model_E2_seed42.pt`) + guía de descarga de las 9 semillas |
 | **`Datos/`** | Estructura de señales, inventario EDA (`sleep_edf_records.csv`, `sleep_edf_summary.json`) y parámetros Z-score oficiales (`norm_params.npz`) |
 | `src/` | Código modular: `config.py`, `data_tesis/`, `models/`, `training/`, `evaluation/`, `inference/predict.py`, `api/` (`main.py`, `service.py`, `schemas.py`, `static/index.html`) y `utils/` |
+| `hf_registry/` | Punteros de versionado con *revision lock* (`datos.dvc`, `modelos.dvc`) hacia `tesis-final-2026` en Hugging Face Hub |
+| `docs/` | Documento oficial de entrega final (`Entrega_Final_MAIA_Grupo25.docx`) |
 | `kaggle/` | Kernels batch asíncronos (`e0`, `e1`, `e2`) para auditoría remota |
 | `tests/test_api.py` | Pruebas automatizadas E2E sobre API, `/ui`, modelos y mapa de estadios |
 | `Dockerfile.api`, `Dockerfile.mlflow`, `docker-compose.yml` | Empaquetado reproducible para local y Azure Container Apps |
@@ -167,10 +169,13 @@ curl -X POST https://sleep-ai-api.whitesky-80270a35.eastus.azurecontainerapps.io
   -d '{"window_index": 1000, "models": ["e0_seed42", "e1_seed42", "e2_seed42"]}'
 ```
 
-### C. Pruebas Automatizadas y Reproducibilidad Científica
+### C. Pruebas Automatizadas, Sincronización HF y Reproducibilidad Científica
 ```powershell
 pytest tests/test_api.py -v                         # Suite de integración (5/5 pruebas)
-python -m src.data_tesis.test_data_tesis            # Integridad de tensores y particiones por sujeto
+python -m src.data_tesis.test_data_tesis            # 21/21 checks de integridad, tensores y particiones sin fuga
+python -m src.utils.hf_hub verify                   # Verificar token y acceso a repositorios Hugging Face
+python -m src.utils.hf_hub pull-models              # Descargar checkpoints oficiales si faltan en disco
+python -m src.utils.hf_hub pull-data                # Descargar tensores procesados desde Hugging Face
 python -m src.utils.register_thesis_mlflow          # Registro de las 9 corridas en MLflow
 ```
 

@@ -29,9 +29,11 @@ experiments/E2/
 mlruns.db
 src/evaluation/imagenes/
 
-# Archivos temporales regenerables
+# Archivos temporales regenerables e IDE
 /_hf_stage_*/
 outputs/kaggle_batch/*/*.log
 .pytest_cache/
 .ruff_cache/
 .mypy_cache/
+.vscode/
+.dvc/
